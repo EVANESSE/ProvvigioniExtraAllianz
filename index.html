@@ -105,6 +105,7 @@
     }
     tr:hover td{ background: rgba(124,246,255,.04); }
     .mono{ font-variant-numeric: tabular-nums; }
+
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:4px 10px; border-radius: 999px;
@@ -246,7 +247,7 @@
     import {
       getFirestore, collection, addDoc, doc, updateDoc, deleteDoc,
       query, where, orderBy, getDocs, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js"; // CRUD/query Firestore [web:24][web:38]
+    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js"; /* add/query/update/delete Firestore [web:24][web:38] */
 
     const firebaseConfig = {
       apiKey: "AIzaSyBImpEln_jCpYyMMrNh63xJDJ89Vxf3DIc",
@@ -263,7 +264,6 @@
     const COL_EXTRA = "allianz_provvigioni_extra";
     const COL_PROD  = "produttori";
 
-    // DEFAULT produttori (così non spariscono più)
     const DEFAULT_PRODUTTORI = [
       "EVAN SGARBI",
       "DUILIO FRARACCI",
@@ -297,15 +297,14 @@
     const btnExportExcel = document.getElementById('btnExportExcel');
     const totaleBox = document.getElementById('totaleBox');
 
-    let produttori = [];        // [{id,name}]
-    let producerColorMap = {};  // name -> color
+    let produttori = [];
+    let producerColorMap = {};
     let lastResults = [];
 
     function setMsg(type, text){
       msg.className = 'msg' + (type ? ' ' + type : '');
       msg.textContent = text || '';
     }
-
     function toNumber(v){
       if (typeof v !== 'string') v = String(v ?? '');
       v = v.replace(',', '.').trim();
@@ -321,7 +320,6 @@
       for (let i=0;i<name.length;i++) h = (h*31 + name.charCodeAt(i)) >>> 0;
       return palette[h % palette.length];
     }
-
     function normalizeName(s){ return (s || "").trim().toUpperCase(); }
 
     function calcolaProvvigioni(){
@@ -339,7 +337,6 @@
     });
 
     function mergeProduttori(firestoreList){
-      // Unione: DEFAULT + Firestore, senza duplicati
       const set = new Map();
       DEFAULT_PRODUTTORI.forEach(n => set.set(normalizeName(n), { id: null, name: normalizeName(n) }));
       firestoreList.forEach(p => set.set(normalizeName(p.name), { id: p.id || null, name: normalizeName(p.name) }));
@@ -362,13 +359,12 @@
     async function loadProduttori(){
       try{
         const ref = collection(db, COL_PROD);
-        const q = query(ref, orderBy("name", "asc")); // orderBy [web:38]
-        const snap = await getDocs(q);                // getDocs [web:38]
+        const q = query(ref, orderBy("name", "asc"));
+        const snap = await getDocs(q);
         const fs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.name);
         produttori = mergeProduttori(fs);
         renderProduttoriSelects();
       }catch(e){
-        // Se query fallisce (rules), almeno mostro i DEFAULT
         console.error(e);
         produttori = mergeProduttori([]);
         renderProduttoriSelects();
@@ -389,18 +385,16 @@
       }
 
       try{
-        await addDoc(collection(db, COL_PROD), { name: clean, createdAt: serverTimestamp() }); // addDoc [web:24]
+        await addDoc(collection(db, COL_PROD), { name: clean, createdAt: serverTimestamp() });
         setMsg('ok', 'Produttore salvato.');
         await loadProduttori();
         produttoreSelect.value = clean;
       }catch(e){
         console.error(e);
-        // Se rules bloccano, lo aggiungo comunque localmente (così non perdi il lavoro)
         produttori = mergeProduttori([...produttori, { id: null, name: clean }]);
         renderProduttoriSelects();
         produttoreSelect.value = clean;
-
-        setMsg('err', `Errore salvataggio produttore su Firestore.\nProbabile problema Rules (permission-denied).\n${e.code || ''} ${e.message || ''}`); // permessi tipici [web:64]
+        setMsg('err', `Errore salvataggio produttore su Firestore.\n${e.code || ''} ${e.message || ''}`);
       }
     });
 
@@ -423,17 +417,21 @@
       const d = new Date();
       const anno = d.getFullYear();
       const mese = d.getMonth() + 1;
-      const dataISO = `${anno}-${pad2(mese)}-${pad2(d.getDate())}`;
+      const dataiso = `${anno}-${pad2(mese)}-${pad2(d.getDate())}`;  // <-- FIX
+
       const titolo = `PROVVIGIONI EXTRA ALLIANZ - ${numPolizza}`;
 
       const record = {
-        titolo, produttore,
+        titolo,
+        produttore,
         numeroPolizza: numPolizza,
         premio: premioVal,
         premioImponibile: imponibileVal,
         percentuale: percVal,
         provvigioni: provvVal,
-        anno, mese, dataISO,
+        anno,
+        mese,
+        dataiso,                         // <-- FIX
         pagate: false,
         pagateData: null,
         createdAt: serverTimestamp(),
@@ -441,14 +439,14 @@
       };
 
       try{
-        await addDoc(collection(db, COL_EXTRA), record); // addDoc [web:24]
+        await addDoc(collection(db, COL_EXTRA), record);
         setMsg('ok','Inserito e salvato su Firestore.');
         form.reset();
         provvigioni.value = '';
         await loadByFilters();
       }catch(e){
         console.error(e);
-        setMsg('err', `Errore salvataggio su Firestore.\n${e.code || ''} ${e.message || ''}`); // permessi tipici [web:64]
+        setMsg('err', `Errore salvataggio su Firestore.\n${e.code || ''} ${e.message || ''}`);
       }
     }
     btnInserisci.addEventListener('click', addRecord);
@@ -464,7 +462,7 @@
 
         return `
           <tr>
-            <td class="mono">${r.dataISO ?? ""}</td>
+            <td class="mono">${r.dataiso ?? ""}</td>  <!-- FIX -->
             <td>
               <div class="pill">
                 <span class="dot" style="color:${c}; background:${c};"></span>
@@ -513,13 +511,16 @@
       try{
         const ref = collection(db, COL_EXTRA);
         const constraints = [];
+
         if (prod) constraints.push(where("produttore", "==", prod));
         if (annoSel) constraints.push(where("anno", "==", annoSel));
         if (meseSel) constraints.push(where("mese", "==", meseSel));
-        constraints.push(orderBy("dataISO", "desc")); // orderBy [web:38]
+
+        constraints.push(orderBy("dataiso", "desc")); // <-- FIX
 
         const q = query(ref, ...constraints);
-        const snap = await getDocs(q); // getDocs [web:38]
+        const snap = await getDocs(q);
+
         const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderResults(rows);
       }catch(e){
@@ -532,6 +533,7 @@
     tbody.addEventListener('click', async (ev) => {
       const btn = ev.target.closest('button');
       if (!btn) return;
+
       const action = btn.dataset.action;
       const id = btn.dataset.id;
       if (!action || !id) return;
@@ -553,6 +555,7 @@
 
         const nuovoImponibile = prompt("Nuovo premio imponibile:", String(row.premioImponibile ?? ""));
         if (nuovoImponibile === null) return;
+
         const nuovaPerc = prompt("Nuova percentuale:", String(row.percentuale ?? ""));
         if (nuovaPerc === null) return;
 
@@ -562,6 +565,7 @@
           setMsg('err','Valori non validi.');
           return;
         }
+
         const provvVal = Math.round((imponibileVal * (percVal/100)) * 100)/100;
 
         try{
@@ -596,6 +600,7 @@
           }
           if (!checked) dateInput.value = '';
         }
+
         try{
           await updateDoc(doc(db, COL_EXTRA, id), {
             pagate: checked,
@@ -629,7 +634,7 @@
       if (!window.XLSX) return;
 
       const data = lastResults.map(r => ({
-        Data: r.dataISO ?? "",
+        Data: r.dataiso ?? "",            // <-- FIX
         Titolo: r.titolo ?? "",
         Produttore: r.produttore ?? "",
         Polizza: r.numeroPolizza ?? "",
@@ -650,12 +655,12 @@
       const prod = fProduttore.value || "Tutti";
       const anno = fAnno.value || "Tutti";
       const mese = fMese.value || "Tutti";
-      XLSX.writeFile(wb, `ProvvigioniExtra_Allianz_${prod}_A${anno}_M${mese}.xlsx`);
+      XLSX.writeFile(wb, `ProvvigioniExtraAllianz_${prod}_A${anno}_M${mese}.xlsx`);
     }
     btnExportExcel.addEventListener('click', exportExcel);
 
     (async function init(){
-      await loadProduttori();  // ora avrai sempre i DEFAULT, anche se Firestore è vuoto
+      await loadProduttori();
       await loadByFilters();
       setMsg('ok', 'Pronto.');
     })();
