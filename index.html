@@ -11,17 +11,13 @@
       --text:#EAF0FF;
       --muted:#9AA6C0;
       --line: rgba(120, 150, 255, .18);
-      --accent:#7CF6FF;
-      --accent2:#B18CFF;
       --danger:#FF5A7A;
       --ok:#35F2A6;
       --warn:#FFC04D;
     }
-
     *{ box-sizing:border-box; }
     body{
-      margin:0;
-      padding:26px;
+      margin:0; padding:26px;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
         radial-gradient(900px 500px at 20% 10%, rgba(124,246,255,.10), transparent 55%),
@@ -30,25 +26,13 @@
       color: var(--text);
     }
     .wrap{ max-width: 1100px; margin: 0 auto; }
-    .title{
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom: 16px;
-    }
-    .title h1{
-      margin:0;
-      font-size: 20px;
-      letter-spacing: .3px;
-      text-shadow: 0 0 14px rgba(124,246,255,.25);
-    }
+    .title{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 16px; }
+    .title h1{ margin:0; font-size: 20px; letter-spacing: .3px; text-shadow: 0 0 14px rgba(124,246,255,.25); }
     .badge{
-      padding:6px 10px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 12px;
+      padding:6px 10px; border:1px solid var(--line);
+      background: rgba(255,255,255,.03); border-radius: 999px;
+      color: var(--muted); font-size: 12px;
     }
-
     .card{
       border: 1px solid var(--line);
       background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
@@ -60,7 +44,6 @@
         0 0 38px rgba(124,246,255,.12);
       backdrop-filter: blur(8px);
     }
-
     label{ display:block; margin: 10px 0 6px; color: var(--muted); font-size: 13px; }
     input, select, button{
       width:100%;
@@ -76,36 +59,24 @@
       border-color: rgba(124,246,255,.55);
       box-shadow: 0 0 0 3px rgba(124,246,255,.14);
     }
-    input[readonly]{
-      background: rgba(255,255,255,.04);
-      border-style: dashed;
-      color: rgba(234,240,255,.92);
-    }
+    input[readonly]{ background: rgba(255,255,255,.04); border-style: dashed; color: rgba(234,240,255,.92); }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 14px;
-    }
+    .grid{ display:grid; grid-template-columns: 1.1fr 1fr; gap: 14px; }
     @media (max-width: 860px){ .grid{ grid-template-columns: 1fr; } }
-
     .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media (max-width: 680px){ .row2{ grid-template-columns: 1fr; } }
 
     .actions{ display:flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; align-items:center; }
     .btn{
-      width:auto; padding: 10px 14px; cursor:pointer;
+      width:auto; padding: 10px 14px; cursor:pointer; white-space: nowrap;
       border: 1px solid rgba(124,246,255,.35);
       background: linear-gradient(180deg, rgba(124,246,255,.12), rgba(177,140,255,.10));
       box-shadow: 0 0 18px rgba(124,246,255,.14);
-      white-space: nowrap;
     }
-    .btn:hover{ border-color: rgba(124,246,255,.65); box-shadow: 0 0 26px rgba(124,246,255,.18); }
     .btn.secondary{ border-color: rgba(177,140,255,.35); background: rgba(255,255,255,.03); }
     .btn.danger{ border-color: rgba(255,90,122,.45); background: rgba(255,90,122,.08); }
     .btn.warn{ border-color: rgba(255,192,77,.45); background: rgba(255,192,77,.08); }
-
-    .msg{ margin-top: 10px; font-size: 13px; color: var(--muted); }
+    .msg{ margin-top: 10px; font-size: 13px; color: var(--muted); white-space: pre-wrap; }
     .msg.ok{ color: var(--ok); }
     .msg.err{ color: var(--danger); }
 
@@ -122,76 +93,32 @@
     .tool.small{ min-width: 130px; max-width: 180px; flex: 0; }
 
     table{
-      width:100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      overflow:hidden;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(6, 9, 18, .6);
+      width:100%; border-collapse: collapse; margin-top: 12px;
+      overflow:hidden; border-radius: 14px;
+      border: 1px solid var(--line); background: rgba(6, 9, 18, .6);
     }
-    th, td{
-      padding: 10px 10px;
-      border-bottom: 1px solid rgba(120,150,255,.14);
-      font-size: 13px;
-      vertical-align: top;
-    }
+    th, td{ padding: 10px 10px; border-bottom: 1px solid rgba(120,150,255,.14); font-size: 13px; vertical-align: top; }
     th{
-      text-align:left;
-      color: rgba(234,240,255,.95);
+      text-align:left; color: rgba(234,240,255,.95);
       background: rgba(255,255,255,.03);
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(6px);
-      z-index: 1;
+      position: sticky; top: 0; backdrop-filter: blur(6px); z-index: 1;
     }
     tr:hover td{ background: rgba(124,246,255,.04); }
-
     .mono{ font-variant-numeric: tabular-nums; }
     .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:4px 10px;
-      border-radius: 999px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:4px 10px; border-radius: 999px;
       border:1px solid rgba(120,150,255,.22);
       background: rgba(255,255,255,.02);
       white-space: nowrap;
     }
-    .dot{
-      width:10px; height:10px; border-radius:50%;
-      box-shadow: 0 0 16px currentColor;
-      display:inline-block;
-      flex: 0 0 10px;
-    }
-
+    .dot{ width:10px; height:10px; border-radius:50%; box-shadow: 0 0 16px currentColor; display:inline-block; flex: 0 0 10px; }
     .cell-actions{ display:flex; gap:8px; flex-wrap: wrap; }
-    .tiny{
-      width:auto;
-      padding: 7px 10px;
-      border-radius: 10px;
-      font-size: 12px;
-    }
-
-    .paid-wrap{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap: wrap;
-    }
+    .tiny{ width:auto; padding: 7px 10px; border-radius: 10px; font-size: 12px; }
+    .paid-wrap{ display:flex; align-items:center; gap:10px; flex-wrap: wrap; }
     .paid-wrap input[type="checkbox"]{ width:auto; }
-    .paid-wrap input[type="date"]{
-      width:auto;
-      padding: 8px 10px;
-      border-radius: 10px;
-    }
-
-    .split{
-      display:flex;
-      gap:10px;
-      flex-wrap: wrap;
-      align-items: end;
-    }
+    .paid-wrap input[type="date"]{ width:auto; padding: 8px 10px; border-radius: 10px; }
+    .split{ display:flex; gap:10px; flex-wrap: wrap; align-items: end; }
     .split > *{ flex: 1; min-width: 200px; }
   </style>
 </head>
@@ -200,7 +127,7 @@
   <div class="wrap">
     <div class="title">
       <h1>Provvigioni Extra Allianz</h1>
-      <div class="badge">Firestore + filtri server-side</div>
+      <div class="badge">Produttori dinamici + Firestore</div>
     </div>
 
     <div class="card">
@@ -312,16 +239,14 @@
     </div>
   </div>
 
-  <!-- SheetJS export XLSX [web:48] -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <script type="module">
-    // Firebase SDK + Firestore CRUD/query [web:24][web:38]
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
     import {
       getFirestore, collection, addDoc, doc, updateDoc, deleteDoc,
       query, where, orderBy, getDocs, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js"; // CRUD/query Firestore [web:24][web:38]
 
     const firebaseConfig = {
       apiKey: "AIzaSyBImpEln_jCpYyMMrNh63xJDJ89Vxf3DIc",
@@ -336,9 +261,18 @@
     const db = getFirestore(app);
 
     const COL_EXTRA = "allianz_provvigioni_extra";
-    const COL_PROD = "produttori"; // { name: "EVAN SGARBI", createdAt }
+    const COL_PROD  = "produttori";
 
-    // UI refs
+    // DEFAULT produttori (così non spariscono più)
+    const DEFAULT_PRODUTTORI = [
+      "EVAN SGARBI",
+      "DUILIO FRARACCI",
+      "GINO POLIGANI",
+      "GIOVANNI CARERI",
+      "LUCA IORI",
+      "ANTONIO SENTIMENTI"
+    ];
+
     const produttoreSelect = document.getElementById('produttoreSelect');
     const btnNuovoProduttore = document.getElementById('btnNuovoProduttore');
 
@@ -363,16 +297,15 @@
     const btnExportExcel = document.getElementById('btnExportExcel');
     const totaleBox = document.getElementById('totaleBox');
 
-    // Stato
     let produttori = [];        // [{id,name}]
     let producerColorMap = {};  // name -> color
-    let lastResults = [];       // risultati ultima query
+    let lastResults = [];
 
-    // Helpers
     function setMsg(type, text){
       msg.className = 'msg' + (type ? ' ' + type : '');
       msg.textContent = text || '';
     }
+
     function toNumber(v){
       if (typeof v !== 'string') v = String(v ?? '');
       v = v.replace(',', '.').trim();
@@ -382,13 +315,14 @@
     function money2(n){ return (Math.round(n * 100) / 100).toFixed(2); }
     function pad2(n){ return String(n).padStart(2,'0'); }
 
-    // colore deterministico da stringa produttore
     function colorForProducer(name){
       const palette = ["#7CF6FF","#B18CFF","#35F2A6","#FFC04D","#FF5A7A","#7CFFB2","#6CA8FF","#E0A6FF"];
       let h = 0;
       for (let i=0;i<name.length;i++) h = (h*31 + name.charCodeAt(i)) >>> 0;
       return palette[h % palette.length];
     }
+
+    function normalizeName(s){ return (s || "").trim().toUpperCase(); }
 
     function calcolaProvvigioni(){
       const imponibile = toNumber(premioImponibile.value);
@@ -404,74 +338,81 @@
       provvigioni.value = '';
     });
 
-    // =========================
-    // Produttori dinamici
-    // =========================
+    function mergeProduttori(firestoreList){
+      // Unione: DEFAULT + Firestore, senza duplicati
+      const set = new Map();
+      DEFAULT_PRODUTTORI.forEach(n => set.set(normalizeName(n), { id: null, name: normalizeName(n) }));
+      firestoreList.forEach(p => set.set(normalizeName(p.name), { id: p.id || null, name: normalizeName(p.name) }));
+      return [...set.values()].sort((a,b)=>a.name.localeCompare(b.name));
+    }
+
     function renderProduttoriSelects(){
-      // main select
       produttoreSelect.innerHTML =
         `<option value="" selected disabled>Seleziona...</option>` +
         produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
 
-      // filter select
       fProduttore.innerHTML =
         `<option value="">Tutti</option>` +
         produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
 
-      // color map
       producerColorMap = {};
       produttori.forEach(p => producerColorMap[p.name] = colorForProducer(p.name));
     }
 
     async function loadProduttori(){
-      // Leggo produttori ordinati alfabeticamente (semplice, poi eventuale indice) [web:38]
-      const ref = collection(db, COL_PROD);
-      const q = query(ref, orderBy("name", "asc"));
-      const snap = await getDocs(q);
-      produttori = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.name);
-      renderProduttoriSelects();
+      try{
+        const ref = collection(db, COL_PROD);
+        const q = query(ref, orderBy("name", "asc")); // orderBy [web:38]
+        const snap = await getDocs(q);                // getDocs [web:38]
+        const fs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.name);
+        produttori = mergeProduttori(fs);
+        renderProduttoriSelects();
+      }catch(e){
+        // Se query fallisce (rules), almeno mostro i DEFAULT
+        console.error(e);
+        produttori = mergeProduttori([]);
+        renderProduttoriSelects();
+        setMsg('err', `Impossibile leggere produttori da Firestore.\n${e.code || ''} ${e.message || ''}`);
+      }
     }
 
     btnNuovoProduttore.addEventListener('click', async () => {
-      const name = prompt("Inserisci nome nuovo produttore (verrà salvato per il futuro):");
+      const name = prompt("Inserisci nome nuovo produttore:");
       if (!name) return;
 
-      const clean = name.trim().toUpperCase();
+      const clean = normalizeName(name);
       if (!clean) return;
 
-      // evita duplicati in memoria
-      if (produttori.some(p => (p.name || '').toUpperCase() === clean)){
+      if (produttori.some(p => p.name === clean)){
         setMsg('err', 'Produttore già presente.');
         return;
       }
 
       try{
-        await addDoc(collection(db, COL_PROD), { name: clean, createdAt: serverTimestamp() }); // serverTimestamp [web:24]
+        await addDoc(collection(db, COL_PROD), { name: clean, createdAt: serverTimestamp() }); // addDoc [web:24]
         setMsg('ok', 'Produttore salvato.');
         await loadProduttori();
         produttoreSelect.value = clean;
       }catch(e){
         console.error(e);
-        setMsg('err', 'Errore salvataggio produttore.');
+        // Se rules bloccano, lo aggiungo comunque localmente (così non perdi il lavoro)
+        produttori = mergeProduttori([...produttori, { id: null, name: clean }]);
+        renderProduttoriSelects();
+        produttoreSelect.value = clean;
+
+        setMsg('err', `Errore salvataggio produttore su Firestore.\nProbabile problema Rules (permission-denied).\n${e.code || ''} ${e.message || ''}`); // permessi tipici [web:64]
       }
     });
 
-    // =========================
-    // Insert record
-    // =========================
-    btnInserisci.addEventListener('click', async () => {
+    async function addRecord(){
       setMsg('', '');
-
       const form = document.getElementById('formProvvigioni');
       if (!form.reportValidity()) return;
 
       calcolaProvvigioni();
 
       const produttore = produttoreSelect.value;
-      if (!produttore){
-        setMsg('err','Seleziona il produttore.');
-        return;
-      }
+      if (!produttore){ setMsg('err','Seleziona il produttore.'); return; }
 
       const numPolizza = numeroPolizza.value.trim();
       const premioVal = toNumber(premio.value);
@@ -483,20 +424,16 @@
       const anno = d.getFullYear();
       const mese = d.getMonth() + 1;
       const dataISO = `${anno}-${pad2(mese)}-${pad2(d.getDate())}`;
-
       const titolo = `PROVVIGIONI EXTRA ALLIANZ - ${numPolizza}`;
 
       const record = {
-        titolo,
-        produttore,
+        titolo, produttore,
         numeroPolizza: numPolizza,
         premio: premioVal,
         premioImponibile: imponibileVal,
         percentuale: percVal,
         provvigioni: provvVal,
-        anno,
-        mese,
-        dataISO,
+        anno, mese, dataISO,
         pagate: false,
         pagateData: null,
         createdAt: serverTimestamp(),
@@ -511,13 +448,11 @@
         await loadByFilters();
       }catch(e){
         console.error(e);
-        setMsg('err','Errore salvataggio su Firestore (controlla rules/indici).');
+        setMsg('err', `Errore salvataggio su Firestore.\n${e.code || ''} ${e.message || ''}`); // permessi tipici [web:64]
       }
-    });
+    }
+    btnInserisci.addEventListener('click', addRecord);
 
-    // =========================
-    // Query server-side (filtri)
-    // =========================
     function renderResults(rows){
       lastResults = rows;
 
@@ -564,7 +499,6 @@
       totaleBox.className = 'msg ok';
       totaleBox.textContent = `Totale provvigioni (filtri attivi): ${money2(tot)}`;
 
-      // Popolo dropdown anno con ciò che arriva (pratico)
       const anni = [...new Set(rows.map(r => r.anno))].filter(Boolean).sort((a,b)=>b-a);
       const current = fAnno.value;
       fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a => `<option value="${a}">${a}</option>`).join('');
@@ -579,33 +513,25 @@
       try{
         const ref = collection(db, COL_EXTRA);
         const constraints = [];
-
         if (prod) constraints.push(where("produttore", "==", prod));
         if (annoSel) constraints.push(where("anno", "==", annoSel));
         if (meseSel) constraints.push(where("mese", "==", meseSel));
-
         constraints.push(orderBy("dataISO", "desc")); // orderBy [web:38]
 
         const q = query(ref, ...constraints);
         const snap = await getDocs(q); // getDocs [web:38]
-
         const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderResults(rows);
       }catch(e){
         console.error(e);
-        setMsg('err','Errore query (se chiede index, crealo da link in console).');
+        setMsg('err', `Errore query.\n${e.code || ''} ${e.message || ''}`);
       }
     }
-
     btnApplicaFiltri.addEventListener('click', loadByFilters);
 
-    // =========================
-    // Edit / delete / paid toggle
-    // =========================
     tbody.addEventListener('click', async (ev) => {
       const btn = ev.target.closest('button');
       if (!btn) return;
-
       const action = btn.dataset.action;
       const id = btn.dataset.id;
       if (!action || !id) return;
@@ -613,11 +539,11 @@
       if (action === 'del'){
         if (!confirm("Confermi eliminazione?")) return;
         try{
-          await deleteDoc(doc(db, COL_EXTRA, id)); // deleteDoc [web:52]
+          await deleteDoc(doc(db, COL_EXTRA, id));
           await loadByFilters();
         }catch(e){
           console.error(e);
-          setMsg('err','Errore eliminazione.');
+          setMsg('err', `Errore eliminazione.\n${e.code || ''} ${e.message || ''}`);
         }
       }
 
@@ -625,32 +551,30 @@
         const row = lastResults.find(r => r.id === id);
         if (!row) return;
 
-        const nuovoPremioImponibile = prompt("Nuovo premio imponibile:", String(row.premioImponibile ?? ""));
-        if (nuovoPremioImponibile === null) return;
+        const nuovoImponibile = prompt("Nuovo premio imponibile:", String(row.premioImponibile ?? ""));
+        if (nuovoImponibile === null) return;
+        const nuovaPerc = prompt("Nuova percentuale:", String(row.percentuale ?? ""));
+        if (nuovaPerc === null) return;
 
-        const nuovaPercentuale = prompt("Nuova percentuale:", String(row.percentuale ?? ""));
-        if (nuovaPercentuale === null) return;
-
-        const imponibileVal = toNumber(nuovoPremioImponibile);
-        const percVal = toNumber(nuovaPercentuale);
+        const imponibileVal = toNumber(nuovoImponibile);
+        const percVal = toNumber(nuovaPerc);
         if (!Number.isFinite(imponibileVal) || !Number.isFinite(percVal)){
           setMsg('err','Valori non validi.');
           return;
         }
-
-        const provvVal = imponibileVal * (percVal / 100);
+        const provvVal = Math.round((imponibileVal * (percVal/100)) * 100)/100;
 
         try{
           await updateDoc(doc(db, COL_EXTRA, id), {
             premioImponibile: imponibileVal,
             percentuale: percVal,
-            provvigioni: Math.round(provvVal * 100) / 100,
+            provvigioni: provvVal,
             updatedAt: serverTimestamp()
-          }); // updateDoc [web:52]
+          });
           await loadByFilters();
         }catch(e){
           console.error(e);
-          setMsg('err','Errore modifica.');
+          setMsg('err', `Errore modifica.\n${e.code || ''} ${e.message || ''}`);
         }
       }
     });
@@ -661,7 +585,6 @@
       const id = el.dataset.id;
       if (!action || !id) return;
 
-      // toggle paid
       if (action === 'togglePaid'){
         const checked = el.checked;
         const dateInput = tbody.querySelector(`input[data-action="paidDate"][data-id="${id}"]`);
@@ -673,21 +596,18 @@
           }
           if (!checked) dateInput.value = '';
         }
-
         try{
           await updateDoc(doc(db, COL_EXTRA, id), {
             pagate: checked,
             pagateData: checked ? (dateInput ? dateInput.value : null) : null,
             updatedAt: serverTimestamp()
           });
-          // non ricarico per evitare flicker: dati già coerenti
         }catch(e){
           console.error(e);
-          setMsg('err','Errore aggiornamento pagate.');
+          setMsg('err', `Errore aggiornamento pagate.\n${e.code || ''} ${e.message || ''}`);
         }
       }
 
-      // paid date changed
       if (action === 'paidDate'){
         const val = el.value || null;
         try{
@@ -696,19 +616,15 @@
             pagate: !!val,
             updatedAt: serverTimestamp()
           });
-          // allineo checkbox
           const cb = tbody.querySelector(`input[data-action="togglePaid"][data-id="${id}"]`);
           if (cb) cb.checked = !!val;
         }catch(e){
           console.error(e);
-          setMsg('err','Errore aggiornamento data pagate.');
+          setMsg('err', `Errore aggiornamento data pagate.\n${e.code || ''} ${e.message || ''}`);
         }
       }
     });
 
-    // =========================
-    // Export Excel (selezione corrente)
-    // =========================
     function exportExcel(){
       if (!window.XLSX) return;
 
@@ -734,22 +650,14 @@
       const prod = fProduttore.value || "Tutti";
       const anno = fAnno.value || "Tutti";
       const mese = fMese.value || "Tutti";
-      const filename = `ProvvigioniExtra_Allianz_${prod}_A${anno}_M${mese}.xlsx`;
-
-      XLSX.writeFile(wb, filename); // [web:48]
+      XLSX.writeFile(wb, `ProvvigioniExtra_Allianz_${prod}_A${anno}_M${mese}.xlsx`);
     }
     btnExportExcel.addEventListener('click', exportExcel);
 
-    // Init
     (async function init(){
-      try{
-        await loadProduttori();
-        await loadByFilters();
-        setMsg('ok','Pronto.');
-      }catch(e){
-        console.error(e);
-        setMsg('err','Errore inizializzazione (verifica Firestore abilitato e rules).');
-      }
+      await loadProduttori();  // ora avrai sempre i DEFAULT, anche se Firestore è vuoto
+      await loadByFilters();
+      setMsg('ok', 'Pronto.');
     })();
   </script>
 </body>
