@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Provvigioni Extra Allianz</title>
+
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0C1224;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#9AA6C0;
+      --line: rgba(120, 150, 255, .18);
+      --glow1: rgba(115, 230, 255, .35);
+      --glow2: rgba(170, 120, 255, .25);
+      --accent:#7CF6FF;
+      --accent2:#B18CFF;
+      --danger:#FF5A7A;
+      --ok:#35F2A6;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      padding:26px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(124,246,255,.10), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(177,140,255,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), #050711);
+      color: var(--text);
+    }
+
+    .wrap{ max-width: 980px; margin: 0 auto; }
+
+    .title{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom: 16px;
+    }
+    .title h1{
+      margin:0;
+      font-size: 20px;
+      letter-spacing: .3px;
+      text-shadow: 0 0 14px rgba(124,246,255,.25);
+    }
+    .badge{
+      padding:6px 10px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .card{
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow:
+        0 0 0 1px rgba(124,246,255,.08),
+        0 18px 50px rgba(0,0,0,.55),
+        0 0 38px rgba(124,246,255,.12);
+      backdrop-filter: blur(8px);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    label{ display:block; margin: 10px 0 6px; color: var(--muted); font-size: 13px; }
+
+    input, select, button{
+      width:100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(120,150,255,.22);
+      background: rgba(10, 14, 28, .85);
+      color: var(--text);
+      outline: none;
+    }
+    input::placeholder{ color: rgba(154,166,192,.55); }
+
+    input:focus, select:focus{
+      border-color: rgba(124,246,255,.55);
+      box-shadow: 0 0 0 3px rgba(124,246,255,.14);
+    }
+
+    input[readonly]{
+      background: rgba(255,255,255,.04);
+      border-style: dashed;
+      color: rgba(234,240,255,.92);
+    }
+
+    .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 680px){ .row2{ grid-template-columns: 1fr; } }
+
+    .hidden{ display:none; }
+
+    .actions{
+      display:flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;
+    }
+    .btn{
+      width:auto; padding: 10px 14px; cursor:pointer;
+      border: 1px solid rgba(124,246,255,.35);
+      background: linear-gradient(180deg, rgba(124,246,255,.12), rgba(177,140,255,.10));
+      box-shadow: 0 0 18px rgba(124,246,255,.14);
+    }
+    .btn:hover{
+      border-color: rgba(124,246,255,.65);
+      box-shadow: 0 0 26px rgba(124,246,255,.18);
+    }
+    .btn.secondary{
+      border-color: rgba(177,140,255,.35);
+      background: rgba(255,255,255,.03);
+    }
+
+    .msg{ margin-top: 10px; font-size: 13px; color: var(--muted); }
+    .msg.ok{ color: var(--ok); }
+    .msg.err{ color: var(--danger); }
+
+    .toolbar{
+      display:flex; gap: 10px; flex-wrap: wrap;
+      align-items: end;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    .tool{ min-width: 170px; flex: 1; }
+    .tool.small{ min-width: 130px; max-width: 180px; flex: 0; }
+
+    table{
+      width:100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(6, 9, 18, .6);
+    }
+    th, td{
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(120,150,255,.14);
+      font-size: 13px;
+      vertical-align: top;
+    }
+    th{
+      text-align:left;
+      color: rgba(234,240,255,.95);
+      background: rgba(255,255,255,.03);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(6px);
+    }
+    tr:hover td{ background: rgba(124,246,255,.04); }
+    .mono{ font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="title">
+      <h1>Provvigioni Extra Allianz</h1>
+      <div class="badge">Dark glow UI</div>
+    </div>
+
+    <div class="card">
+      <form id="formProvvigioni">
+        <div class="grid">
+          <div>
+            <label for="produttoreSelect">Produttore</label>
+            <select id="produttoreSelect" required>
+              <option value="" selected disabled>Seleziona...</option>
+              <option value="EVAN SGARBI">EVAN SGARBI</option>
+              <option value="DUILIO FRARACCI">DUILIO FRARACCI</option>
+              <option value="GINO POLIGANI">GINO POLIGANI</option>
+              <option value="GIOVANNI CARERI">GIOVANNI CARERI</option>
+              <option value="LUCA IORI">LUCA IORI</option>
+              <option value="ANTONIO SENTIMENTI">ANTONIO SENTIMENTI</option>
+              <option value="ALTRO">ALTRO (testo libero)</option>
+            </select>
+
+            <div id="produttoreAltroWrap" class="hidden">
+              <label for="produttoreAltro">Produttore (Altro)</label>
+              <input id="produttoreAltro" type="text" placeholder="Inserisci produttore..." />
+            </div>
+
+            <label for="numeroPolizza">Numero di polizza</label>
+            <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
+          </div>
+
+          <div>
+            <div class="row2">
+              <div>
+                <label for="premio">Premio</label>
+                <input id="premio" type="number" step="0.01" min="0" required placeholder="0,00" />
+              </div>
+              <div>
+                <label for="premioImponibile">Premio imponibile</label>
+                <input id="premioImponibile" type="number" step="0.01" min="0" required placeholder="0,00" />
+              </div>
+            </div>
+
+            <div class="row2">
+              <div>
+                <label for="percentuale">% provvigioni (su imponibile)</label>
+                <input id="percentuale" type="number" step="0.01" min="0" required placeholder="Es. 12,50" />
+              </div>
+              <div>
+                <label for="provvigioni">Provvigioni calcolate</label>
+                <input id="provvigioni" type="number" step="0.01" readonly placeholder="0,00" />
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" type="button" id="btnInserisci">Inserisci titolo & salva</button>
+              <button class="btn secondary" type="reset" id="btnReset">Reset</button>
+            </div>
+            <div id="msg" class="msg"></div>
+          </div>
+        </div>
+      </form>
+
+      <div class="toolbar">
+        <div class="tool">
+          <label for="fProduttore">Filtro produttore</label>
+          <select id="fProduttore">
+            <option value="">Tutti</option>
+            <option value="EVAN SGARBI">EVAN SGARBI</option>
+            <option value="DUILIO FRARACCI">DUILIO FRARACCI</option>
+            <option value="GINO POLIGANI">GINO POLIGANI</option>
+            <option value="GIOVANNI CARERI">GIOVANNI CARERI</option>
+            <option value="LUCA IORI">LUCA IORI</option>
+            <option value="ANTONIO SENTIMENTI">ANTONIO SENTIMENTI</option>
+          </select>
+        </div>
+
+        <div class="tool small">
+          <label for="fAnno">Anno</label>
+          <select id="fAnno">
+            <option value="">Tutti</option>
+          </select>
+        </div>
+
+        <div class="tool small">
+          <label for="fMese">Mese</label>
+          <select id="fMese">
+            <option value="">Tutti</option>
+            <option value="1">Gen</option><option value="2">Feb</option><option value="3">Mar</option>
+            <option value="4">Apr</option><option value="5">Mag</option><option value="6">Giu</option>
+            <option value="7">Lug</option><option value="8">Ago</option><option value="9">Set</option>
+            <option value="10">Ott</option><option value="11">Nov</option><option value="12">Dic</option>
+          </select>
+        </div>
+
+        <div class="tool small">
+          <label>&nbsp;</label>
+          <button class="btn secondary" type="button" id="btnApplicaFiltri">Applica filtri</button>
+        </div>
+      </div>
+
+      <table id="tabella" class="hidden">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Titolo</th>
+            <th>Produttore</th>
+            <th>Polizza</th>
+            <th class="mono">Premio</th>
+            <th class="mono">Imponibile</th>
+            <th class="mono">%</</th>
+            <th class="mono">Provvigioni</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="actions" style="margin-top:12px;">
+        <button class="btn secondary" type="button" id="btnExportExcel">Export Excel</button>
+      </div>
+      <div id="totaleBox" class="msg"></div>
+    </div>
+  </div>
+
+  <!-- SheetJS per export Excel [web:48] -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <script type="module">
+    // ======================
+    // Firebase config
+    // ======================
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc,
+      query, where, orderBy, getDocs, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js"; [web:24][web:38]
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBImpEln_jCpYyMMrNh63xJDJ89Vxf3DIc",
+      authDomain: "provvigioni-extra-allianz.firebaseapp.com",
+      projectId: "provvigioni-extra-allianz",
+      storageBucket: "provvigioni-extra-allianz.firebasestorage.app",
+      messagingSenderId: "650627729378",
+      appId: "1:650627729378:web:3e91c2a09dd071437c5bbb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app); [web:24]
+
+    const COLLECTION_NAME = "allianz_provvigioni_extra";
+
+    // ======================
+    // Riferimenti UI
+    // ======================
+    const produttoreSelect = document.getElementById('produttoreSelect');
+    const produttoreAltroWrap = document.getElementById('produttoreAltroWrap');
+    const produttoreAltro = document.getElementById('produttoreAltro');
+
+    const numeroPolizza = document.getElementById('numeroPolizza');
+    const premio = document.getElementById('premio');
+    const premioImponibile = document.getElementById('premioImponibile');
+    const percentuale = document.getElementById('percentuale');
+    const provvigioni = document.getElementById('provvigioni');
+
+    const btnInserisci = document.getElementById('btnInserisci');
+    const btnReset = document.getElementById('btnReset');
+    const msg = document.getElementById('msg');
+
+    const tabella = document.getElementById('tabella');
+    const tbody = tabella.querySelector('tbody');
+
+    const fProduttore = document.getElementById('fProduttore');
+    const fAnno = document.getElementById('fAnno');
+    const fMese = document.getElementById('fMese');
+    const btnApplicaFiltri = document.getElementById('btnApplicaFiltri');
+
+    const btnExportExcel = document.getElementById('btnExportExcel');
+    const totaleBox = document.getElementById('totaleBox');
+
+    let lastResults = [];
+
+    function toNumber(v){
+      if (typeof v !== 'string') v = String(v ?? '');
+      v = v.replace(',', '.').trim();
+      const n = Number(v);
+      return Number.isFinite(n) ? n : NaN;
+    }
+    function money2(n){ return (Math.round(n * 100) / 100).toFixed(2); }
+    function pad2(n){ return String(n).padStart(2,'0'); }
+
+    function getProduttoreFinale(){
+      if (produttoreSelect.value === 'ALTRO') return produttoreAltro.value.trim();
+      return produttoreSelect.value;
+    }
+
+    function calcolaProvvigioni(){
+      const imponibile = toNumber(premioImponibile.value);
+      const perc = toNumber(percentuale.value);
+      if (!Number.isFinite(imponibile) || !Number.isFinite(perc)) { provvigioni.value = ''; return; }
+      provvigioni.value = money2(imponibile * (perc / 100));
+    }
+
+    produttoreSelect.addEventListener('change', () => {
+      const isAltro = produttoreSelect.value === 'ALTRO';
+      produttoreAltroWrap.classList.toggle('hidden', !isAltro);
+      produttoreAltro.required = isAltro;
+      if (!isAltro) produttoreAltro.value = '';
+    });
+
+    premioImponibile.addEventListener('input', calcolaProvvigioni);
+    percentuale.addEventListener('input', calcolaProvvigioni);
+
+    btnReset.addEventListener('click', () => {
+      msg.textContent = '';
+      msg.className = 'msg';
+      produttoreAltroWrap.classList.add('hidden');
+      produttoreAltro.required = false;
+      provvigioni.value = '';
+    });
+
+    // ======================
+    // INSERT + Firestore
+    // ======================
+    btnInserisci.addEventListener('click', async () => {
+      msg.className = 'msg';
+      msg.textContent = '';
+
+      const form = document.getElementById('formProvvigioni');
+      if (!form.reportValidity()) return;
+
+      calcolaProvvigioni();
+
+      const produttore = getProduttoreFinale();
+      if (!produttore){
+        msg.className = 'msg err';
+        msg.textContent = 'Inserisci il produttore (Altro).';
+        return;
+      }
+
+      const numPolizza = numeroPolizza.value.trim();
+      const premioVal = toNumber(premio.value);
+      const imponibileVal = toNumber(premioImponibile.value);
+      const percVal = toNumber(percentuale.value);
+      const provvVal = toNumber(provvigioni.value);
+
+      if (!Number.isFinite(imponibileVal) || !Number.isFinite(percVal) || !Number.isFinite(provvVal)){
+        msg.className = 'msg err';
+        msg.textContent = 'Valori numerici non validi.';
+        return;
+      }
+
+      const d = new Date();
+      const anno = d.getFullYear();
+      const mese = d.getMonth() + 1;
+      const dataISO = `${anno}-${pad2(mese)}-${pad2(d.getDate())}`;
+
+      const titolo = `PROVVIGIONI EXTRA ALLIANZ - ${numPolizza}`;
+
+      const record = {
+        titolo,
+        produttore,
+        numeroPolizza: numPolizza,
+        premio: premioVal,
+        premioImponibile: imponibileVal,
+        percentuale: percVal,
+        provvigioni: provvVal,
+        anno,
+        mese,
+        dataISO,
+        createdAt: serverTimestamp()
+      }; [web:23]
+
+      try {
+        await addDoc(collection(db, COLLECTION_NAME), record); [web:24]
+        msg.className = 'msg ok';
+        msg.textContent = 'Inserito e salvato su Firestore.';
+
+        form.reset();
+        produttoreAltroWrap.classList.add('hidden');
+        produttoreAltro.required = false;
+        provvigioni.value = '';
+
+        // ricarico lista in base ai filtri correnti
+        await loadByFilters();
+      } catch (e) {
+        console.error(e);
+        msg.className = 'msg err';
+        msg.textContent = 'Errore salvataggio su Firestore.';
+      }
+    });
+
+    // ======================
+    // QUERY SERVER-SIDE + render
+    // ======================
+    function renderResults(rows){
+      lastResults = rows;
+
+      tbody.innerHTML = rows.map(r => `
+        <tr>
+          <td class="mono">${r.dataISO ?? ''}</td>
+          <td>${r.titolo ?? ''}</td>
+          <td>${r.produttore ?? ''}</td>
+          <td>${r.numeroPolizza ?? ''}</td>
+          <td class="mono">${money2(Number(r.premio ?? 0))}</td>
+          <td class="mono">${money2(Number(r.premioImponibile ?? 0))}</td>
+          <td class="mono">${money2(Number(r.percentuale ?? 0))}</td>
+          <td class="mono">${money2(Number(r.provvigioni ?? 0))}</td>
+        </tr>
+      `).join('');
+
+      tabella.classList.toggle('hidden', rows.length === 0);
+
+      const tot = rows.reduce((s, r) => s + (Number(r.provvigioni) || 0), 0);
+      if (totaleBox) {
+        totaleBox.className = 'msg ok';
+        totaleBox.textContent = `Totale provvigioni (filtri attivi): ${money2(tot)}`;
+      }
+
+      // aggiorna lista anni disponibili
+      const anni = [...new Set(rows.map(r => r.anno))].filter(Boolean).sort((a,b)=>b-a);
+      const current = fAnno.value;
+      const baseOpt = `<option value="">Tutti</option>`;
+      const anniHTML = anni.map(a => `<option value="${a}">${a}</option>`).join('');
+      fAnno.innerHTML = baseOpt + anniHTML;
+      if (anni.includes(Number(current))) fAnno.value = current;
+    }
+
+    async function loadByFilters(){
+      const prod = fProduttore.value;
+      const annoSel = fAnno.value ? Number(fAnno.value) : null;
+      const meseSel = fMese.value ? Number(fMese.value) : null;
+
+      try {
+        const ref = collection(db, COLLECTION_NAME);
+        const constraints = [];
+
+        if (prod) constraints.push(where("produttore", "==", prod));
+        if (annoSel) constraints.push(where("anno", "==", annoSel));
+        if (meseSel) constraints.push(where("mese", "==", meseSel));
+
+        constraints.push(orderBy("dataISO", "desc")); [web:38]
+
+        const q = query(ref, ...constraints);
+        const snap = await getDocs(q); [web:38]
+
+        const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderResults(rows);
+      } catch (e) {
+        console.error(e);
+        msg.className = 'msg err';
+        msg.textContent = 'Errore caricamento dati (verifica indici Firestore se richiesti).'; [web:39]
+      }
+    }
+
+    btnApplicaFiltri.addEventListener('click', loadByFilters);
+
+    // ======================
+    // EXPORT EXCEL (SheetJS)
+    // ======================
+    function exportExcel(){
+      if (!window.XLSX) return;
+
+      const data = lastResults.map(r => ({
+        Data: r.dataISO ?? "",
+        Titolo: r.titolo ?? "",
+        Produttore: r.produttore ?? "",
+        Polizza: r.numeroPolizza ?? "",
+        Premio: Number(r.premio ?? 0),
+        "Premio imponibile": Number(r.premioImponibile ?? 0),
+        "Percentuale %": Number(r.percentuale ?? 0),
+        Provvigioni: Number(r.provvigioni ?? 0),
+        Anno: r.anno ?? "",
+        Mese: r.mese ?? ""
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Selezione");
+
+      const prod = fProduttore.value || "Tutti";
+      const anno = fAnno.value || "Tutti";
+      const mese = fMese.value || "Tutti";
+      const filename = `ProvvigioniExtra_Allianz_${prod}_A${anno}_M${mese}.xlsx`;
+
+      XLSX.writeFile(wb, filename); [web:48]
+    }
+
+    btnExportExcel.addEventListener('click', exportExcel);
+
+    // Carica dati iniziali (tutti)
+    loadByFilters();
+  </script>
+</body>
+</html>
