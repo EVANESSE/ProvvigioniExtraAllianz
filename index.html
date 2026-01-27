@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <link rel="icon" type="image/svg+xml" href="icon.svg">
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#070A12">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Provvigioni Extra Allianz</title>
+  <title>Provvigioni Extra</title>
+
+  <!-- favicon (metti icon.svg nella stessa cartella di index.html) -->
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
 
   <style>
     :root{
@@ -28,7 +28,7 @@
         linear-gradient(180deg, var(--bg), #050711);
       color: var(--text);
     }
-    .wrap{ max-width: 1100px; margin: 0 auto; }
+    .wrap{ max-width: 1200px; margin: 0 auto; }
     .title{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 16px; }
     .title h1{ margin:0; font-size: 20px; letter-spacing: .3px; text-shadow: 0 0 14px rgba(124,246,255,.25); }
     .badge{
@@ -63,12 +63,10 @@
       box-shadow: 0 0 0 3px rgba(124,246,255,.14);
     }
     input[readonly]{ background: rgba(255,255,255,.04); border-style: dashed; color: rgba(234,240,255,.92); }
-
     .grid{ display:grid; grid-template-columns: 1.1fr 1fr; gap: 14px; }
-    @media (max-width: 860px){ .grid{ grid-template-columns: 1fr; } }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
     .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media (max-width: 680px){ .row2{ grid-template-columns: 1fr; } }
-
     .actions{ display:flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; align-items:center; }
     .btn{
       width:auto; padding: 10px 14px; cursor:pointer; white-space: nowrap;
@@ -93,7 +91,7 @@
       background: rgba(255,255,255,.02);
     }
     .tool{ min-width: 170px; flex: 1; }
-    .tool.small{ min-width: 130px; max-width: 180px; flex: 0; }
+    .tool.small{ min-width: 130px; max-width: 190px; flex: 0; }
 
     table{
       width:100%; border-collapse: collapse; margin-top: 12px;
@@ -108,7 +106,6 @@
     }
     tr:hover td{ background: rgba(124,246,255,.04); }
     .mono{ font-variant-numeric: tabular-nums; }
-
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:4px 10px; border-radius: 999px;
@@ -123,15 +120,15 @@
     .paid-wrap input[type="checkbox"]{ width:auto; }
     .paid-wrap input[type="date"]{ width:auto; padding: 8px 10px; border-radius: 10px; }
     .split{ display:flex; gap:10px; flex-wrap: wrap; align-items: end; }
-    .split > *{ flex: 1; min-width: 200px; }
+    .split > *{ flex: 1; min-width: 180px; }
   </style>
 </head>
 
 <body>
   <div class="wrap">
     <div class="title">
-      <h1>Provvigioni Extra Allianz</h1>
-      <div class="badge">Produttori dinamici + Firestore</div>
+      <h1>Provvigioni Extra</h1>
+      <div class="badge">Produttori + Incentivazioni dinamiche · Firestore</div>
     </div>
 
     <div class="card">
@@ -148,6 +145,44 @@
               <div>
                 <label>&nbsp;</label>
                 <button class="btn secondary" type="button" id="btnNuovoProduttore">Inserisci nuovo produttore</button>
+              </div>
+            </div>
+
+            <div class="split">
+              <div>
+                <label for="compagniaSelect">Compagnia</label>
+                <select id="compagniaSelect" required>
+                  <option value="" selected disabled>Seleziona...</option>
+                  <option value="ALLIANZ">ALLIANZ</option>
+                  <option value="HDI">HDI</option>
+                  <option value="VITTORIA">VITTORIA</option>
+                  <option value="ARAG">ARAG</option>
+                  <option value="HELVETIA">HELVETIA</option>
+                  <option value="GENIALPIU'">GENIALPIU'</option>
+                  <option value="METLIFE">METLIFE</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="tipoPolizzaSelect">Tipo polizza</label>
+                <select id="tipoPolizzaSelect" required>
+                  <option value="" selected disabled>Seleziona...</option>
+                  <option value="NUOVA">Polizza nuova</option>
+                  <option value="SOSTITUZIONE_AUMENTO">Sostituzione (premio in aumento)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="split">
+              <div>
+                <label for="incentivazioneSelect">Incentivazione</label>
+                <select id="incentivazioneSelect" required>
+                  <option value="" selected disabled>Caricamento...</option>
+                </select>
+              </div>
+              <div>
+                <label>&nbsp;</label>
+                <button class="btn secondary" type="button" id="btnNuovaIncentivazione">Inserisci incentivazione</button>
               </div>
             </div>
 
@@ -195,6 +230,36 @@
           </select>
         </div>
 
+        <div class="tool">
+          <label for="fCompagnia">Compagnia</label>
+          <select id="fCompagnia">
+            <option value="">Tutte</option>
+            <option value="ALLIANZ">ALLIANZ</option>
+            <option value="HDI">HDI</option>
+            <option value="VITTORIA">VITTORIA</option>
+            <option value="ARAG">ARAG</option>
+            <option value="HELVETIA">HELVETIA</option>
+            <option value="GENIALPIU'">GENIALPIU'</option>
+            <option value="METLIFE">METLIFE</option>
+          </select>
+        </div>
+
+        <div class="tool">
+          <label for="fTipoPolizza">Tipo polizza</label>
+          <select id="fTipoPolizza">
+            <option value="">Tutti</option>
+            <option value="NUOVA">Polizza nuova</option>
+            <option value="SOSTITUZIONE_AUMENTO">Sostituzione (premio in aumento)</option>
+          </select>
+        </div>
+
+        <div class="tool">
+          <label for="fIncentivazione">Incentivazione</label>
+          <select id="fIncentivazione">
+            <option value="">Tutte</option>
+          </select>
+        </div>
+
         <div class="tool small">
           <label for="fAnno">Anno</label>
           <select id="fAnno">
@@ -230,6 +295,9 @@
             <th>Data</th>
             <th>Titolo</th>
             <th>Produttore</th>
+            <th>Compagnia</th>
+            <th>Tipo</th>
+            <th>Incentivazione</th>
             <th>Polizza</th>
             <th class="mono">Provvigioni</th>
             <th>Pagate</th>
@@ -250,10 +318,10 @@
     import {
       getFirestore, collection, addDoc, doc, updateDoc, deleteDoc,
       query, where, orderBy, getDocs, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js"; /* add/query/update/delete Firestore [web:24][web:38] */
+    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBImpEln_jCpYyMMrNh63xJDJ89Vxf3DIc",
+      apiKey: "AIzaSyBImpElnjCpYyMMrNh63xJDJ89Vxf3DIc",
       authDomain: "provvigioni-extra-allianz.firebaseapp.com",
       projectId: "provvigioni-extra-allianz",
       storageBucket: "provvigioni-extra-allianz.firebasestorage.app",
@@ -264,58 +332,67 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Firestore collections
     const COL_EXTRA = "allianz_provvigioni_extra";
-    const COL_PROD  = "produttori";
+    const COL_PROD = "produttori";
+    const COL_INC = "incentivazioni";
 
-    const DEFAULT_PRODUTTORI = [
-      "EVAN SGARBI",
-      "DUILIO FRARACCI",
-      "GINO POLIGANI",
-      "GIOVANNI CARERI",
-      "LUCA IORI",
-      "ANTONIO SENTIMENTI"
-    ];
+    // Defaults (visibili anche se Firestore è vuoto o non leggibile)
+    const DEFAULT_PRODUTTORI = ["EVAN SGARBI","DUILIO FRARACCI","GINO POLIGANI","GIOVANNI CARERI","LUCA IORI","ANTONIO SENTIMENTI"];
+    const DEFAULT_INCENTIVAZIONI = ["STANDARD"];
 
-    const produttoreSelect = document.getElementById('produttoreSelect');
-    const btnNuovoProduttore = document.getElementById('btnNuovoProduttore');
+    // Elements
+    const produttoreSelect = document.getElementById("produttoreSelect");
+    const btnNuovoProduttore = document.getElementById("btnNuovoProduttore");
 
-    const numeroPolizza = document.getElementById('numeroPolizza');
-    const premio = document.getElementById('premio');
-    const premioImponibile = document.getElementById('premioImponibile');
-    const percentuale = document.getElementById('percentuale');
-    const provvigioni = document.getElementById('provvigioni');
+    const compagniaSelect = document.getElementById("compagniaSelect");
+    const tipoPolizzaSelect = document.getElementById("tipoPolizzaSelect");
 
-    const btnInserisci = document.getElementById('btnInserisci');
-    const btnReset = document.getElementById('btnReset');
-    const msg = document.getElementById('msg');
+    const incentivazioneSelect = document.getElementById("incentivazioneSelect");
+    const btnNuovaIncentivazione = document.getElementById("btnNuovaIncentivazione");
 
-    const fProduttore = document.getElementById('fProduttore');
-    const fAnno = document.getElementById('fAnno');
-    const fMese = document.getElementById('fMese');
-    const btnApplicaFiltri = document.getElementById('btnApplicaFiltri');
+    const numeroPolizza = document.getElementById("numeroPolizza");
+    const premio = document.getElementById("premio");
+    const premioImponibile = document.getElementById("premioImponibile");
+    const percentuale = document.getElementById("percentuale");
+    const provvigioni = document.getElementById("provvigioni");
 
-    const tabella = document.getElementById('tabella');
-    const tbody = tabella.querySelector('tbody');
+    const btnInserisci = document.getElementById("btnInserisci");
+    const btnReset = document.getElementById("btnReset");
+    const msg = document.getElementById("msg");
 
-    const btnExportExcel = document.getElementById('btnExportExcel');
-    const totaleBox = document.getElementById('totaleBox');
+    const fProduttore = document.getElementById("fProduttore");
+    const fCompagnia = document.getElementById("fCompagnia");
+    const fTipoPolizza = document.getElementById("fTipoPolizza");
+    const fIncentivazione = document.getElementById("fIncentivazione");
+    const fAnno = document.getElementById("fAnno");
+    const fMese = document.getElementById("fMese");
+    const btnApplicaFiltri = document.getElementById("btnApplicaFiltri");
+
+    const tabella = document.getElementById("tabella");
+    const tbody = tabella.querySelector("tbody");
+    const btnExportExcel = document.getElementById("btnExportExcel");
+    const totaleBox = document.getElementById("totaleBox");
 
     let produttori = [];
+    let incentivazioni = [];
     let producerColorMap = {};
     let lastResults = [];
 
     function setMsg(type, text){
-      msg.className = 'msg' + (type ? ' ' + type : '');
-      msg.textContent = text || '';
+      msg.className = "msg" + (type ? " " + type : "");
+      msg.textContent = text || "";
     }
+
     function toNumber(v){
-      if (typeof v !== 'string') v = String(v ?? '');
-      v = v.replace(',', '.').trim();
+      if (typeof v !== "string") v = String(v ?? "");
+      v = v.replace(",", ".").trim();
       const n = Number(v);
       return Number.isFinite(n) ? n : NaN;
     }
+
     function money2(n){ return (Math.round(n * 100) / 100).toFixed(2); }
-    function pad2(n){ return String(n).padStart(2,'0'); }
+    function pad2(n){ return String(n).padStart(2, "0"); }
 
     function colorForProducer(name){
       const palette = ["#7CF6FF","#B18CFF","#35F2A6","#FFC04D","#FF5A7A","#7CFFB2","#6CA8FF","#E0A6FF"];
@@ -323,40 +400,52 @@
       for (let i=0;i<name.length;i++) h = (h*31 + name.charCodeAt(i)) >>> 0;
       return palette[h % palette.length];
     }
+
     function normalizeName(s){ return (s || "").trim().toUpperCase(); }
 
     function calcolaProvvigioni(){
       const imponibile = toNumber(premioImponibile.value);
       const perc = toNumber(percentuale.value);
-      if (!Number.isFinite(imponibile) || !Number.isFinite(perc)) { provvigioni.value = ''; return; }
+      if (!Number.isFinite(imponibile) || !Number.isFinite(perc)) { provvigioni.value = ""; return; }
       provvigioni.value = money2(imponibile * (perc / 100));
     }
-    premioImponibile.addEventListener('input', calcolaProvvigioni);
-    percentuale.addEventListener('input', calcolaProvvigioni);
 
-    btnReset.addEventListener('click', () => {
-      setMsg('', '');
-      provvigioni.value = '';
+    premioImponibile.addEventListener("input", calcolaProvvigioni);
+    percentuale.addEventListener("input", calcolaProvvigioni);
+
+    btnReset.addEventListener("click", () => {
+      setMsg("", "");
+      provvigioni.value = "";
     });
 
-    function mergeProduttori(firestoreList){
+    function mergeList(defaults, firestoreList){
       const set = new Map();
-      DEFAULT_PRODUTTORI.forEach(n => set.set(normalizeName(n), { id: null, name: normalizeName(n) }));
+      defaults.forEach(n => set.set(normalizeName(n), { id: null, name: normalizeName(n) }));
       firestoreList.forEach(p => set.set(normalizeName(p.name), { id: p.id || null, name: normalizeName(p.name) }));
       return [...set.values()].sort((a,b)=>a.name.localeCompare(b.name));
     }
 
-    function renderProduttoriSelects(){
+    function renderProduttori(){
       produttoreSelect.innerHTML =
         `<option value="" selected disabled>Seleziona...</option>` +
-        produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+        produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
 
       fProduttore.innerHTML =
         `<option value="">Tutti</option>` +
-        produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+        produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
 
       producerColorMap = {};
       produttori.forEach(p => producerColorMap[p.name] = colorForProducer(p.name));
+    }
+
+    function renderIncentivazioni(){
+      incentivazioneSelect.innerHTML =
+        `<option value="" selected disabled>Seleziona...</option>` +
+        incentivazioni.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
+
+      fIncentivazione.innerHTML =
+        `<option value="">Tutte</option>` +
+        incentivazioni.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
     }
 
     async function loadProduttori(){
@@ -365,53 +454,101 @@
         const q = query(ref, orderBy("name", "asc"));
         const snap = await getDocs(q);
         const fs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.name);
-        produttori = mergeProduttori(fs);
-        renderProduttoriSelects();
+        produttori = mergeList(DEFAULT_PRODUTTORI, fs);
+        renderProduttori();
       }catch(e){
         console.error(e);
-        produttori = mergeProduttori([]);
-        renderProduttoriSelects();
-        setMsg('err', `Impossibile leggere produttori da Firestore.\n${e.code || ''} ${e.message || ''}`);
+        produttori = mergeList(DEFAULT_PRODUTTORI, []);
+        renderProduttori();
+        setMsg("err", `Impossibile leggere produttori da Firestore.\n${e.code || ""} ${e.message || ""}`);
       }
     }
 
-    btnNuovoProduttore.addEventListener('click', async () => {
+    async function loadIncentivazioni(){
+      try{
+        const ref = collection(db, COL_INC);
+        const q = query(ref, orderBy("name", "asc"));
+        const snap = await getDocs(q);
+        const fs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.name);
+        incentivazioni = mergeList(DEFAULT_INCENTIVAZIONI, fs);
+        renderIncentivazioni();
+      }catch(e){
+        console.error(e);
+        incentivazioni = mergeList(DEFAULT_INCENTIVAZIONI, []);
+        renderIncentivazioni();
+        setMsg("err", `Impossibile leggere incentivazioni da Firestore.\n${e.code || ""} ${e.message || ""}`);
+      }
+    }
+
+    btnNuovoProduttore.addEventListener("click", async () => {
       const name = prompt("Inserisci nome nuovo produttore:");
       if (!name) return;
-
       const clean = normalizeName(name);
       if (!clean) return;
 
       if (produttori.some(p => p.name === clean)){
-        setMsg('err', 'Produttore già presente.');
+        setMsg("err", "Produttore già presente.");
         return;
       }
 
       try{
         await addDoc(collection(db, COL_PROD), { name: clean, createdAt: serverTimestamp() });
-        setMsg('ok', 'Produttore salvato.');
+        setMsg("ok", "Produttore salvato.");
         await loadProduttori();
         produttoreSelect.value = clean;
       }catch(e){
         console.error(e);
-        produttori = mergeProduttori([...produttori, { id: null, name: clean }]);
-        renderProduttoriSelects();
+        produttori = mergeList(DEFAULT_PRODUTTORI, [...produttori, { id:null, name: clean }]);
+        renderProduttori();
         produttoreSelect.value = clean;
-        setMsg('err', `Errore salvataggio produttore su Firestore.\n${e.code || ''} ${e.message || ''}`);
+        setMsg("err", `Errore salvataggio produttore su Firestore.\n${e.code || ""} ${e.message || ""}`);
+      }
+    });
+
+    btnNuovaIncentivazione.addEventListener("click", async () => {
+      const name = prompt("Inserisci nuova incentivazione:");
+      if (!name) return;
+      const clean = normalizeName(name);
+      if (!clean) return;
+
+      if (incentivazioni.some(p => p.name === clean)){
+        setMsg("err", "Incentivazione già presente.");
+        return;
+      }
+
+      try{
+        await addDoc(collection(db, COL_INC), { name: clean, createdAt: serverTimestamp() });
+        setMsg("ok", "Incentivazione salvata.");
+        await loadIncentivazioni();
+        incentivazioneSelect.value = clean;
+      }catch(e){
+        console.error(e);
+        incentivazioni = mergeList(DEFAULT_INCENTIVAZIONI, [...incentivazioni, { id:null, name: clean }]);
+        renderIncentivazioni();
+        incentivazioneSelect.value = clean;
+        setMsg("err", `Errore salvataggio incentivazione su Firestore.\n${e.code || ""} ${e.message || ""}`);
       }
     });
 
     async function addRecord(){
-      setMsg('', '');
-      const form = document.getElementById('formProvvigioni');
+      setMsg("", "");
+      const form = document.getElementById("formProvvigioni");
       if (!form.reportValidity()) return;
 
       calcolaProvvigioni();
 
       const produttore = produttoreSelect.value;
-      if (!produttore){ setMsg('err','Seleziona il produttore.'); return; }
+      const compagnia = compagniaSelect.value;
+      const tipoPolizza = tipoPolizzaSelect.value;
+      const incentivazione = incentivazioneSelect.value;
+
+      if (!produttore){ setMsg("err","Seleziona il produttore."); return; }
+      if (!compagnia){ setMsg("err","Seleziona la compagnia."); return; }
+      if (!tipoPolizza){ setMsg("err","Seleziona il tipo polizza."); return; }
+      if (!incentivazione){ setMsg("err","Seleziona l'incentivazione."); return; }
 
       const numPolizza = numeroPolizza.value.trim();
+
       const premioVal = toNumber(premio.value);
       const imponibileVal = toNumber(premioImponibile.value);
       const percVal = toNumber(percentuale.value);
@@ -420,13 +557,16 @@
       const d = new Date();
       const anno = d.getFullYear();
       const mese = d.getMonth() + 1;
-      const dataiso = `${anno}-${pad2(mese)}-${pad2(d.getDate())}`;  // <-- FIX
+      const dataiso = `${anno}-${pad2(mese)}-${pad2(d.getDate())}`;
 
-      const titolo = `PROVVIGIONI EXTRA ALLIANZ - ${numPolizza}`;
+      const titolo = `PROVVIGIONI EXTRA - ${numPolizza}`;
 
       const record = {
         titolo,
         produttore,
+        compagnia,
+        tipoPolizza,
+        incentivazione,
         numeroPolizza: numPolizza,
         premio: premioVal,
         premioImponibile: imponibileVal,
@@ -434,7 +574,7 @@
         provvigioni: provvVal,
         anno,
         mese,
-        dataiso,                         // <-- FIX
+        dataiso,
         pagate: false,
         pagateData: null,
         createdAt: serverTimestamp(),
@@ -443,16 +583,17 @@
 
       try{
         await addDoc(collection(db, COL_EXTRA), record);
-        setMsg('ok','Inserito e salvato su Firestore.');
+        setMsg("ok", "Inserito e salvato su Firestore.");
         form.reset();
-        provvigioni.value = '';
+        provvigioni.value = "";
         await loadByFilters();
       }catch(e){
         console.error(e);
-        setMsg('err', `Errore salvataggio su Firestore.\n${e.code || ''} ${e.message || ''}`);
+        setMsg("err", `Errore salvataggio su Firestore.\n${e.code || ""} ${e.message || ""}`);
       }
     }
-    btnInserisci.addEventListener('click', addRecord);
+
+    btnInserisci.addEventListener("click", addRecord);
 
     function renderResults(rows){
       lastResults = rows;
@@ -463,9 +604,13 @@
         const dateVal = (r.pagateData && typeof r.pagateData === "string") ? r.pagateData : "";
         const disabledDate = r.pagate ? "" : "disabled";
 
+        const tipoTxt =
+          r.tipoPolizza === "SOSTITUZIONE_AUMENTO" ? "Sostituzione (aumento)" :
+          r.tipoPolizza === "NUOVA" ? "Nuova" : (r.tipoPolizza ?? "");
+
         return `
           <tr>
-            <td class="mono">${r.dataiso ?? ""}</td>  <!-- FIX -->
+            <td class="mono">${r.dataiso ?? ""}</td>
             <td>
               <div class="pill">
                 <span class="dot" style="color:${c}; background:${c};"></span>
@@ -473,6 +618,9 @@
               </div>
             </td>
             <td>${r.produttore ?? ""}</td>
+            <td>${r.compagnia ?? ""}</td>
+            <td>${tipoTxt}</td>
+            <td>${r.incentivazione ?? ""}</td>
             <td>${r.numeroPolizza ?? ""}</td>
             <td class="mono">${money2(Number(r.provvigioni ?? 0))}</td>
             <td>
@@ -492,22 +640,26 @@
             </td>
           </tr>
         `;
-      }).join('');
+      }).join("");
 
-      tabella.classList.toggle('hidden', rows.length === 0);
+      tabella.classList.toggle("hidden", rows.length === 0);
 
       const tot = rows.reduce((s, r) => s + (Number(r.provvigioni) || 0), 0);
-      totaleBox.className = 'msg ok';
+      totaleBox.className = "msg ok";
       totaleBox.textContent = `Totale provvigioni (filtri attivi): ${money2(tot)}`;
 
       const anni = [...new Set(rows.map(r => r.anno))].filter(Boolean).sort((a,b)=>b-a);
       const current = fAnno.value;
-      fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a => `<option value="${a}">${a}</option>`).join('');
+      fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a => `<option value="${a}">${a}</option>`).join("");
       if (anni.includes(Number(current))) fAnno.value = current;
     }
 
     async function loadByFilters(){
       const prod = fProduttore.value;
+      const comp = fCompagnia.value;
+      const tipo = fTipoPolizza.value;
+      const inc = fIncentivazione.value;
+
       const annoSel = fAnno.value ? Number(fAnno.value) : null;
       const meseSel = fMese.value ? Number(fMese.value) : null;
 
@@ -516,10 +668,14 @@
         const constraints = [];
 
         if (prod) constraints.push(where("produttore", "==", prod));
+        if (comp) constraints.push(where("compagnia", "==", comp));
+        if (tipo) constraints.push(where("tipoPolizza", "==", tipo));
+        if (inc) constraints.push(where("incentivazione", "==", inc));
+
         if (annoSel) constraints.push(where("anno", "==", annoSel));
         if (meseSel) constraints.push(where("mese", "==", meseSel));
 
-        constraints.push(orderBy("dataiso", "desc")); // <-- FIX
+        constraints.push(orderBy("dataiso", "desc"));
 
         const q = query(ref, ...constraints);
         const snap = await getDocs(q);
@@ -528,31 +684,32 @@
         renderResults(rows);
       }catch(e){
         console.error(e);
-        setMsg('err', `Errore query.\n${e.code || ''} ${e.message || ''}`);
+        setMsg("err", `Errore query.\n${e.code || ""} ${e.message || ""}`);
       }
     }
-    btnApplicaFiltri.addEventListener('click', loadByFilters);
 
-    tbody.addEventListener('click', async (ev) => {
-      const btn = ev.target.closest('button');
+    btnApplicaFiltri.addEventListener("click", loadByFilters);
+
+    tbody.addEventListener("click", async (ev) => {
+      const btn = ev.target.closest("button");
       if (!btn) return;
 
       const action = btn.dataset.action;
       const id = btn.dataset.id;
       if (!action || !id) return;
 
-      if (action === 'del'){
+      if (action === "del"){
         if (!confirm("Confermi eliminazione?")) return;
         try{
           await deleteDoc(doc(db, COL_EXTRA, id));
           await loadByFilters();
         }catch(e){
           console.error(e);
-          setMsg('err', `Errore eliminazione.\n${e.code || ''} ${e.message || ''}`);
+          setMsg("err", `Errore eliminazione.\n${e.code || ""} ${e.message || ""}`);
         }
       }
 
-      if (action === 'edit'){
+      if (action === "edit"){
         const row = lastResults.find(r => r.id === id);
         if (!row) return;
 
@@ -565,7 +722,7 @@
         const imponibileVal = toNumber(nuovoImponibile);
         const percVal = toNumber(nuovaPerc);
         if (!Number.isFinite(imponibileVal) || !Number.isFinite(percVal)){
-          setMsg('err','Valori non validi.');
+          setMsg("err","Valori non validi.");
           return;
         }
 
@@ -581,18 +738,18 @@
           await loadByFilters();
         }catch(e){
           console.error(e);
-          setMsg('err', `Errore modifica.\n${e.code || ''} ${e.message || ''}`);
+          setMsg("err", `Errore modifica.\n${e.code || ""} ${e.message || ""}`);
         }
       }
     });
 
-    tbody.addEventListener('change', async (ev) => {
+    tbody.addEventListener("change", async (ev) => {
       const el = ev.target;
       const action = el.dataset.action;
       const id = el.dataset.id;
       if (!action || !id) return;
 
-      if (action === 'togglePaid'){
+      if (action === "togglePaid"){
         const checked = el.checked;
         const dateInput = tbody.querySelector(`input[data-action="paidDate"][data-id="${id}"]`);
         if (dateInput){
@@ -601,7 +758,7 @@
             const d = new Date();
             dateInput.value = `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
           }
-          if (!checked) dateInput.value = '';
+          if (!checked) dateInput.value = "";
         }
 
         try{
@@ -612,11 +769,11 @@
           });
         }catch(e){
           console.error(e);
-          setMsg('err', `Errore aggiornamento pagate.\n${e.code || ''} ${e.message || ''}`);
+          setMsg("err", `Errore aggiornamento pagate.\n${e.code || ""} ${e.message || ""}`);
         }
       }
 
-      if (action === 'paidDate'){
+      if (action === "paidDate"){
         const val = el.value || null;
         try{
           await updateDoc(doc(db, COL_EXTRA, id), {
@@ -628,7 +785,7 @@
           if (cb) cb.checked = !!val;
         }catch(e){
           console.error(e);
-          setMsg('err', `Errore aggiornamento data pagate.\n${e.code || ''} ${e.message || ''}`);
+          setMsg("err", `Errore aggiornamento data pagate.\n${e.code || ""} ${e.message || ""}`);
         }
       }
     });
@@ -637,9 +794,12 @@
       if (!window.XLSX) return;
 
       const data = lastResults.map(r => ({
-        Data: r.dataiso ?? "",            // <-- FIX
+        Data: r.dataiso ?? "",
         Titolo: r.titolo ?? "",
         Produttore: r.produttore ?? "",
+        Compagnia: r.compagnia ?? "",
+        Tipo: r.tipoPolizza ?? "",
+        Incentivazione: r.incentivazione ?? "",
         Polizza: r.numeroPolizza ?? "",
         Premio: Number(r.premio ?? 0),
         "Premio imponibile": Number(r.premioImponibile ?? 0),
@@ -656,17 +816,22 @@
       XLSX.utils.book_append_sheet(wb, ws, "Selezione");
 
       const prod = fProduttore.value || "Tutti";
+      const comp = fCompagnia.value || "Tutte";
+      const tipo = fTipoPolizza.value || "Tutti";
+      const inc = fIncentivazione.value || "Tutte";
       const anno = fAnno.value || "Tutti";
       const mese = fMese.value || "Tutti";
-      XLSX.writeFile(wb, `ProvvigioniExtraAllianz_${prod}_A${anno}_M${mese}.xlsx`);
+      XLSX.writeFile(wb, `ProvvigioniExtra_${prod}_${comp}_${tipo}_${inc}_A${anno}_M${mese}.xlsx`);
     }
-    btnExportExcel.addEventListener('click', exportExcel);
+    btnExportExcel.addEventListener("click", exportExcel);
 
-    (async function init(){
+    async function init(){
       await loadProduttori();
+      await loadIncentivazioni();
       await loadByFilters();
-      setMsg('ok', 'Pronto.');
-    })();
+      setMsg("ok", "Pronto.");
+    }
+    init();
   </script>
 </body>
 </html>
