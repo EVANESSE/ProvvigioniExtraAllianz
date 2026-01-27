@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Provvigioni Extra</title>
 
-  <!-- favicon (metti icon.svg nella stessa cartella di index.html) -->
   <link rel="icon" type="image/svg+xml" href="icon.svg">
 
   <style>
@@ -121,6 +120,7 @@
     .paid-wrap input[type="date"]{ width:auto; padding: 8px 10px; border-radius: 10px; }
     .split{ display:flex; gap:10px; flex-wrap: wrap; align-items: end; }
     .split > *{ flex: 1; min-width: 180px; }
+    .hidden{ display:none; }
   </style>
 </head>
 
@@ -260,6 +260,16 @@
           </select>
         </div>
 
+        <!-- PATCH: filtro pagate / da pagare / tutte -->
+        <div class="tool small">
+          <label for="fPagate">Pagamenti</label>
+          <select id="fPagate">
+            <option value="">Tutte</option>
+            <option value="true">Pagate</option>
+            <option value="false">Da pagare</option>
+          </select>
+        </div>
+
         <div class="tool small">
           <label for="fAnno">Anno</label>
           <select id="fAnno">
@@ -332,16 +342,13 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Firestore collections
     const COL_EXTRA = "allianz_provvigioni_extra";
     const COL_PROD = "produttori";
     const COL_INC = "incentivazioni";
 
-    // Defaults (visibili anche se Firestore è vuoto o non leggibile)
     const DEFAULT_PRODUTTORI = ["EVAN SGARBI","DUILIO FRARACCI","GINO POLIGANI","GIOVANNI CARERI","LUCA IORI","ANTONIO SENTIMENTI"];
     const DEFAULT_INCENTIVAZIONI = ["STANDARD"];
 
-    // Elements
     const produttoreSelect = document.getElementById("produttoreSelect");
     const btnNuovoProduttore = document.getElementById("btnNuovoProduttore");
 
@@ -365,6 +372,7 @@
     const fCompagnia = document.getElementById("fCompagnia");
     const fTipoPolizza = document.getElementById("fTipoPolizza");
     const fIncentivazione = document.getElementById("fIncentivazione");
+    const fPagate = document.getElementById("fPagate"); // PATCH
     const fAnno = document.getElementById("fAnno");
     const fMese = document.getElementById("fMese");
     const btnApplicaFiltri = document.getElementById("btnApplicaFiltri");
@@ -660,6 +668,8 @@
       const tipo = fTipoPolizza.value;
       const inc = fIncentivazione.value;
 
+      const pagateSel = fPagate.value; // PATCH: "", "true", "false"
+
       const annoSel = fAnno.value ? Number(fAnno.value) : null;
       const meseSel = fMese.value ? Number(fMese.value) : null;
 
@@ -671,6 +681,11 @@
         if (comp) constraints.push(where("compagnia", "==", comp));
         if (tipo) constraints.push(where("tipoPolizza", "==", tipo));
         if (inc) constraints.push(where("incentivazione", "==", inc));
+
+        // PATCH: filtro pagate
+        if (pagateSel !== "") {
+          constraints.push(where("pagate", "==", pagateSel === "true"));
+        }
 
         if (annoSel) constraints.push(where("anno", "==", annoSel));
         if (meseSel) constraints.push(where("mese", "==", meseSel));
@@ -819,9 +834,11 @@
       const comp = fCompagnia.value || "Tutte";
       const tipo = fTipoPolizza.value || "Tutti";
       const inc = fIncentivazione.value || "Tutte";
+      const pag = fPagate.value === "" ? "Tutte" : (fPagate.value === "true" ? "Pagate" : "DaPagare");
       const anno = fAnno.value || "Tutti";
       const mese = fMese.value || "Tutti";
-      XLSX.writeFile(wb, `ProvvigioniExtra_${prod}_${comp}_${tipo}_${inc}_A${anno}_M${mese}.xlsx`);
+
+      XLSX.writeFile(wb, `ProvvigioniExtra_${prod}_${comp}_${tipo}_${inc}_${pag}_A${anno}_M${mese}.xlsx`);
     }
     btnExportExcel.addEventListener("click", exportExcel);
 
