@@ -652,9 +652,14 @@
 
       tabella.classList.toggle("hidden", rows.length === 0);
 
-      const tot = rows.reduce((s, r) => s + (Number(r.provvigioni) || 0), 0);
-      totaleBox.className = "msg ok";
-      totaleBox.textContent = `Totale provvigioni (filtri attivi): ${money2(tot)}`;
+     const totProvv = rows.reduce((s, r) => s + (Number(r.provvigioni) || 0), 0);
+     const totImp = rows.reduce((s, r) => s + (Number(r.premioImponibile) || 0), 0);
+
+     totaleBox.className = "msg ok";
+     totaleBox.textContent =
+      `Totale provvigioni (filtri attivi): ${money2(totProvv)}\n` +
+      `Totale imponibile (filtri attivi): ${money2(totImp)}`;
+
 
       const anni = [...new Set(rows.map(r => r.anno))].filter(Boolean).sort((a,b)=>b-a);
       const current = fAnno.value;
