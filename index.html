@@ -20,7 +20,6 @@
       --danger:#FF5A7A;
       --ok:#35F2A6;
       --warn:#FFC04D;
-      /* NUOVO COLORE FLUO */
       --glow-orange: #FF6B00; 
     }
     *{ box-sizing:border-box; }
@@ -28,7 +27,7 @@
       margin:0; padding:26px;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
-        radial-gradient(900px 500px at 20% 10%, rgba(255, 107, 0, .08), transparent 55%), /* Riflesso arancio */
+        radial-gradient(900px 500px at 20% 10%, rgba(255, 107, 0, .08), transparent 55%),
         radial-gradient(900px 600px at 80% 20%, rgba(177,140,255,.10), transparent 60%),
         linear-gradient(180deg, var(--bg), #050711);
       color: var(--text);
@@ -36,104 +35,69 @@
     .wrap{ max-width: 1200px; margin: 0 auto; }
     
     .title{ 
-      display:flex; 
-      flex-direction: column; 
-      align-items:start; 
-      justify-content:center; 
-      margin-bottom: 24px; 
-      gap: 10px;
+      display:flex; flex-direction: column; align-items:start; justify-content:center; 
+      margin-bottom: 24px; gap: 10px;
     }
-    
-    /* STILE TITOLO D'IMPATTO */
     .title h1{ 
-      margin:0; 
-      font-size: 38px; 
-      text-transform: uppercase; 
-      font-weight: 900;
-      letter-spacing: 1px;
-      color: #fff;
-      text-shadow: 
-        0 0 10px rgba(255, 107, 0, 0.6),
-        0 0 20px rgba(255, 107, 0, 0.4),
-        0 0 40px rgba(255, 107, 0, 0.2);
+      margin:0; font-size: 38px; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; color: #fff;
+      text-shadow: 0 0 10px rgba(255, 107, 0, 0.6), 0 0 20px rgba(255, 107, 0, 0.4);
     }
-    
     .badge{
       padding:6px 12px; border:1px solid var(--line);
       background: rgba(255,255,255,.03); border-radius: 999px;
       color: var(--muted); font-size: 12px;
-      align-self: flex-start;
     }
     
     .card{
       border: 1px solid var(--line);
       background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow:
-        0 0 0 1px rgba(124,246,255,.08),
-        0 18px 50px rgba(0,0,0,.55),
-        0 0 38px rgba(124,246,255,.05);
+      border-radius: 14px; padding: 20px;
+      box-shadow: 0 0 0 1px rgba(124,246,255,.08), 0 18px 50px rgba(0,0,0,.55);
       backdrop-filter: blur(8px);
     }
     label{ display:block; margin: 10px 0 6px; color: var(--muted); font-size: 13px; }
     input, select, button{
-      width:100%;
-      padding: 11px 12px;
-      border-radius: 12px;
+      width:100%; padding: 11px 12px; border-radius: 12px;
       border: 1px solid rgba(120,150,255,.22);
-      background: rgba(10, 14, 28, .85);
-      color: var(--text);
-      outline: none;
-      transition: all 0.2s ease;
+      background: rgba(10, 14, 28, .85); color: var(--text);
+      outline: none; transition: all 0.2s ease;
     }
-    input::placeholder{ color: rgba(154,166,192,.55); }
     input:focus, select:focus{
-      border-color: var(--glow-orange); /* Focus Arancio */
-      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
+      border-color: var(--glow-orange); box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
     }
     input[readonly]{ background: rgba(255,255,255,.04); border-style: dashed; color: rgba(234,240,255,.92); }
+    
     .grid{ display:grid; grid-template-columns: 1.1fr 1fr; gap: 20px; }
     @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
     .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 680px){ .row2{ grid-template-columns: 1fr; } }
+    .split{ display:flex; gap:10px; flex-wrap: wrap; align-items: end; }
+    .split > *{ flex: 1; min-width: 180px; }
+
     .actions{ display:flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; align-items:center; }
-    
     .btn{
       width:auto; padding: 12px 20px; cursor:pointer; white-space: nowrap;
       border: 1px solid rgba(124,246,255,.35);
-      /* Gradiente leggermente modificato per includere un tocco caldo */
       background: linear-gradient(180deg, rgba(124,246,255,.12), rgba(177,140,255,.10));
-      box-shadow: 0 0 18px rgba(124,246,255,.14);
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      box-shadow: 0 0 18px rgba(124,246,255,.14); font-weight: 600;
     }
-    /* Bottone principale con tocco arancio */
     .btn#btnInserisci {
       border-color: var(--glow-orange);
       background: linear-gradient(180deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05));
-      box-shadow: 0 0 20px rgba(255, 107, 0, 0.2);
-      color: #fff;
+      box-shadow: 0 0 20px rgba(255, 107, 0, 0.2); color: #fff;
     }
-    .btn#btnInserisci:hover {
-       background: rgba(255, 107, 0, 0.25);
-    }
-
+    .btn#btnInserisci:hover { background: rgba(255, 107, 0, 0.25); }
     .btn.secondary{ border-color: rgba(177,140,255,.35); background: rgba(255,255,255,.03); font-weight: normal; }
     .btn.danger{ border-color: rgba(255,90,122,.45); background: rgba(255,90,122,.08); }
     .btn.warn{ border-color: rgba(255,192,77,.45); background: rgba(255,192,77,.08); }
+    
     .msg{ margin-top: 10px; font-size: 13px; color: var(--muted); white-space: pre-wrap; }
     .msg.ok{ color: var(--ok); }
     .msg.err{ color: var(--danger); }
 
     .toolbar{
-      display:flex; gap: 10px; flex-wrap: wrap;
-      align-items: end;
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.02);
+      display:flex; gap: 10px; flex-wrap: wrap; align-items: end;
+      margin-top: 20px; padding: 16px; border-radius: 14px;
+      border: 1px solid var(--line); background: rgba(255,255,255,.02);
     }
     .tool{ min-width: 170px; flex: 1; }
     .tool.small{ min-width: 130px; max-width: 190px; flex: 0; }
@@ -144,30 +108,33 @@
       border: 1px solid var(--line); background: rgba(6, 9, 18, .6);
     }
     th, td{ padding: 12px 12px; border-bottom: 1px solid rgba(120,150,255,.14); font-size: 13px; vertical-align: middle; }
-    th{
-      text-align:left; color: rgba(234,240,255,.95);
-      background: rgba(255,255,255,.03);
-      position: sticky; top: 0; backdrop-filter: blur(6px); z-index: 1;
-      font-weight: 600;
-    }
+    th{ text-align:left; color: rgba(234,240,255,.95); background: rgba(255,255,255,.03); font-weight: 600; }
     tr:hover td{ background: rgba(124,246,255,.04); }
     .mono{ font-variant-numeric: tabular-nums; }
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:4px 10px; border-radius: 999px;
-      border:1px solid rgba(120,150,255,.22);
-      background: rgba(255,255,255,.02);
-      white-space: nowrap;
+      border:1px solid rgba(120,150,255,.22); background: rgba(255,255,255,.02);
     }
-    .dot{ width:10px; height:10px; border-radius:50%; box-shadow: 0 0 16px currentColor; display:inline-block; flex: 0 0 10px; }
     .cell-actions{ display:flex; gap:8px; flex-wrap: wrap; }
     .tiny{ width:auto; padding: 7px 10px; border-radius: 10px; font-size: 12px; }
     .paid-wrap{ display:flex; align-items:center; gap:10px; flex-wrap: wrap; }
-    .paid-wrap input[type="checkbox"]{ width:auto; accent-color: var(--ok); }
-    .paid-wrap input[type="date"]{ width:auto; padding: 6px 10px; border-radius: 8px; font-size: 12px; }
-    .split{ display:flex; gap:10px; flex-wrap: wrap; align-items: end; }
-    .split > *{ flex: 1; min-width: 180px; }
-    .hidden{ display:none; }
+    .hidden{ display:none !important; }
+
+    /* MODALE */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+      z-index: 1000; display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-content {
+      background: #0D111D; border: 1px solid var(--glow-orange);
+      border-radius: 16px; padding: 24px; width: 100%; max-width: 800px;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 0 40px rgba(255, 107, 0, 0.2);
+    }
+    .modal-header { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: var(--glow-orange); text-transform: uppercase; }
   </style>
 </head>
 
@@ -283,11 +250,8 @@
       <div class="toolbar">
         <div class="tool">
           <label for="fProduttore">Filtro produttore</label>
-          <select id="fProduttore">
-            <option value="">Tutti</option>
-          </select>
+          <select id="fProduttore"><option value="">Tutti</option></select>
         </div>
-
         <div class="tool">
           <label for="fCompagnia">Compagnia</label>
           <select id="fCompagnia">
@@ -301,23 +265,18 @@
             <option value="METLIFE">METLIFE</option>
           </select>
         </div>
-
         <div class="tool">
           <label for="fTipoPolizza">Tipo polizza</label>
           <select id="fTipoPolizza">
             <option value="">Tutti</option>
             <option value="NUOVA">Polizza nuova</option>
-            <option value="SOSTITUZIONE_AUMENTO">Sostituzione (premio in aumento)</option>
+            <option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
           </select>
         </div>
-
         <div class="tool">
           <label for="fIncentivazione">Incentivazione</label>
-          <select id="fIncentivazione">
-            <option value="">Tutte</option>
-          </select>
+          <select id="fIncentivazione"><option value="">Tutte</option></select>
         </div>
-
         <div class="tool small">
           <label for="fPagate">Pagamenti</label>
           <select id="fPagate">
@@ -326,14 +285,10 @@
             <option value="false">Da pagare</option>
           </select>
         </div>
-
         <div class="tool small">
           <label for="fAnno">Anno</label>
-          <select id="fAnno">
-            <option value="">Tutti</option>
-          </select>
+          <select id="fAnno"><option value="">Tutti</option></select>
         </div>
-
         <div class="tool small">
           <label for="fMese">Mese</label>
           <select id="fMese">
@@ -344,12 +299,10 @@
             <option value="10">Ott</option><option value="11">Nov</option><option value="12">Dic</option>
           </select>
         </div>
-
         <div class="tool small">
           <label>&nbsp;</label>
-          <button class="btn secondary" type="button" id="btnApplicaFiltri">Applica filtri</button>
+          <button class="btn secondary" type="button" id="btnApplicaFiltri">Applica</button>
         </div>
-
         <div class="tool small">
           <label>&nbsp;</label>
           <button class="btn secondary" type="button" id="btnExportExcel">Export Excel</button>
@@ -360,19 +313,102 @@
         <thead>
           <tr>
             <th>Data Ins.</th>
-            <th>Cliente</th> <th>Decorrenza</th> <th>Produttore</th>
+            <th>Cliente</th>
+            <th>Decorrenza</th>
+            <th>Produttore</th>
             <th>Compagnia</th>
             <th>Tipo</th>
             <th>Polizza</th>
-            <th class="mono">Provvigioni</th>
+            <th class="mono">Provv.</th>
             <th>Pagate</th>
             <th>Azioni</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
-
       <div id="totaleBox" class="msg"></div>
+    </div>
+  </div>
+
+  <div id="editModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">Modifica Provvigione</div>
+      <form id="formEdit">
+        <input type="hidden" id="editId" />
+        <div class="grid">
+          <div>
+            <div class="split">
+              <div>
+                <label>Nome Cliente</label>
+                <input id="editNomeCliente" type="text" />
+              </div>
+              <div>
+                <label>Data Decorrenza</label>
+                <input id="editDataDecorrenza" type="date" />
+              </div>
+            </div>
+            <div class="split">
+              <div>
+                <label>Produttore</label>
+                <select id="editProduttoreSelect"></select>
+              </div>
+              <div>
+                <label>Compagnia</label>
+                <select id="editCompagniaSelect">
+                   <option value="ALLIANZ">ALLIANZ</option>
+                   <option value="HDI">HDI</option>
+                   <option value="VITTORIA">VITTORIA</option>
+                   <option value="ARAG">ARAG</option>
+                   <option value="HELVETIA">HELVETIA</option>
+                   <option value="GENIALPIU'">GENIALPIU'</option>
+                   <option value="METLIFE">METLIFE</option>
+                </select>
+              </div>
+            </div>
+            <div class="split">
+               <div>
+                 <label>Tipo Polizza</label>
+                 <select id="editTipoPolizzaSelect">
+                    <option value="NUOVA">Polizza nuova</option>
+                    <option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
+                 </select>
+               </div>
+               <div>
+                 <label>Incentivazione</label>
+                 <select id="editIncentivazioneSelect"></select>
+               </div>
+            </div>
+            <label>Numero Polizza</label>
+            <input id="editNumeroPolizza" type="text" />
+          </div>
+          <div>
+            <div class="row2">
+              <div>
+                <label>Premio</label>
+                <input id="editPremio" type="number" step="0.01" />
+              </div>
+              <div>
+                <label>Premio Imponibile</label>
+                <input id="editPremioImponibile" type="number" step="0.01" />
+              </div>
+            </div>
+            <div class="row2">
+              <div>
+                <label>% Provvigione</label>
+                <input id="editPercentuale" type="number" step="0.01" />
+              </div>
+              <div>
+                <label>Calcolo Provv.</label>
+                <input id="editProvvigioni" type="number" step="0.01" readonly />
+              </div>
+            </div>
+            <div class="actions" style="margin-top:24px;">
+              <button class="btn" type="button" id="btnSalvaModifiche">SALVA MODIFICHE</button>
+              <button class="btn secondary" type="button" id="btnChiudiModal">Annulla</button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -404,29 +440,25 @@
     const DEFAULT_PRODUTTORI = ["EVAN SGARBI","DUILIO FRARACCI","GINO POLIGANI","GIOVANNI CARERI","LUCA IORI","ANTONIO SENTIMENTI"];
     const DEFAULT_INCENTIVAZIONI = ["STANDARD"];
 
-    // Elementi nuovi
+    // Main Form Elements
     const nomeClienteInput = document.getElementById("nomeCliente");
     const dataDecorrenzaInput = document.getElementById("dataDecorrenza");
-
     const produttoreSelect = document.getElementById("produttoreSelect");
     const btnNuovoProduttore = document.getElementById("btnNuovoProduttore");
-
     const compagniaSelect = document.getElementById("compagniaSelect");
     const tipoPolizzaSelect = document.getElementById("tipoPolizzaSelect");
-
     const incentivazioneSelect = document.getElementById("incentivazioneSelect");
     const btnNuovaIncentivazione = document.getElementById("btnNuovaIncentivazione");
-
     const numeroPolizza = document.getElementById("numeroPolizza");
     const premio = document.getElementById("premio");
     const premioImponibile = document.getElementById("premioImponibile");
     const percentuale = document.getElementById("percentuale");
     const provvigioni = document.getElementById("provvigioni");
-
     const btnInserisci = document.getElementById("btnInserisci");
     const btnReset = document.getElementById("btnReset");
     const msg = document.getElementById("msg");
 
+    // Filter Elements
     const fProduttore = document.getElementById("fProduttore");
     const fCompagnia = document.getElementById("fCompagnia");
     const fTipoPolizza = document.getElementById("fTipoPolizza");
@@ -436,10 +468,30 @@
     const fMese = document.getElementById("fMese");
     const btnApplicaFiltri = document.getElementById("btnApplicaFiltri");
 
+    // Table & Export
     const tabella = document.getElementById("tabella");
     const tbody = tabella.querySelector("tbody");
     const btnExportExcel = document.getElementById("btnExportExcel");
     const totaleBox = document.getElementById("totaleBox");
+
+    // Modal Elements
+    const editModal = document.getElementById("editModal");
+    const btnChiudiModal = document.getElementById("btnChiudiModal");
+    const btnSalvaModifiche = document.getElementById("btnSalvaModifiche");
+    
+    // Edit Form Elements
+    const editId = document.getElementById("editId");
+    const editNomeCliente = document.getElementById("editNomeCliente");
+    const editDataDecorrenza = document.getElementById("editDataDecorrenza");
+    const editProduttoreSelect = document.getElementById("editProduttoreSelect");
+    const editCompagniaSelect = document.getElementById("editCompagniaSelect");
+    const editTipoPolizzaSelect = document.getElementById("editTipoPolizzaSelect");
+    const editIncentivazioneSelect = document.getElementById("editIncentivazioneSelect");
+    const editNumeroPolizza = document.getElementById("editNumeroPolizza");
+    const editPremio = document.getElementById("editPremio");
+    const editPremioImponibile = document.getElementById("editPremioImponibile");
+    const editPercentuale = document.getElementById("editPercentuale");
+    const editProvvigioni = document.getElementById("editProvvigioni");
 
     let produttori = [];
     let incentivazioni = [];
@@ -460,6 +512,7 @@
 
     function money2(n){ return (Math.round(n * 100) / 100).toFixed(2); }
     function pad2(n){ return String(n).padStart(2, "0"); }
+    function normalizeName(s){ return (s || "").trim().toUpperCase(); }
 
     function colorForProducer(name){
       const palette = ["#7CF6FF","#B18CFF","#35F2A6","#FFC04D","#FF5A7A","#7CFFB2","#6CA8FF","#E0A6FF"];
@@ -468,17 +521,25 @@
       return palette[h % palette.length];
     }
 
-    function normalizeName(s){ return (s || "").trim().toUpperCase(); }
-
+    // Calcolo Form Principale
     function calcolaProvvigioni(){
-      const imponibile = toNumber(premioImponibile.value);
+      const imp = toNumber(premioImponibile.value);
       const perc = toNumber(percentuale.value);
-      if (!Number.isFinite(imponibile) || !Number.isFinite(perc)) { provvigioni.value = ""; return; }
-      provvigioni.value = money2(imponibile * (perc / 100));
+      if (!Number.isFinite(imp) || !Number.isFinite(perc)) { provvigioni.value = ""; return; }
+      provvigioni.value = money2(imp * (perc / 100));
     }
-
     premioImponibile.addEventListener("input", calcolaProvvigioni);
     percentuale.addEventListener("input", calcolaProvvigioni);
+
+    // Calcolo Form Modale
+    function calcolaProvvigioniModal(){
+      const imp = toNumber(editPremioImponibile.value);
+      const perc = toNumber(editPercentuale.value);
+      if (!Number.isFinite(imp) || !Number.isFinite(perc)) { editProvvigioni.value = ""; return; }
+      editProvvigioni.value = money2(imp * (perc / 100));
+    }
+    editPremioImponibile.addEventListener("input", calcolaProvvigioniModal);
+    editPercentuale.addEventListener("input", calcolaProvvigioniModal);
 
     btnReset.addEventListener("click", () => {
       setMsg("", "");
@@ -493,12 +554,13 @@
     }
 
     function renderProduttori(){
-      produttoreSelect.innerHTML =
-        `<option value="" selected disabled>Seleziona...</option>` +
+      const html = `<option value="" selected disabled>Seleziona...</option>` +
         produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
+      
+      produttoreSelect.innerHTML = html;
+      editProduttoreSelect.innerHTML = html; // Popolo anche il modal
 
-      fProduttore.innerHTML =
-        `<option value="">Tutti</option>` +
+      fProduttore.innerHTML = `<option value="">Tutti</option>` +
         produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
 
       producerColorMap = {};
@@ -506,12 +568,13 @@
     }
 
     function renderIncentivazioni(){
-      incentivazioneSelect.innerHTML =
-        `<option value="" selected disabled>Seleziona...</option>` +
+      const html = `<option value="" selected disabled>Seleziona...</option>` +
         incentivazioni.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
+      
+      incentivazioneSelect.innerHTML = html;
+      editIncentivazioneSelect.innerHTML = html; // Popolo anche il modal
 
-      fIncentivazione.innerHTML =
-        `<option value="">Tutte</option>` +
+      fIncentivazione.innerHTML = `<option value="">Tutte</option>` +
         incentivazioni.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
     }
 
@@ -527,7 +590,7 @@
         console.error(e);
         produttori = mergeList(DEFAULT_PRODUTTORI, []);
         renderProduttori();
-        setMsg("err", `Impossibile leggere produttori da Firestore.\n${e.code || ""} ${e.message || ""}`);
+        setMsg("err", "Errore lettura produttori.");
       }
     }
 
@@ -543,7 +606,7 @@
         console.error(e);
         incentivazioni = mergeList(DEFAULT_INCENTIVAZIONI, []);
         renderIncentivazioni();
-        setMsg("err", `Impossibile leggere incentivazioni da Firestore.\n${e.code || ""} ${e.message || ""}`);
+        setMsg("err", "Errore lettura incentivazioni.");
       }
     }
 
@@ -552,24 +615,13 @@
       if (!name) return;
       const clean = normalizeName(name);
       if (!clean) return;
-
-      if (produttori.some(p => p.name === clean)){
-        setMsg("err", "Produttore già presente.");
-        return;
-      }
-
+      if (produttori.some(p => p.name === clean)) return setMsg("err", "Produttore già presente.");
       try{
         await addDoc(collection(db, COL_PROD), { name: clean, createdAt: serverTimestamp() });
         setMsg("ok", "Produttore salvato.");
         await loadProduttori();
         produttoreSelect.value = clean;
-      }catch(e){
-        console.error(e);
-        produttori = mergeList(DEFAULT_PRODUTTORI, [...produttori, { id:null, name: clean }]);
-        renderProduttori();
-        produttoreSelect.value = clean;
-        setMsg("err", `Errore salvataggio produttore su Firestore.\n${e.code || ""} ${e.message || ""}`);
-      }
+      }catch(e){ setMsg("err", e.message); }
     });
 
     btnNuovaIncentivazione.addEventListener("click", async () => {
@@ -577,119 +629,68 @@
       if (!name) return;
       const clean = normalizeName(name);
       if (!clean) return;
-
-      if (incentivazioni.some(p => p.name === clean)){
-        setMsg("err", "Incentivazione già presente.");
-        return;
-      }
-
+      if (incentivazioni.some(p => p.name === clean)) return setMsg("err", "Incentivazione già presente.");
       try{
         await addDoc(collection(db, COL_INC), { name: clean, createdAt: serverTimestamp() });
         setMsg("ok", "Incentivazione salvata.");
         await loadIncentivazioni();
         incentivazioneSelect.value = clean;
-      }catch(e){
-        console.error(e);
-        incentivazioni = mergeList(DEFAULT_INCENTIVAZIONI, [...incentivazioni, { id:null, name: clean }]);
-        renderIncentivazioni();
-        incentivazioneSelect.value = clean;
-        setMsg("err", `Errore salvataggio incentivazione su Firestore.\n${e.code || ""} ${e.message || ""}`);
-      }
+      }catch(e){ setMsg("err", e.message); }
     });
 
     async function addRecord(){
       setMsg("", "");
       const form = document.getElementById("formProvvigioni");
       if (!form.reportValidity()) return;
-
       calcolaProvvigioni();
-
-      const produttore = produttoreSelect.value;
-      const compagnia = compagniaSelect.value;
-      const tipoPolizza = tipoPolizzaSelect.value;
-      const incentivazione = incentivazioneSelect.value;
-      
-      // Nuovi campi
-      const nCliente = nomeClienteInput.value.trim();
-      const dDecorrenza = dataDecorrenzaInput.value; // Formato YYYY-MM-DD
-
-      if (!produttore){ setMsg("err","Seleziona il produttore."); return; }
-      if (!compagnia){ setMsg("err","Seleziona la compagnia."); return; }
-      if (!tipoPolizza){ setMsg("err","Seleziona il tipo polizza."); return; }
-      if (!incentivazione){ setMsg("err","Seleziona l'incentivazione."); return; }
-
-      const numPolizza = numeroPolizza.value.trim();
-
-      const premioVal = toNumber(premio.value);
-      const imponibileVal = toNumber(premioImponibile.value);
-      const percVal = toNumber(percentuale.value);
-      const provvVal = toNumber(provvigioni.value);
 
       const d = new Date();
       const anno = d.getFullYear();
       const mese = d.getMonth() + 1;
       const dataiso = `${anno}-${pad2(mese)}-${pad2(d.getDate())}`;
 
-      const titolo = `PROVVIGIONI EXTRA - ${numPolizza}`;
-
       const record = {
-        titolo,
-        nomeCliente: nCliente, // Salvo nome cliente
-        dataDecorrenza: dDecorrenza, // Salvo data decorrenza
-        produttore,
-        compagnia,
-        tipoPolizza,
-        incentivazione,
-        numeroPolizza: numPolizza,
-        premio: premioVal,
-        premioImponibile: imponibileVal,
-        percentuale: percVal,
-        provvigioni: provvVal,
-        anno,
-        mese,
-        dataiso,
-        pagate: false,
-        pagateData: null,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        titolo: `PROVVIGIONI EXTRA - ${numeroPolizza.value}`,
+        nomeCliente: nomeClienteInput.value.trim(),
+        dataDecorrenza: dataDecorrenzaInput.value,
+        produttore: produttoreSelect.value,
+        compagnia: compagniaSelect.value,
+        tipoPolizza: tipoPolizzaSelect.value,
+        incentivazione: incentivazioneSelect.value,
+        numeroPolizza: numeroPolizza.value.trim(),
+        premio: toNumber(premio.value),
+        premioImponibile: toNumber(premioImponibile.value),
+        percentuale: toNumber(percentuale.value),
+        provvigioni: toNumber(provvigioni.value),
+        anno, mese, dataiso,
+        pagate: false, pagateData: null,
+        createdAt: serverTimestamp(), updatedAt: serverTimestamp()
       };
 
       try{
         await addDoc(collection(db, COL_EXTRA), record);
-        setMsg("ok", "Inserito e salvato su Firestore.");
+        setMsg("ok", "Inserito e salvato.");
         form.reset();
         provvigioni.value = "";
         await loadByFilters();
-      }catch(e){
-        console.error(e);
-        setMsg("err", `Errore salvataggio su Firestore.\n${e.code || ""} ${e.message || ""}`);
-      }
+      }catch(e){ setMsg("err", `Errore salvataggio: ${e.message}`); }
     }
-
     btnInserisci.addEventListener("click", addRecord);
 
     function renderResults(rows){
       lastResults = rows;
-
       tbody.innerHTML = rows.map(r => {
         const c = producerColorMap[r.produttore] || "#7CF6FF";
         const checked = r.pagate ? "checked" : "";
         const dateVal = (r.pagateData && typeof r.pagateData === "string") ? r.pagateData : "";
         const disabledDate = r.pagate ? "" : "disabled";
-
-        const tipoTxt =
-          r.tipoPolizza === "SOSTITUZIONE_AUMENTO" ? "Sostituzione" :
-          r.tipoPolizza === "NUOVA" ? "Nuova" : (r.tipoPolizza ?? "");
-
-        // Recupero i nuovi campi, se non esistono (vecchi record) metto stringa vuota
-        const cli = r.nomeCliente || "";
-        const deco = r.dataDecorrenza || "";
-
+        const tipoTxt = r.tipoPolizza === "SOSTITUZIONE_AUMENTO" ? "Sostituzione" : r.tipoPolizza === "NUOVA" ? "Nuova" : r.tipoPolizza;
+        
         return `
           <tr>
             <td class="mono" style="color:var(--muted); font-size:11px;">${r.dataiso ?? ""}</td>
-            <td><b>${cli}</b></td>
-            <td>${deco}</td>
+            <td><b>${r.nomeCliente ?? ""}</b></td>
+            <td>${r.dataDecorrenza ?? ""}</td>
             <td><span style="color:${c}">${r.produttore ?? ""}</span></td>
             <td>${r.compagnia ?? ""}</td>
             <td>${tipoTxt}</td>
@@ -697,7 +698,7 @@
             <td class="mono" style="font-weight:bold; color:#fff;">${money2(Number(r.provvigioni ?? 0))}</td>
             <td>
               <div class="paid-wrap">
-                <input type="checkbox" data-action="togglePaid" data-id="${r.id}" ${checked} title="Segna come pagato" />
+                <input type="checkbox" data-action="togglePaid" data-id="${r.id}" ${checked} title="Pagato?" />
                 <input type="date" data-action="paidDate" data-id="${r.id}" value="${dateVal}" ${disabledDate}/>
               </div>
             </td>
@@ -707,210 +708,157 @@
                 <button class="btn danger tiny" type="button" data-action="del" data-id="${r.id}">X</button>
               </div>
             </td>
-          </tr>
-        `;
+          </tr>`;
       }).join("");
 
       tabella.classList.toggle("hidden", rows.length === 0);
-
-     const totProvv = rows.reduce((s, r) => s + (Number(r.provvigioni) || 0), 0);
-     const totImp = rows.reduce((s, r) => s + (Number(r.premioImponibile) || 0), 0);
-
-     totaleBox.className = "msg ok";
-     totaleBox.textContent =
-      `Totale provvigioni (filtri attivi): ${money2(totProvv)}\n` +
-      `Totale imponibile (filtri attivi): ${money2(totImp)}`;
-
-
+      const totProvv = rows.reduce((s, r) => s + (Number(r.provvigioni)||0), 0);
+      const totImp = rows.reduce((s, r) => s + (Number(r.premioImponibile)||0), 0);
+      totaleBox.className = "msg ok";
+      totaleBox.textContent = `Totale provvigioni: ${money2(totProvv)}\nTotale imponibile: ${money2(totImp)}`;
+      
       const anni = [...new Set(rows.map(r => r.anno))].filter(Boolean).sort((a,b)=>b-a);
-      const current = fAnno.value;
-      fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a => `<option value="${a}">${a}</option>`).join("");
-      if (anni.includes(Number(current))) fAnno.value = current;
+      if(fAnno.children.length<=1) 
+        fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a => `<option value="${a}">${a}</option>`).join("");
     }
 
     async function loadByFilters(){
-      const prod = fProduttore.value;
-      const comp = fCompagnia.value;
-      const tipo = fTipoPolizza.value;
-      const inc = fIncentivazione.value;
-
-      const pagateSel = fPagate.value; 
-
-      const annoSel = fAnno.value ? Number(fAnno.value) : null;
-      const meseSel = fMese.value ? Number(fMese.value) : null;
-
+      const constraints = [];
+      if(fProduttore.value) constraints.push(where("produttore", "==", fProduttore.value));
+      if(fCompagnia.value) constraints.push(where("compagnia", "==", fCompagnia.value));
+      if(fTipoPolizza.value) constraints.push(where("tipoPolizza", "==", fTipoPolizza.value));
+      if(fIncentivazione.value) constraints.push(where("incentivazione", "==", fIncentivazione.value));
+      if(fPagate.value !== "") constraints.push(where("pagate", "==", fPagate.value === "true"));
+      if(fAnno.value) constraints.push(where("anno", "==", Number(fAnno.value)));
+      if(fMese.value) constraints.push(where("mese", "==", Number(fMese.value)));
+      constraints.push(orderBy("dataiso", "desc"));
+      
       try{
-        const ref = collection(db, COL_EXTRA);
-        const constraints = [];
-
-        if (prod) constraints.push(where("produttore", "==", prod));
-        if (comp) constraints.push(where("compagnia", "==", comp));
-        if (tipo) constraints.push(where("tipoPolizza", "==", tipo));
-        if (inc) constraints.push(where("incentivazione", "==", inc));
-
-        if (pagateSel !== "") {
-          constraints.push(where("pagate", "==", pagateSel === "true"));
-        }
-
-        if (annoSel) constraints.push(where("anno", "==", annoSel));
-        if (meseSel) constraints.push(where("mese", "==", meseSel));
-
-        constraints.push(orderBy("dataiso", "desc"));
-
-        const q = query(ref, ...constraints);
+        const q = query(collection(db, COL_EXTRA), ...constraints);
         const snap = await getDocs(q);
-
-        const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderResults(rows);
-      }catch(e){
-        console.error(e);
-        setMsg("err", `Errore query.\n${e.code || ""} ${e.message || ""}`);
-      }
+        renderResults(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }catch(e){ console.error(e); setMsg("err", "Errore caricamento dati."); }
     }
-
     btnApplicaFiltri.addEventListener("click", loadByFilters);
 
+    // Gestione Tabella (Delete e Open Modal)
     tbody.addEventListener("click", async (ev) => {
       const btn = ev.target.closest("button");
       if (!btn) return;
-
       const action = btn.dataset.action;
       const id = btn.dataset.id;
-      if (!action || !id) return;
-
+      
       if (action === "del"){
-        if (!confirm("Confermi eliminazione?")) return;
-        try{
-          await deleteDoc(doc(db, COL_EXTRA, id));
-          await loadByFilters();
-        }catch(e){
-          console.error(e);
-          setMsg("err", `Errore eliminazione.\n${e.code || ""} ${e.message || ""}`);
-        }
+        if (!confirm("Eliminare definitivamente?")) return;
+        await deleteDoc(doc(db, COL_EXTRA, id));
+        loadByFilters();
       }
 
       if (action === "edit"){
         const row = lastResults.find(r => r.id === id);
-        if (!row) return;
+        if(!row) return;
 
-        const nuovoImponibile = prompt("Nuovo premio imponibile:", String(row.premioImponibile ?? ""));
-        if (nuovoImponibile === null) return;
+        // Riempi Modale
+        editId.value = row.id;
+        editNomeCliente.value = row.nomeCliente || "";
+        editDataDecorrenza.value = row.dataDecorrenza || "";
+        editProduttoreSelect.value = row.produttore || "";
+        editCompagniaSelect.value = row.compagnia || "";
+        editTipoPolizzaSelect.value = row.tipoPolizza || "";
+        editIncentivazioneSelect.value = row.incentivazione || "";
+        editNumeroPolizza.value = row.numeroPolizza || "";
+        editPremio.value = row.premio || "";
+        editPremioImponibile.value = row.premioImponibile || "";
+        editPercentuale.value = row.percentuale || "";
+        editProvvigioni.value = row.provvigioni || "";
 
-        const nuovaPerc = prompt("Nuova percentuale:", String(row.percentuale ?? ""));
-        if (nuovaPerc === null) return;
-
-        const imponibileVal = toNumber(nuovoImponibile);
-        const percVal = toNumber(nuovaPerc);
-        if (!Number.isFinite(imponibileVal) || !Number.isFinite(percVal)){
-          setMsg("err","Valori non validi.");
-          return;
-        }
-
-        const provvVal = Math.round((imponibileVal * (percVal/100)) * 100)/100;
-
-        try{
-          await updateDoc(doc(db, COL_EXTRA, id), {
-            premioImponibile: imponibileVal,
-            percentuale: percVal,
-            provvigioni: provvVal,
-            updatedAt: serverTimestamp()
-          });
-          await loadByFilters();
-        }catch(e){
-          console.error(e);
-          setMsg("err", `Errore modifica.\n${e.code || ""} ${e.message || ""}`);
-        }
+        // Mostra modale
+        editModal.classList.remove("hidden");
       }
     });
 
+    // Gestione Chiusura/Salvataggio Modal
+    btnChiudiModal.addEventListener("click", () => editModal.classList.add("hidden"));
+    
+    btnSalvaModifiche.addEventListener("click", async () => {
+      const id = editId.value;
+      if(!id) return;
+      
+      const imp = toNumber(editPremioImponibile.value);
+      const perc = toNumber(editPercentuale.value);
+      const prov = toNumber(editProvvigioni.value);
+
+      try{
+        await updateDoc(doc(db, COL_EXTRA, id), {
+          nomeCliente: editNomeCliente.value.trim(),
+          dataDecorrenza: editDataDecorrenza.value,
+          produttore: editProduttoreSelect.value,
+          compagnia: editCompagniaSelect.value,
+          tipoPolizza: editTipoPolizzaSelect.value,
+          incentivazione: editIncentivazioneSelect.value,
+          numeroPolizza: editNumeroPolizza.value.trim(),
+          premio: toNumber(editPremio.value),
+          premioImponibile: imp,
+          percentuale: perc,
+          provvigioni: prov,
+          updatedAt: serverTimestamp()
+        });
+        editModal.classList.add("hidden");
+        await loadByFilters();
+        setMsg("ok", "Modifica salvata.");
+      }catch(e){
+        alert("Errore salvataggio modifica: " + e.message);
+      }
+    });
+
+    // Toggle Paid Checkbox
     tbody.addEventListener("change", async (ev) => {
       const el = ev.target;
       const action = el.dataset.action;
       const id = el.dataset.id;
       if (!action || !id) return;
-
+      
       if (action === "togglePaid"){
         const checked = el.checked;
         const dateInput = tbody.querySelector(`input[data-action="paidDate"][data-id="${id}"]`);
-        if (dateInput){
-          dateInput.disabled = !checked;
-          if (checked && !dateInput.value){
-            const d = new Date();
-            dateInput.value = `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-          }
-          if (!checked) dateInput.value = "";
+        if(dateInput){
+            dateInput.disabled = !checked;
+            if(checked && !dateInput.value){
+                const d = new Date();
+                dateInput.value = `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+            }
+            if(!checked) dateInput.value = "";
         }
-
-        try{
-          await updateDoc(doc(db, COL_EXTRA, id), {
-            pagate: checked,
-            pagateData: checked ? (dateInput ? dateInput.value : null) : null,
+        await updateDoc(doc(db, COL_EXTRA, id), {
+            pagate: checked, 
+            pagateData: checked ? dateInput.value : null, 
             updatedAt: serverTimestamp()
-          });
-        }catch(e){
-          console.error(e);
-          setMsg("err", `Errore aggiornamento pagate.\n${e.code || ""} ${e.message || ""}`);
-        }
+        });
       }
-
       if (action === "paidDate"){
-        const val = el.value || null;
-        try{
-          await updateDoc(doc(db, COL_EXTRA, id), {
-            pagateData: val,
-            pagate: !!val,
-            updatedAt: serverTimestamp()
-          });
-          const cb = tbody.querySelector(`input[data-action="togglePaid"][data-id="${id}"]`);
-          if (cb) cb.checked = !!val;
-        }catch(e){
-          console.error(e);
-          setMsg("err", `Errore aggiornamento data pagate.\n${e.code || ""} ${e.message || ""}`);
-        }
+        const val = el.value;
+        await updateDoc(doc(db, COL_EXTRA, id), { pagateData: val, pagate: !!val });
       }
     });
 
-    function exportExcel(){
+    btnExportExcel.addEventListener("click", () => {
       if (!window.XLSX) return;
-
       const data = lastResults.map(r => ({
-        "Data Ins.": r.dataiso ?? "",
-        "Cliente": r.nomeCliente ?? "", // NUOVO CAMPO EXCEL
-        "Data Decorrenza": r.dataDecorrenza ?? "", // NUOVO CAMPO EXCEL
-        "Produttore": r.produttore ?? "",
-        "Compagnia": r.compagnia ?? "",
-        "Tipo": r.tipoPolizza ?? "",
-        "Incentivazione": r.incentivazione ?? "",
-        "Polizza": r.numeroPolizza ?? "",
-        "Premio": Number(r.premio ?? 0),
-        "Premio imponibile": Number(r.premioImponibile ?? 0),
-        "Percentuale %": Number(r.percentuale ?? 0),
-        "Provvigioni": Number(r.provvigioni ?? 0),
-        "Pagate": r.pagate ? "SI" : "NO",
-        "Data pagamento": r.pagateData ?? "",
-        "Anno Rif": r.anno ?? "",
-        "Mese Rif": r.mese ?? ""
+        "Data Ins.": r.dataiso, "Cliente": r.nomeCliente, "Decorrenza": r.dataDecorrenza,
+        "Produttore": r.produttore, "Compagnia": r.compagnia, "Tipo": r.tipoPolizza,
+        "Incentivazione": r.incentivazione, "Polizza": r.numeroPolizza,
+        "Premio": r.premio, "Imponibile": r.premioImponibile, "%": r.percentuale,
+        "Provvigioni": r.provvigioni, "Pagate": r.pagate?"SI":"NO", "Data Pag.": r.pagateData
       }));
-
-      const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Provvigioni");
-
-      const prod = fProduttore.value || "Tutti";
-      const comp = fCompagnia.value || "Tutte";
-      
-      const d = new Date();
-      const ts = `${d.getFullYear()}${pad2(d.getMonth()+1)}${pad2(d.getDate())}`;
-
-      XLSX.writeFile(wb, `ProvvigioniExtra_Export_${ts}.xlsx`);
-    }
-    btnExportExcel.addEventListener("click", exportExcel);
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Export");
+      XLSX.writeFile(wb, `Provvigioni_${new Date().getTime()}.xlsx`);
+    });
 
     async function init(){
       await loadProduttori();
       await loadIncentivazioni();
       await loadByFilters();
-      setMsg("ok", "Pronto.");
     }
     init();
   </script>
