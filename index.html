@@ -3,13 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Provvigioni Extra</title>
+  <title>Provvigioni Extra - Login</title>
   <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#070A12">
+  <meta name="theme-color" content="#070A12">
 
-<link rel="icon" type="image/svg+xml" href="icon.svg">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
 
   <style>
     :root{
@@ -24,125 +22,153 @@
     }
     *{ box-sizing:border-box; }
     body{
-      margin:0; padding:26px;
+      margin:0; padding:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
         radial-gradient(900px 500px at 20% 10%, rgba(255, 107, 0, .08), transparent 55%),
         radial-gradient(900px 600px at 80% 20%, rgba(177,140,255,.10), transparent 60%),
         linear-gradient(180deg, var(--bg), #050711);
       color: var(--text);
-    }
-    .wrap{ max-width: 1200px; margin: 0 auto; }
-    
-    .title{ 
-      display:flex; flex-direction: column; align-items:start; justify-content:center; 
-      margin-bottom: 24px; gap: 10px;
-    }
-    .title h1{ 
-      margin:0; font-size: 38px; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; color: #fff;
-      text-shadow: 0 0 10px rgba(255, 107, 0, 0.6), 0 0 20px rgba(255, 107, 0, 0.4);
-    }
-    .badge{
-      padding:6px 12px; border:1px solid var(--line);
-      background: rgba(255,255,255,.03); border-radius: 999px;
-      color: var(--muted); font-size: 12px;
+      min-height: 100vh;
     }
     
-    .card{
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
-      border-radius: 14px; padding: 20px;
-      box-shadow: 0 0 0 1px rgba(124,246,255,.08), 0 18px 50px rgba(0,0,0,.55);
-      backdrop-filter: blur(8px);
+    /* UTILS */
+    .hidden { display: none !important; }
+    .btn{
+      width:100%; padding: 12px 20px; cursor:pointer; white-space: nowrap;
+      border: 1px solid var(--glow-orange);
+      background: linear-gradient(180deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05));
+      box-shadow: 0 0 20px rgba(255, 107, 0, 0.2);
+      color: #fff; font-weight: 600; border-radius: 12px;
+      transition: all 0.2s;
     }
-    label{ display:block; margin: 10px 0 6px; color: var(--muted); font-size: 13px; }
-    input, select, button{
+    .btn:hover { background: rgba(255, 107, 0, 0.25); }
+    .btn.secondary{ 
+      border-color: rgba(177,140,255,.35); background: rgba(255,255,255,.03); 
+      box-shadow: none; font-weight: normal; 
+    }
+    .btn.danger{ border-color: rgba(255,90,122,.45); background: rgba(255,90,122,.08); box-shadow:none; }
+    .btn.warn{ border-color: rgba(255,192,77,.45); background: rgba(255,192,77,.08); box-shadow:none;}
+    .tiny{ width:auto; padding: 7px 10px; font-size: 12px; }
+
+    input, select {
       width:100%; padding: 11px 12px; border-radius: 12px;
       border: 1px solid rgba(120,150,255,.22);
       background: rgba(10, 14, 28, .85); color: var(--text);
-      outline: none; transition: all 0.2s ease;
+      outline: none; margin-bottom: 10px;
     }
     input:focus, select:focus{
       border-color: var(--glow-orange); box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
     }
-    input[readonly]{ background: rgba(255,255,255,.04); border-style: dashed; color: rgba(234,240,255,.92); }
+    label{ display:block; margin: 10px 0 6px; color: var(--muted); font-size: 13px; }
+
+    /* AUTH SCREEN */
+    #authContainer {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 20px;
+    }
+    .auth-card {
+      width: 100%; max-width: 400px;
+      padding: 30px; border-radius: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+    .logo-area {
+      margin-bottom: 20px; color: var(--glow-orange);
+    }
+    .logo-area svg { width: 60px; height: 60px; fill: currentColor; filter: drop-shadow(0 0 10px rgba(255,107,0,0.5)); }
+    .auth-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; color: #fff; }
+    .auth-toggle { margin-top: 15px; font-size: 13px; color: var(--muted); cursor: pointer; text-decoration: underline; }
+
+    /* APP SCREEN */
+    #appContainer { padding: 26px; max-width: 1200px; margin: 0 auto; }
     
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--line);
+    }
+    .user-info { display: flex; align-items: center; gap: 15px; }
+    .user-name { font-weight: bold; color: var(--ok); text-shadow: 0 0 10px rgba(53, 242, 166, 0.3); }
+
+    /* Existing Styles kept for compatibility */
+    .title h1{ 
+      margin:0; font-size: 38px; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; color: #fff;
+      text-shadow: 0 0 10px rgba(255, 107, 0, 0.6), 0 0 20px rgba(255, 107, 0, 0.4);
+    }
+    .badge{ padding:6px 12px; border:1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 999px; color: var(--muted); font-size: 12px; }
+    .card{ border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)); border-radius: 14px; padding: 20px; margin-bottom: 20px; backdrop-filter: blur(8px); }
     .grid{ display:grid; grid-template-columns: 1.1fr 1fr; gap: 20px; }
     @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
-    .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .split{ display:flex; gap:10px; flex-wrap: wrap; align-items: end; }
     .split > *{ flex: 1; min-width: 180px; }
-
+    .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .actions{ display:flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; align-items:center; }
-    .btn{
-      width:auto; padding: 12px 20px; cursor:pointer; white-space: nowrap;
-      border: 1px solid rgba(124,246,255,.35);
-      background: linear-gradient(180deg, rgba(124,246,255,.12), rgba(177,140,255,.10));
-      box-shadow: 0 0 18px rgba(124,246,255,.14); font-weight: 600;
-    }
-    .btn#btnInserisci {
-      border-color: var(--glow-orange);
-      background: linear-gradient(180deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05));
-      box-shadow: 0 0 20px rgba(255, 107, 0, 0.2); color: #fff;
-    }
-    .btn#btnInserisci:hover { background: rgba(255, 107, 0, 0.25); }
-    .btn.secondary{ border-color: rgba(177,140,255,.35); background: rgba(255,255,255,.03); font-weight: normal; }
-    .btn.danger{ border-color: rgba(255,90,122,.45); background: rgba(255,90,122,.08); }
-    .btn.warn{ border-color: rgba(255,192,77,.45); background: rgba(255,192,77,.08); }
-    
-    .msg{ margin-top: 10px; font-size: 13px; color: var(--muted); white-space: pre-wrap; }
-    .msg.ok{ color: var(--ok); }
-    .msg.err{ color: var(--danger); }
-
-    .toolbar{
-      display:flex; gap: 10px; flex-wrap: wrap; align-items: end;
-      margin-top: 20px; padding: 16px; border-radius: 14px;
-      border: 1px solid var(--line); background: rgba(255,255,255,.02);
-    }
+    .toolbar{ display:flex; gap: 10px; flex-wrap: wrap; align-items: end; margin-top: 20px; padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.02); }
     .tool{ min-width: 170px; flex: 1; }
     .tool.small{ min-width: 130px; max-width: 190px; flex: 0; }
-
-    table{
-      width:100%; border-collapse: collapse; margin-top: 16px;
-      overflow:hidden; border-radius: 14px;
-      border: 1px solid var(--line); background: rgba(6, 9, 18, .6);
-    }
+    
+    table{ width:100%; border-collapse: collapse; margin-top: 16px; overflow:hidden; border-radius: 14px; border: 1px solid var(--line); background: rgba(6, 9, 18, .6); }
     th, td{ padding: 12px 12px; border-bottom: 1px solid rgba(120,150,255,.14); font-size: 13px; vertical-align: middle; }
     th{ text-align:left; color: rgba(234,240,255,.95); background: rgba(255,255,255,.03); font-weight: 600; }
     tr:hover td{ background: rgba(124,246,255,.04); }
     .mono{ font-variant-numeric: tabular-nums; }
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:4px 10px; border-radius: 999px;
-      border:1px solid rgba(120,150,255,.22); background: rgba(255,255,255,.02);
-    }
-    .cell-actions{ display:flex; gap:8px; flex-wrap: wrap; }
-    .tiny{ width:auto; padding: 7px 10px; border-radius: 10px; font-size: 12px; }
-    .paid-wrap{ display:flex; align-items:center; gap:10px; flex-wrap: wrap; }
-    .hidden{ display:none !important; }
-
+    .msg{ margin-top: 10px; font-size: 13px; color: var(--muted); white-space: pre-wrap; }
+    .msg.ok{ color: var(--ok); }
+    .msg.err{ color: var(--danger); }
+    
     /* MODALE */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
-      z-index: 1000; display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-    }
-    .modal-content {
-      background: #0D111D; border: 1px solid var(--glow-orange);
-      border-radius: 16px; padding: 24px; width: 100%; max-width: 800px;
-      max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 0 40px rgba(255, 107, 0, 0.2);
-    }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: #0D111D; border: 1px solid var(--glow-orange); border-radius: 16px; padding: 24px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 40px rgba(255, 107, 0, 0.2); }
     .modal-header { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: var(--glow-orange); text-transform: uppercase; }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="title">
-      <h1>Provvigioni Extra</h1>
-      <div class="badge">Produttori + Incentivazioni dinamiche · Firestore</div>
+
+  <div id="authContainer">
+    <div class="auth-card">
+      <div class="logo-area">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+      </div>
+      
+      <form id="loginForm">
+        <h2 class="auth-title">Accedi</h2>
+        <input type="email" id="loginEmail" placeholder="Email" required />
+        <input type="password" id="loginPass" placeholder="Password" required />
+        <button type="submit" class="btn">LOGIN</button>
+        <div class="msg" id="loginMsg"></div>
+        <div class="auth-toggle" id="goRegister">Non hai un account? Registrati</div>
+      </form>
+
+      <form id="registerForm" class="hidden">
+        <h2 class="auth-title">Registrati</h2>
+        <div class="row2">
+          <input type="text" id="regNome" placeholder="Nome" required />
+          <input type="text" id="regCognome" placeholder="Cognome" required />
+        </div>
+        <input type="email" id="regEmail" placeholder="Email" required />
+        <input type="password" id="regPass" placeholder="Password (min 6 car.)" required />
+        <button type="submit" class="btn">CREA ACCOUNT</button>
+        <div class="msg" id="regMsg"></div>
+        <div class="auth-toggle" id="goLogin">Hai già un account? Accedi</div>
+      </form>
+    </div>
+  </div>
+
+  <div id="appContainer" class="hidden">
+    
+    <div class="top-bar">
+      <div class="title" style="margin:0;">
+        <h1>Provvigioni Extra</h1>
+        <div class="badge" id="roleBadge">...</div>
+      </div>
+      <div class="user-info">
+        <span class="user-name" id="displayUserName">Caricamento...</span>
+        <button class="btn secondary tiny" id="btnLogout">ESCI</button>
+      </div>
     </div>
 
     <div class="card">
@@ -163,13 +189,11 @@
             <div class="split">
               <div>
                 <label for="produttoreSelect">Produttore</label>
-                <select id="produttoreSelect" required>
-                  <option value="" selected disabled>Caricamento...</option>
-                </select>
+                <select id="produttoreSelect" required><option value="" selected disabled>Caricamento...</option></select>
               </div>
               <div>
                 <label>&nbsp;</label>
-                <button class="btn secondary" type="button" id="btnNuovoProduttore">Nuovo produttore</button>
+                <button class="btn secondary" type="button" id="btnNuovoProduttore">Nuovo</button>
               </div>
             </div>
 
@@ -187,13 +211,12 @@
                   <option value="METLIFE">METLIFE</option>
                 </select>
               </div>
-
               <div>
                 <label for="tipoPolizzaSelect">Tipo polizza</label>
                 <select id="tipoPolizzaSelect" required>
                   <option value="" selected disabled>Seleziona...</option>
                   <option value="NUOVA">Polizza nuova</option>
-                  <option value="SOSTITUZIONE_AUMENTO">Sostituzione (premio in aumento)</option>
+                  <option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
                 </select>
               </div>
             </div>
@@ -201,13 +224,11 @@
             <div class="split">
               <div>
                 <label for="incentivazioneSelect">Incentivazione</label>
-                <select id="incentivazioneSelect" required>
-                  <option value="" selected disabled>Caricamento...</option>
-                </select>
+                <select id="incentivazioneSelect" required><option value="" selected disabled>Caricamento...</option></select>
               </div>
               <div>
                 <label>&nbsp;</label>
-                <button class="btn secondary" type="button" id="btnNuovaIncentivazione">Nuova incentivazione</button>
+                <button class="btn secondary" type="button" id="btnNuovaIncentivazione">Nuova</button>
               </div>
             </div>
 
@@ -229,11 +250,11 @@
 
             <div class="row2">
               <div>
-                <label for="percentuale">% provvigioni (su imponibile)</label>
+                <label for="percentuale">% provvigioni</label>
                 <input id="percentuale" type="number" step="0.01" min="0" required placeholder="Es. 12,50" />
               </div>
               <div>
-                <label for="provvigioni">Provvigioni calcolate</label>
+                <label for="provvigioni">Calcolate</label>
                 <input id="provvigioni" type="number" step="0.01" readonly placeholder="0,00" />
               </div>
             </div>
@@ -248,71 +269,21 @@
       </form>
 
       <div class="toolbar">
-        <div class="tool">
-          <label for="fProduttore">Filtro produttore</label>
-          <select id="fProduttore"><option value="">Tutti</option></select>
-        </div>
-        <div class="tool">
-          <label for="fCompagnia">Compagnia</label>
-          <select id="fCompagnia">
-            <option value="">Tutte</option>
-            <option value="ALLIANZ">ALLIANZ</option>
-            <option value="HDI">HDI</option>
-            <option value="VITTORIA">VITTORIA</option>
-            <option value="ARAG">ARAG</option>
-            <option value="HELVETIA">HELVETIA</option>
-            <option value="GENIALPIU'">GENIALPIU'</option>
-            <option value="METLIFE">METLIFE</option>
-          </select>
-        </div>
-        <div class="tool">
-          <label for="fTipoPolizza">Tipo polizza</label>
-          <select id="fTipoPolizza">
-            <option value="">Tutti</option>
-            <option value="NUOVA">Polizza nuova</option>
-            <option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
-          </select>
-        </div>
-        <div class="tool">
-          <label for="fIncentivazione">Incentivazione</label>
-          <select id="fIncentivazione"><option value="">Tutte</option></select>
-        </div>
-        <div class="tool small">
-          <label for="fPagate">Pagamenti</label>
-          <select id="fPagate">
-            <option value="">Tutte</option>
-            <option value="true">Pagate</option>
-            <option value="false">Da pagare</option>
-          </select>
-        </div>
-        <div class="tool small">
-          <label for="fAnno">Anno</label>
-          <select id="fAnno"><option value="">Tutti</option></select>
-        </div>
-        <div class="tool small">
-          <label for="fMese">Mese</label>
-          <select id="fMese">
-            <option value="">Tutti</option>
-            <option value="1">Gen</option><option value="2">Feb</option><option value="3">Mar</option>
-            <option value="4">Apr</option><option value="5">Mag</option><option value="6">Giu</option>
-            <option value="7">Lug</option><option value="8">Ago</option><option value="9">Set</option>
-            <option value="10">Ott</option><option value="11">Nov</option><option value="12">Dic</option>
-          </select>
-        </div>
-        <div class="tool small">
-          <label>&nbsp;</label>
-          <button class="btn secondary" type="button" id="btnApplicaFiltri">Applica</button>
-        </div>
-        <div class="tool small">
-          <label>&nbsp;</label>
-          <button class="btn secondary" type="button" id="btnExportExcel">Export Excel</button>
-        </div>
+        <div class="tool"><label>Produttore</label><select id="fProduttore"><option value="">Tutti</option></select></div>
+        <div class="tool"><label>Compagnia</label><select id="fCompagnia"><option value="">Tutte</option><option value="ALLIANZ">ALLIANZ</option><option value="HDI">HDI</option><option value="VITTORIA">VITTORIA</option><option value="ARAG">ARAG</option><option value="HELVETIA">HELVETIA</option><option value="GENIALPIU'">GENIALPIU'</option><option value="METLIFE">METLIFE</option></select></div>
+        <div class="tool"><label>Tipo Polizza</label><select id="fTipoPolizza"><option value="">Tutti</option><option value="NUOVA">Nuova</option><option value="SOSTITUZIONE_AUMENTO">Sostituzione</option></select></div>
+        <div class="tool"><label>Incentivazione</label><select id="fIncentivazione"><option value="">Tutte</option></select></div>
+        <div class="tool small"><label>Pagamenti</label><select id="fPagate"><option value="">Tutte</option><option value="true">Pagate</option><option value="false">Da pagare</option></select></div>
+        <div class="tool small"><label>Anno</label><select id="fAnno"><option value="">Tutti</option></select></div>
+        <div class="tool small"><label>Mese</label><select id="fMese"><option value="">Tutti</option><option value="1">Gen</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">Mag</option><option value="6">Giu</option><option value="7">Lug</option><option value="8">Ago</option><option value="9">Set</option><option value="10">Ott</option><option value="11">Nov</option><option value="12">Dic</option></select></div>
+        <div class="tool small"><label>&nbsp;</label><button class="btn secondary" type="button" id="btnApplicaFiltri">Applica</button></div>
+        <div class="tool small"><label>&nbsp;</label><button class="btn secondary" type="button" id="btnExportExcel">Excel</button></div>
       </div>
 
       <table id="tabella" class="hidden">
         <thead>
           <tr>
-            <th>Data Ins.</th>
+            <th>Ins.</th>
             <th>Cliente</th>
             <th>Decorrenza</th>
             <th>Produttore</th>
@@ -338,69 +309,29 @@
         <div class="grid">
           <div>
             <div class="split">
-              <div>
-                <label>Nome Cliente</label>
-                <input id="editNomeCliente" type="text" />
-              </div>
-              <div>
-                <label>Data Decorrenza</label>
-                <input id="editDataDecorrenza" type="date" />
-              </div>
+              <div><label>Nome Cliente</label><input id="editNomeCliente" type="text" /></div>
+              <div><label>Data Decorrenza</label><input id="editDataDecorrenza" type="date" /></div>
             </div>
             <div class="split">
-              <div>
-                <label>Produttore</label>
-                <select id="editProduttoreSelect"></select>
-              </div>
-              <div>
-                <label>Compagnia</label>
-                <select id="editCompagniaSelect">
-                   <option value="ALLIANZ">ALLIANZ</option>
-                   <option value="HDI">HDI</option>
-                   <option value="VITTORIA">VITTORIA</option>
-                   <option value="ARAG">ARAG</option>
-                   <option value="HELVETIA">HELVETIA</option>
-                   <option value="GENIALPIU'">GENIALPIU'</option>
-                   <option value="METLIFE">METLIFE</option>
-                </select>
-              </div>
+              <div><label>Produttore</label><select id="editProduttoreSelect"></select></div>
+              <div><label>Compagnia</label><select id="editCompagniaSelect">
+                 <option value="ALLIANZ">ALLIANZ</option><option value="HDI">HDI</option><option value="VITTORIA">VITTORIA</option><option value="ARAG">ARAG</option><option value="HELVETIA">HELVETIA</option><option value="GENIALPIU'">GENIALPIU'</option><option value="METLIFE">METLIFE</option>
+              </select></div>
             </div>
             <div class="split">
-               <div>
-                 <label>Tipo Polizza</label>
-                 <select id="editTipoPolizzaSelect">
-                    <option value="NUOVA">Polizza nuova</option>
-                    <option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
-                 </select>
-               </div>
-               <div>
-                 <label>Incentivazione</label>
-                 <select id="editIncentivazioneSelect"></select>
-               </div>
+               <div><label>Tipo Polizza</label><select id="editTipoPolizzaSelect"><option value="NUOVA">Nuova</option><option value="SOSTITUZIONE_AUMENTO">Sostituzione</option></select></div>
+               <div><label>Incentivazione</label><select id="editIncentivazioneSelect"></select></div>
             </div>
-            <label>Numero Polizza</label>
-            <input id="editNumeroPolizza" type="text" />
+            <label>Numero Polizza</label><input id="editNumeroPolizza" type="text" />
           </div>
           <div>
             <div class="row2">
-              <div>
-                <label>Premio</label>
-                <input id="editPremio" type="number" step="0.01" />
-              </div>
-              <div>
-                <label>Premio Imponibile</label>
-                <input id="editPremioImponibile" type="number" step="0.01" />
-              </div>
+              <div><label>Premio</label><input id="editPremio" type="number" step="0.01" /></div>
+              <div><label>Premio Imponibile</label><input id="editPremioImponibile" type="number" step="0.01" /></div>
             </div>
             <div class="row2">
-              <div>
-                <label>% Provvigione</label>
-                <input id="editPercentuale" type="number" step="0.01" />
-              </div>
-              <div>
-                <label>Calcolo Provv.</label>
-                <input id="editProvvigioni" type="number" step="0.01" readonly />
-              </div>
+              <div><label>% Provvigione</label><input id="editPercentuale" type="number" step="0.01" /></div>
+              <div><label>Calcolo Provv.</label><input id="editProvvigioni" type="number" step="0.01" readonly /></div>
             </div>
             <div class="actions" style="margin-top:24px;">
               <button class="btn" type="button" id="btnSalvaModifiche">SALVA MODIFICHE</button>
@@ -416,8 +347,11 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+    import { 
+      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
     import {
-      getFirestore, collection, addDoc, doc, updateDoc, deleteDoc,
+      getFirestore, collection, addDoc, doc, setDoc, getDoc, updateDoc, deleteDoc,
       query, where, orderBy, getDocs, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
@@ -431,16 +365,113 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const db = getFirestore(app);
+
+    // CONFIGURAZIONE AMMINISTRATORI
+    // Inserisci qui le email che devono vedere TUTTO
+    const LISTA_ADMIN = ["evanesse1978@gmai.com", "valentinavitr94@gmail.com", "assicurazioni.vtrani@gmail.com", "assicurazioni.ams@gmail.com"]; 
 
     const COL_EXTRA = "allianz_provvigioni_extra";
     const COL_PROD = "produttori";
     const COL_INC = "incentivazioni";
+    const COL_USERS = "users";
+
+    let currentUser = null;
+    let isAdmin = false;
+
+    // Elementi UI Auth
+    const authContainer = document.getElementById("authContainer");
+    const appContainer = document.getElementById("appContainer");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const goRegister = document.getElementById("goRegister");
+    const goLogin = document.getElementById("goLogin");
+    const displayUserName = document.getElementById("displayUserName");
+    const roleBadge = document.getElementById("roleBadge");
+    const btnLogout = document.getElementById("btnLogout");
+
+    // Toggle Auth Forms
+    goRegister.addEventListener("click", () => { loginForm.classList.add("hidden"); registerForm.classList.remove("hidden"); });
+    goLogin.addEventListener("click", () => { registerForm.classList.add("hidden"); loginForm.classList.remove("hidden"); });
+
+    // Login Logic
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const pass = document.getElementById("loginPass").value;
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (err) {
+        document.getElementById("loginMsg").textContent = "Errore login: " + err.message;
+        document.getElementById("loginMsg").className = "msg err";
+      }
+    });
+
+    // Register Logic
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nome = document.getElementById("regNome").value;
+      const cognome = document.getElementById("regCognome").value;
+      const email = document.getElementById("regEmail").value;
+      const pass = document.getElementById("regPass").value;
+
+      try {
+        const res = await createUserWithEmailAndPassword(auth, email, pass);
+        // Salva profilo utente su Firestore
+        await setDoc(doc(db, COL_USERS, res.user.uid), {
+          nome, cognome, email,
+          role: "USER", // Default role
+          createdAt: serverTimestamp()
+        });
+      } catch (err) {
+        document.getElementById("regMsg").textContent = "Errore registrazione: " + err.message;
+        document.getElementById("regMsg").className = "msg err";
+      }
+    });
+
+    // Logout
+    btnLogout.addEventListener("click", () => signOut(auth));
+
+    // Auth State Observer
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        // Determina se admin
+        isAdmin = LISTA_ADMIN.includes(user.email.toLowerCase());
+        
+        // Recupera info utente
+        try {
+            const userSnap = await getDoc(doc(db, COL_USERS, user.uid));
+            if (userSnap.exists()) {
+                const d = userSnap.data();
+                displayUserName.textContent = `${d.nome} ${d.cognome}`;
+            } else {
+                displayUserName.textContent = user.email;
+            }
+        } catch(e) { displayUserName.textContent = user.email; }
+
+        roleBadge.textContent = isAdmin ? "AMMINISTRATORE" : "AGENTE";
+        roleBadge.style.borderColor = isAdmin ? "var(--glow-orange)" : "var(--line)";
+
+        authContainer.classList.add("hidden");
+        appContainer.classList.remove("hidden");
+        initApp();
+      } else {
+        currentUser = null;
+        isAdmin = false;
+        authContainer.classList.remove("hidden");
+        appContainer.classList.add("hidden");
+      }
+    });
+
+    // --- LOGICA APP ---
+    // (Simile a prima, ma con filtri utente)
 
     const DEFAULT_PRODUTTORI = ["EVAN SGARBI","DUILIO FRARACCI","GINO POLIGANI","GIOVANNI CARERI","LUCA IORI","ANTONIO SENTIMENTI"];
     const DEFAULT_INCENTIVAZIONI = ["STANDARD"];
 
-    // Main Form Elements
+    // UI Refs
     const nomeClienteInput = document.getElementById("nomeCliente");
     const dataDecorrenzaInput = document.getElementById("dataDecorrenza");
     const produttoreSelect = document.getElementById("produttoreSelect");
@@ -458,7 +489,7 @@
     const btnReset = document.getElementById("btnReset");
     const msg = document.getElementById("msg");
 
-    // Filter Elements
+    // Filters
     const fProduttore = document.getElementById("fProduttore");
     const fCompagnia = document.getElementById("fCompagnia");
     const fTipoPolizza = document.getElementById("fTipoPolizza");
@@ -468,18 +499,16 @@
     const fMese = document.getElementById("fMese");
     const btnApplicaFiltri = document.getElementById("btnApplicaFiltri");
 
-    // Table & Export
+    // Table & Modal
     const tabella = document.getElementById("tabella");
     const tbody = tabella.querySelector("tbody");
     const btnExportExcel = document.getElementById("btnExportExcel");
     const totaleBox = document.getElementById("totaleBox");
-
-    // Modal Elements
     const editModal = document.getElementById("editModal");
     const btnChiudiModal = document.getElementById("btnChiudiModal");
     const btnSalvaModifiche = document.getElementById("btnSalvaModifiche");
-    
-    // Edit Form Elements
+
+    // Edit Inputs
     const editId = document.getElementById("editId");
     const editNomeCliente = document.getElementById("editNomeCliente");
     const editDataDecorrenza = document.getElementById("editDataDecorrenza");
@@ -502,49 +531,35 @@
       msg.className = "msg" + (type ? " " + type : "");
       msg.textContent = text || "";
     }
-
     function toNumber(v){
       if (typeof v !== "string") v = String(v ?? "");
       v = v.replace(",", ".").trim();
-      const n = Number(v);
-      return Number.isFinite(n) ? n : NaN;
+      const n = Number(v); return Number.isFinite(n) ? n : NaN;
     }
-
     function money2(n){ return (Math.round(n * 100) / 100).toFixed(2); }
     function pad2(n){ return String(n).padStart(2, "0"); }
     function normalizeName(s){ return (s || "").trim().toUpperCase(); }
-
     function colorForProducer(name){
       const palette = ["#7CF6FF","#B18CFF","#35F2A6","#FFC04D","#FF5A7A","#7CFFB2","#6CA8FF","#E0A6FF"];
-      let h = 0;
-      for (let i=0;i<name.length;i++) h = (h*31 + name.charCodeAt(i)) >>> 0;
+      let h = 0; for (let i=0;i<name.length;i++) h = (h*31 + name.charCodeAt(i)) >>> 0;
       return palette[h % palette.length];
     }
 
-    // Calcolo Form Principale
     function calcolaProvvigioni(){
-      const imp = toNumber(premioImponibile.value);
-      const perc = toNumber(percentuale.value);
+      const imp = toNumber(premioImponibile.value); const perc = toNumber(percentuale.value);
       if (!Number.isFinite(imp) || !Number.isFinite(perc)) { provvigioni.value = ""; return; }
       provvigioni.value = money2(imp * (perc / 100));
     }
-    premioImponibile.addEventListener("input", calcolaProvvigioni);
-    percentuale.addEventListener("input", calcolaProvvigioni);
-
-    // Calcolo Form Modale
+    premioImponibile.addEventListener("input", calcolaProvvigioni); percentuale.addEventListener("input", calcolaProvvigioni);
+    
     function calcolaProvvigioniModal(){
-      const imp = toNumber(editPremioImponibile.value);
-      const perc = toNumber(editPercentuale.value);
+      const imp = toNumber(editPremioImponibile.value); const perc = toNumber(editPercentuale.value);
       if (!Number.isFinite(imp) || !Number.isFinite(perc)) { editProvvigioni.value = ""; return; }
       editProvvigioni.value = money2(imp * (perc / 100));
     }
-    editPremioImponibile.addEventListener("input", calcolaProvvigioniModal);
-    editPercentuale.addEventListener("input", calcolaProvvigioniModal);
+    editPremioImponibile.addEventListener("input", calcolaProvvigioniModal); editPercentuale.addEventListener("input", calcolaProvvigioniModal);
 
-    btnReset.addEventListener("click", () => {
-      setMsg("", "");
-      provvigioni.value = "";
-    });
+    btnReset.addEventListener("click", () => { setMsg("", ""); provvigioni.value = ""; });
 
     function mergeList(defaults, firestoreList){
       const set = new Map();
@@ -553,104 +568,55 @@
       return [...set.values()].sort((a,b)=>a.name.localeCompare(b.name));
     }
 
-    function renderProduttori(){
-      const html = `<option value="" selected disabled>Seleziona...</option>` +
-        produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
+    function renderSelects(){
+      const htmlP = `<option value="" selected disabled>Seleziona...</option>` + produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
+      produttoreSelect.innerHTML = htmlP; editProduttoreSelect.innerHTML = htmlP;
+      fProduttore.innerHTML = `<option value="">Tutti</option>` + produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
       
-      produttoreSelect.innerHTML = html;
-      editProduttoreSelect.innerHTML = html; // Popolo anche il modal
+      const htmlI = `<option value="" selected disabled>Seleziona...</option>` + incentivazioni.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
+      incentivazioneSelect.innerHTML = htmlI; editIncentivazioneSelect.innerHTML = htmlI;
+      fIncentivazione.innerHTML = `<option value="">Tutte</option>` + incentivazioni.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
 
-      fProduttore.innerHTML = `<option value="">Tutti</option>` +
-        produttori.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
-
-      producerColorMap = {};
-      produttori.forEach(p => producerColorMap[p.name] = colorForProducer(p.name));
+      producerColorMap = {}; produttori.forEach(p => producerColorMap[p.name] = colorForProducer(p.name));
     }
 
-    function renderIncentivazioni(){
-      const html = `<option value="" selected disabled>Seleziona...</option>` +
-        incentivazioni.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
-      
-      incentivazioneSelect.innerHTML = html;
-      editIncentivazioneSelect.innerHTML = html; // Popolo anche il modal
-
-      fIncentivazione.innerHTML = `<option value="">Tutte</option>` +
-        incentivazioni.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
-    }
-
-    async function loadProduttori(){
+    async function loadResources(){
       try{
-        const ref = collection(db, COL_PROD);
-        const q = query(ref, orderBy("name", "asc"));
-        const snap = await getDocs(q);
-        const fs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.name);
-        produttori = mergeList(DEFAULT_PRODUTTORI, fs);
-        renderProduttori();
-      }catch(e){
-        console.error(e);
-        produttori = mergeList(DEFAULT_PRODUTTORI, []);
-        renderProduttori();
-        setMsg("err", "Errore lettura produttori.");
-      }
-    }
-
-    async function loadIncentivazioni(){
-      try{
-        const ref = collection(db, COL_INC);
-        const q = query(ref, orderBy("name", "asc"));
-        const snap = await getDocs(q);
-        const fs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.name);
-        incentivazioni = mergeList(DEFAULT_INCENTIVAZIONI, fs);
-        renderIncentivazioni();
-      }catch(e){
-        console.error(e);
-        incentivazioni = mergeList(DEFAULT_INCENTIVAZIONI, []);
-        renderIncentivazioni();
-        setMsg("err", "Errore lettura incentivazioni.");
-      }
+        const pSnap = await getDocs(query(collection(db, COL_PROD), orderBy("name","asc")));
+        produttori = mergeList(DEFAULT_PRODUTTORI, pSnap.docs.map(d=>({id:d.id, ...d.data()})));
+        
+        const iSnap = await getDocs(query(collection(db, COL_INC), orderBy("name","asc")));
+        incentivazioni = mergeList(DEFAULT_INCENTIVAZIONI, iSnap.docs.map(d=>({id:d.id, ...d.data()})));
+        
+        renderSelects();
+      }catch(e){ console.error(e); }
     }
 
     btnNuovoProduttore.addEventListener("click", async () => {
-      const name = prompt("Inserisci nome nuovo produttore:");
-      if (!name) return;
-      const clean = normalizeName(name);
-      if (!clean) return;
-      if (produttori.some(p => p.name === clean)) return setMsg("err", "Produttore già presente.");
-      try{
-        await addDoc(collection(db, COL_PROD), { name: clean, createdAt: serverTimestamp() });
-        setMsg("ok", "Produttore salvato.");
-        await loadProduttori();
-        produttoreSelect.value = clean;
-      }catch(e){ setMsg("err", e.message); }
+      const n = prompt("Nuovo produttore:"); if(!n) return;
+      const clean = normalizeName(n); if(produttori.some(p=>p.name===clean)) return setMsg("err","Esiste già.");
+      await addDoc(collection(db, COL_PROD), { name:clean, createdAt:serverTimestamp() });
+      await loadResources();
     });
 
     btnNuovaIncentivazione.addEventListener("click", async () => {
-      const name = prompt("Inserisci nuova incentivazione:");
-      if (!name) return;
-      const clean = normalizeName(name);
-      if (!clean) return;
-      if (incentivazioni.some(p => p.name === clean)) return setMsg("err", "Incentivazione già presente.");
-      try{
-        await addDoc(collection(db, COL_INC), { name: clean, createdAt: serverTimestamp() });
-        setMsg("ok", "Incentivazione salvata.");
-        await loadIncentivazioni();
-        incentivazioneSelect.value = clean;
-      }catch(e){ setMsg("err", e.message); }
+      const n = prompt("Nuova incentivazione:"); if(!n) return;
+      const clean = normalizeName(n); if(incentivazioni.some(p=>p.name===clean)) return setMsg("err","Esiste già.");
+      await addDoc(collection(db, COL_INC), { name:clean, createdAt:serverTimestamp() });
+      await loadResources();
     });
 
     async function addRecord(){
+      if (!currentUser) return;
       setMsg("", "");
-      const form = document.getElementById("formProvvigioni");
-      if (!form.reportValidity()) return;
+      if (!document.getElementById("formProvvigioni").reportValidity()) return;
       calcolaProvvigioni();
 
       const d = new Date();
-      const anno = d.getFullYear();
-      const mese = d.getMonth() + 1;
-      const dataiso = `${anno}-${pad2(mese)}-${pad2(d.getDate())}`;
-
       const record = {
-        titolo: `PROVVIGIONI EXTRA - ${numeroPolizza.value}`,
+        userId: currentUser.uid, // OWNER
+        ownerName: displayUserName.textContent,
+        titolo: `PROVV - ${numeroPolizza.value}`,
         nomeCliente: nomeClienteInput.value.trim(),
         dataDecorrenza: dataDecorrenzaInput.value,
         produttore: produttoreSelect.value,
@@ -662,68 +628,76 @@
         premioImponibile: toNumber(premioImponibile.value),
         percentuale: toNumber(percentuale.value),
         provvigioni: toNumber(provvigioni.value),
-        anno, mese, dataiso,
+        anno: d.getFullYear(), mese: d.getMonth() + 1,
+        dataiso: `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`,
         pagate: false, pagateData: null,
         createdAt: serverTimestamp(), updatedAt: serverTimestamp()
       };
 
       try{
         await addDoc(collection(db, COL_EXTRA), record);
-        setMsg("ok", "Inserito e salvato.");
-        form.reset();
+        setMsg("ok", "Salvato.");
+        document.getElementById("formProvvigioni").reset();
         provvigioni.value = "";
         await loadByFilters();
-      }catch(e){ setMsg("err", `Errore salvataggio: ${e.message}`); }
+      }catch(e){ setMsg("err", e.message); }
     }
     btnInserisci.addEventListener("click", addRecord);
 
     function renderResults(rows){
       lastResults = rows;
       tbody.innerHTML = rows.map(r => {
-        const c = producerColorMap[r.produttore] || "#7CF6FF";
-        const checked = r.pagate ? "checked" : "";
-        const dateVal = (r.pagateData && typeof r.pagateData === "string") ? r.pagateData : "";
-        const disabledDate = r.pagate ? "" : "disabled";
+        const c = producerColorMap[r.produttore] || "#FFF";
         const tipoTxt = r.tipoPolizza === "SOSTITUZIONE_AUMENTO" ? "Sostituzione" : r.tipoPolizza === "NUOVA" ? "Nuova" : r.tipoPolizza;
-        
+        // Azioni: abilitate solo se admin o se proprietario
+        const isOwner = isAdmin || (r.userId === currentUser.uid);
+        const actions = isOwner ? `
+            <button class="btn warn tiny" data-action="edit" data-id="${r.id}">Mod.</button>
+            <button class="btn danger tiny" data-action="del" data-id="${r.id}">X</button>
+        ` : `<span class="badge">Sola lettura</span>`;
+
+        const disabledCheck = isOwner ? "" : "disabled";
+
         return `
           <tr>
-            <td class="mono" style="color:var(--muted); font-size:11px;">${r.dataiso ?? ""}</td>
-            <td><b>${r.nomeCliente ?? ""}</b></td>
-            <td>${r.dataDecorrenza ?? ""}</td>
-            <td><span style="color:${c}">${r.produttore ?? ""}</span></td>
-            <td>${r.compagnia ?? ""}</td>
+            <td class="mono" style="font-size:11px; color:var(--muted)">${r.dataiso}<br>${r.ownerName||""}</td>
+            <td><b>${r.nomeCliente||""}</b></td>
+            <td>${r.dataDecorrenza||""}</td>
+            <td><span style="color:${c}">${r.produttore}</span></td>
+            <td>${r.compagnia}</td>
             <td>${tipoTxt}</td>
-            <td>${r.numeroPolizza ?? ""}</td>
-            <td class="mono" style="font-weight:bold; color:#fff;">${money2(Number(r.provvigioni ?? 0))}</td>
+            <td>${r.numeroPolizza}</td>
+            <td class="mono" style="font-weight:bold; color:#fff;">${money2(Number(r.provvigioni))}</td>
             <td>
               <div class="paid-wrap">
-                <input type="checkbox" data-action="togglePaid" data-id="${r.id}" ${checked} title="Pagato?" />
-                <input type="date" data-action="paidDate" data-id="${r.id}" value="${dateVal}" ${disabledDate}/>
+                <input type="checkbox" data-action="togglePaid" data-id="${r.id}" ${r.pagate?"checked":""} ${disabledCheck}/>
+                <input type="date" data-action="paidDate" data-id="${r.id}" value="${r.pagateData||""}" ${r.pagate?"":"disabled"} ${disabledCheck}/>
               </div>
             </td>
-            <td>
-              <div class="cell-actions">
-                <button class="btn warn tiny" type="button" data-action="edit" data-id="${r.id}">Mod.</button>
-                <button class="btn danger tiny" type="button" data-action="del" data-id="${r.id}">X</button>
-              </div>
-            </td>
+            <td><div class="cell-actions">${actions}</div></td>
           </tr>`;
       }).join("");
 
       tabella.classList.toggle("hidden", rows.length === 0);
       const totProvv = rows.reduce((s, r) => s + (Number(r.provvigioni)||0), 0);
       const totImp = rows.reduce((s, r) => s + (Number(r.premioImponibile)||0), 0);
-      totaleBox.className = "msg ok";
-      totaleBox.textContent = `Totale provvigioni: ${money2(totProvv)}\nTotale imponibile: ${money2(totImp)}`;
+      totaleBox.textContent = `Totale provvigioni: ${money2(totProvv)} | Totale imponibile: ${money2(totImp)}`;
       
       const anni = [...new Set(rows.map(r => r.anno))].filter(Boolean).sort((a,b)=>b-a);
-      if(fAnno.children.length<=1) 
-        fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a => `<option value="${a}">${a}</option>`).join("");
+      if(fAnno.children.length<=1) fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a => `<option value="${a}">${a}</option>`).join("");
     }
 
     async function loadByFilters(){
+      if (!currentUser) return;
+
       const constraints = [];
+      
+      // MULTI-TENANCY LOGIC
+      // Se NON è admin, filtra per userId
+      if (!isAdmin) {
+          constraints.push(where("userId", "==", currentUser.uid));
+      }
+
       if(fProduttore.value) constraints.push(where("produttore", "==", fProduttore.value));
       if(fCompagnia.value) constraints.push(where("compagnia", "==", fCompagnia.value));
       if(fTipoPolizza.value) constraints.push(where("tipoPolizza", "==", fTipoPolizza.value));
@@ -731,17 +705,23 @@
       if(fPagate.value !== "") constraints.push(where("pagate", "==", fPagate.value === "true"));
       if(fAnno.value) constraints.push(where("anno", "==", Number(fAnno.value)));
       if(fMese.value) constraints.push(where("mese", "==", Number(fMese.value)));
+      
       constraints.push(orderBy("dataiso", "desc"));
       
       try{
         const q = query(collection(db, COL_EXTRA), ...constraints);
         const snap = await getDocs(q);
         renderResults(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      }catch(e){ console.error(e); setMsg("err", "Errore caricamento dati."); }
+      }catch(e){ 
+          console.error(e); 
+          // Se manca l'indice Firestore, avvisa l'admin
+          if (e.message.includes("indexes")) setMsg("err", "Richiesto indice Firestore (vedi console).");
+          else setMsg("err", "Errore caricamento dati."); 
+      }
     }
     btnApplicaFiltri.addEventListener("click", loadByFilters);
 
-    // Gestione Tabella (Delete e Open Modal)
+    // EDIT MODAL LOGIC
     tbody.addEventListener("click", async (ev) => {
       const btn = ev.target.closest("button");
       if (!btn) return;
@@ -753,12 +733,9 @@
         await deleteDoc(doc(db, COL_EXTRA, id));
         loadByFilters();
       }
-
       if (action === "edit"){
         const row = lastResults.find(r => r.id === id);
         if(!row) return;
-
-        // Riempi Modale
         editId.value = row.id;
         editNomeCliente.value = row.nomeCliente || "";
         editDataDecorrenza.value = row.dataDecorrenza || "";
@@ -771,23 +748,15 @@
         editPremioImponibile.value = row.premioImponibile || "";
         editPercentuale.value = row.percentuale || "";
         editProvvigioni.value = row.provvigioni || "";
-
-        // Mostra modale
         editModal.classList.remove("hidden");
       }
     });
 
-    // Gestione Chiusura/Salvataggio Modal
     btnChiudiModal.addEventListener("click", () => editModal.classList.add("hidden"));
     
     btnSalvaModifiche.addEventListener("click", async () => {
       const id = editId.value;
       if(!id) return;
-      
-      const imp = toNumber(editPremioImponibile.value);
-      const perc = toNumber(editPercentuale.value);
-      const prov = toNumber(editProvvigioni.value);
-
       try{
         await updateDoc(doc(db, COL_EXTRA, id), {
           nomeCliente: editNomeCliente.value.trim(),
@@ -798,24 +767,20 @@
           incentivazione: editIncentivazioneSelect.value,
           numeroPolizza: editNumeroPolizza.value.trim(),
           premio: toNumber(editPremio.value),
-          premioImponibile: imp,
-          percentuale: perc,
-          provvigioni: prov,
+          premioImponibile: toNumber(editPremioImponibile.value),
+          percentuale: toNumber(editPercentuale.value),
+          provvigioni: toNumber(editProvvigioni.value),
           updatedAt: serverTimestamp()
         });
         editModal.classList.add("hidden");
         await loadByFilters();
         setMsg("ok", "Modifica salvata.");
-      }catch(e){
-        alert("Errore salvataggio modifica: " + e.message);
-      }
+      }catch(e){ alert("Errore: " + e.message); }
     });
 
-    // Toggle Paid Checkbox
     tbody.addEventListener("change", async (ev) => {
       const el = ev.target;
-      const action = el.dataset.action;
-      const id = el.dataset.id;
+      const action = el.dataset.action; const id = el.dataset.id;
       if (!action || !id) return;
       
       if (action === "togglePaid"){
@@ -824,16 +789,11 @@
         if(dateInput){
             dateInput.disabled = !checked;
             if(checked && !dateInput.value){
-                const d = new Date();
-                dateInput.value = `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+                const d = new Date(); dateInput.value = `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
             }
             if(!checked) dateInput.value = "";
         }
-        await updateDoc(doc(db, COL_EXTRA, id), {
-            pagate: checked, 
-            pagateData: checked ? dateInput.value : null, 
-            updatedAt: serverTimestamp()
-        });
+        await updateDoc(doc(db, COL_EXTRA, id), { pagate: checked, pagateData: checked ? dateInput.value : null, updatedAt: serverTimestamp() });
       }
       if (action === "paidDate"){
         const val = el.value;
@@ -844,6 +804,7 @@
     btnExportExcel.addEventListener("click", () => {
       if (!window.XLSX) return;
       const data = lastResults.map(r => ({
+        "Owner": r.ownerName || "",
         "Data Ins.": r.dataiso, "Cliente": r.nomeCliente, "Decorrenza": r.dataDecorrenza,
         "Produttore": r.produttore, "Compagnia": r.compagnia, "Tipo": r.tipoPolizza,
         "Incentivazione": r.incentivazione, "Polizza": r.numeroPolizza,
@@ -852,15 +813,13 @@
       }));
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Export");
-      XLSX.writeFile(wb, `Provvigioni_${new Date().getTime()}.xlsx`);
+      XLSX.writeFile(wb, `Provvigioni_Export.xlsx`);
     });
 
-    async function init(){
-      await loadProduttori();
-      await loadIncentivazioni();
+    async function initApp(){
+      await loadResources();
       await loadByFilters();
     }
-    init();
   </script>
 </body>
 </html>
