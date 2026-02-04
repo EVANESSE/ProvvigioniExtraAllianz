@@ -252,6 +252,14 @@
           <label for="fProduttore">Filtro produttore</label>
           <select id="fProduttore"><option value="">Tutti</option></select>
         </div>
+<div class="tool small">
+  <label>Gestione Dati</label>
+  <div style="display:flex; gap:5px;">
+    <button class="btn secondary" type="button" id="btnBackupDownload" title="Scarica Backup JSON">Backup</button>
+    <button class="btn warn" type="button" id="btnBackupRestore" title="Carica Backup JSON">Ripristina</button>
+  </div>
+  <input type="file" id="fileBackupInput" accept=".json" class="hidden" />
+</div>
         <div class="tool">
           <label for="fCompagnia">Compagnia</label>
           <select id="fCompagnia">
@@ -417,7 +425,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
     import {
-      getFirestore, collection, addDoc, doc, updateDoc, deleteDoc,
+      getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, setDoc,
       query, where, orderBy, getDocs, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
@@ -860,6 +868,131 @@
       await loadIncentivazioni();
       await loadByFilters();
     }
+// ==========================================
+    // SEZIONE BACKUP E RIPRISTINO
+    // ==========================================
+
+    const btnBackupDownload = document.getElementById("btnBackupDownload");
+    const btnBackupRestore = document.getElementById("btnBackupRestore");
+    const fileBackupInput = document.getElementById("fileBackupInput");
+
+    // Helper per scaricare dati massivi
+    async function getFullCollection(colName) {
+      const q = query(collection(db, colName));
+      const snap = await getDocs(q);
+      return snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+    }
+
+    // 1. ESPORTAZIONE (BACKUP)
+    btnBackupDownload.addEventListener("click", async () => {
+      if(!confirm("Vuoi scaricare un backup completo di tutti i dati (JSON)?")) return;
+      
+      try {
+        setMsg("warn", "Generazione backup in corso...");
+        
+        // Scarica tutto in parallelo
+        const [prodData, incData, extraData] = await Promise.all([
+          getFullCollection(COL_PROD),
+          getFullCollection(COL_INC),
+          getFullCollection(COL_EXTRA)
+        ]);
+
+        const backupBundle = {
+          version: 1,
+          timestamp: new Date().toISOString(),
+          stats: {
+            produttori: prodData.length,
+            incentivazioni: incData.length,
+            provvigioni: extraData.length
+          },
+          data: {
+            produttori: prodData,
+            incentivazioni: incData,
+            extra: extraData
+          }
+        };
+
+        const blob = new Blob([JSON.stringify(backupBundle, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Backup_Provvigioni_${new Date().toISOString().slice(0,10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        setMsg("ok", `Backup scaricato con successo! (${extraData.length} provvigioni)`);
+      } catch (e) {
+        console.error(e);
+        setMsg("err", "Errore durante il backup: " + e.message);
+      }
+    });
+
+    // 2. RIPRISTINO (IMPORT) - Trigger
+    btnBackupRestore.addEventListener("click", () => {
+      fileBackupInput.value = ""; // Reset input
+      fileBackupInput.click();
+    });
+
+    // Gestione file selezionato
+    fileBackupInput.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const json = JSON.parse(event.target.result);
+          
+          // Validazione minima
+          if (!json.data || !json.data.extra) {
+            throw new Error("Formato file non valido.");
+          }
+
+          const countExtra = json.data.extra.length;
+          const msgConfirm = `Trovati nel backup:\n` +
+            `- ${json.data.produttori.length} Produttori\n` +
+            `- ${json.data.incentivazioni.length} Incentivazioni\n` +
+            `- ${countExtra} Provvigioni\n\n` +
+            `ATTENZIONE: I dati con lo stesso ID verranno sovrascritti. Vuoi procedere?`;
+
+          if (!confirm(msgConfirm)) return;
+
+          setMsg("warn", "Ripristino in corso... attendere.");
+
+          // Funzione per ripristinare una collezione
+          const restoreCollection = async (colName, items) => {
+            const promises = items.map(item => {
+              const { _id, ...docData } = item;
+              // Convertiamo eventuali stringhe data in Timestamp se necessario, 
+              // ma Firestore accetta stringhe ISO o le lascia come stringhe.
+              // Per sicurezza aggiorniamo updatedAt
+              docData.updatedAt = serverTimestamp(); 
+              return setDoc(doc(db, colName, _id), docData);
+            });
+            await Promise.all(promises);
+          };
+
+          // Esecuzione ripristino
+          await restoreCollection(COL_PROD, json.data.produttori);
+          await restoreCollection(COL_INC, json.data.incentivazioni);
+          await restoreCollection(COL_EXTRA, json.data.extra);
+
+          setMsg("ok", "Ripristino completato con successo!");
+          
+          // Ricarica le liste
+          await loadProduttori();
+          await loadIncentivazioni();
+          await loadByFilters();
+
+        } catch (err) {
+          console.error(err);
+          setMsg("err", "Errore nel file di backup: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    });
     init();
   </script>
 </body>
