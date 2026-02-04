@@ -252,14 +252,7 @@
           <label for="fProduttore">Filtro produttore</label>
           <select id="fProduttore"><option value="">Tutti</option></select>
         </div>
-<div class="tool small">
-  <label>Gestione Dati</label>
-  <div style="display:flex; gap:5px;">
-    <button class="btn secondary" type="button" id="btnBackupDownload" title="Scarica Backup JSON">Backup</button>
-    <button class="btn warn" type="button" id="btnBackupRestore" title="Carica Backup JSON">Ripristina</button>
-  </div>
-  <input type="file" id="fileBackupInput" accept=".json" class="hidden" />
-</div>
+
         <div class="tool">
           <label for="fCompagnia">Compagnia</label>
           <select id="fCompagnia">
@@ -314,6 +307,14 @@
         <div class="tool small">
           <label>&nbsp;</label>
           <button class="btn secondary" type="button" id="btnExportExcel">Export Excel</button>
+        </div>
+        <div class="tool" style="min-width: 180px;">
+          <label>Gestione Backup</label>
+          <div style="display:flex; gap:5px;">
+            <button class="btn secondary" type="button" id="btnBackupDownload" title="Scarica Backup">Salva</button>
+            <button class="btn warn" type="button" id="btnBackupRestore" title="Ripristina da file">Carica</button>
+          </div>
+          <input type="file" id="fileBackupInput" accept=".json" class="hidden" />
         </div>
       </div>
 
