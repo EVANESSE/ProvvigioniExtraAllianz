@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#070A12">
 
   <style>
-    /* STILI PREESISTENTI */
+    /* STILI */
     :root{
       --bg:#070A12; --text:#EAF0FF; --muted:#9AA6C0; --line: rgba(120, 150, 255, .18);
       --danger:#FF5A7A; --ok:#35F2A6; --warn:#FFC04D; --glow-orange: #FF6B00; 
@@ -325,10 +325,14 @@
           </div>
           <div>
             <div class="row2">
+              <div><label>Premio</label><input id="editPremio" type="number" step="0.01" /></div>
               <div><label>Premio Imponibile</label><input id="editPremioImponibile" type="number" step="0.01" /></div>
-              <div><label>% Provvigione</label><input id="editPercentuale" type="number" step="0.01" /></div>
             </div>
-            <div><label>Calcolo Provv.</label><input id="editProvvigioni" type="number" step="0.01" readonly /></div>
+            <div class="row2">
+              <div><label>% Provvigione</label><input id="editPercentuale" type="number" step="0.01" /></div>
+              <div><label>Calcolo Provv.</label><input id="editProvvigioni" type="number" step="0.01" readonly /></div>
+            </div>
+            
             <div class="actions" style="margin-top:24px;">
               <button class="btn" type="button" id="btnSalvaModifiche">SALVA MODIFICHE</button>
               <button class="btn secondary" type="button" id="btnChiudiModal">Annulla</button>
@@ -342,7 +346,7 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <script type="module">
-    // IMPORT AGGIUNTIVI PER L'AUTH
+    // IMPORT FIREBASE
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
     import { 
       getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, setDoc,
@@ -352,7 +356,7 @@
       getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-    // CONFIGURAZIONE
+    // CONFIGURAZIONE API KEY CORRETTA
     const firebaseConfig = {
       apiKey: "AIzaSyBImpEln_jCpYyMMrNh63xJDJ89Vxf3DIc",
       authDomain: "provvigioni-extra-allianz.firebaseapp.com",
@@ -362,15 +366,12 @@
       appId: "1:650627729378:web:3e91c2a09dd071437c5bbb"
     };
 
-    // ===============================================
-    // CONFIGURAZIONE RUOLI
-    // Inserisci qui le email degli amministratori che possono vedere TUTTO
-    // ===============================================
+    // LISTA ADMIN
     const ADMIN_EMAILS = [
       "evanesse1978@gmail.com", 
       "valentinavitr94@gmail.com",
       "luigi.vitrani@gmail.com",
-      "assicurazioni.ams@gmail.com",
+      "assicurazioni.ams@gmail.com"
     ];
 
     const app = initializeApp(firebaseConfig);
@@ -384,7 +385,7 @@
     let currentUser = null;
     let isAdmin = false;
 
-    // Elementi UI Login
+    // Login UI
     const loginOverlay = document.getElementById("loginOverlay");
     const mainApp = document.getElementById("mainApp");
     const emailLogin = document.getElementById("emailLogin");
@@ -395,8 +396,7 @@
     const currentUserDisplay = document.getElementById("currentUserDisplay");
     const roleBadge = document.getElementById("roleBadge");
 
-    // Elementi App
-    // ... (Riferimenti preesistenti)
+    // Main Form
     const nomeClienteInput = document.getElementById("nomeCliente");
     const dataDecorrenzaInput = document.getElementById("dataDecorrenza");
     const produttoreSelect = document.getElementById("produttoreSelect");
@@ -413,11 +413,15 @@
     const btnInserisci = document.getElementById("btnInserisci");
     const btnReset = document.getElementById("btnReset");
     const msg = document.getElementById("msg");
+
+    // Filters
     const fProduttore = document.getElementById("fProduttore");
     const fCompagnia = document.getElementById("fCompagnia");
     const fPagate = document.getElementById("fPagate");
     const fAnno = document.getElementById("fAnno");
     const btnApplicaFiltri = document.getElementById("btnApplicaFiltri");
+
+    // Table & Edit
     const tabella = document.getElementById("tabella");
     const tbody = tabella.querySelector("tbody");
     const btnExportExcel = document.getElementById("btnExportExcel");
@@ -425,6 +429,20 @@
     const editModal = document.getElementById("editModal");
     const btnChiudiModal = document.getElementById("btnChiudiModal");
     const btnSalvaModifiche = document.getElementById("btnSalvaModifiche");
+
+    // Edit Fields
+    const editId = document.getElementById("editId");
+    const editNomeCliente = document.getElementById("editNomeCliente");
+    const editDataDecorrenza = document.getElementById("editDataDecorrenza");
+    const editProduttoreSelect = document.getElementById("editProduttoreSelect");
+    const editCompagniaSelect = document.getElementById("editCompagniaSelect");
+    const editTipoPolizzaSelect = document.getElementById("editTipoPolizzaSelect");
+    const editIncentivazioneSelect = document.getElementById("editIncentivazioneSelect");
+    const editNumeroPolizza = document.getElementById("editNumeroPolizza");
+    const editPremio = document.getElementById("editPremio");
+    const editPremioImponibile = document.getElementById("editPremioImponibile");
+    const editPercentuale = document.getElementById("editPercentuale");
+    const editProvvigioni = document.getElementById("editProvvigioni");
     
     // Variabili stato
     let produttori = [];
@@ -435,27 +453,21 @@
     // ------------------------------------------------
     // GESTIONE AUTENTICAZIONE
     // ------------------------------------------------
-    
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // Utente loggato
         currentUser = user;
-        // Controllo se è admin
         isAdmin = ADMIN_EMAILS.includes(user.email);
         
         currentUserDisplay.textContent = user.email;
         roleBadge.textContent = isAdmin ? "AMMINISTRATORE" : "AGENTE";
         roleBadge.className = isAdmin ? "role-badge admin" : "role-badge";
 
-        // Nascondi login, mostra app
         loginOverlay.classList.add("hidden");
         mainApp.classList.remove("hidden");
 
-        // Se NON è admin, nascondiamo i pulsanti di configurazione globale
         if(!isAdmin){
            btnNuovoProduttore.style.display = "none";
            btnNuovaIncentivazione.style.display = "none";
-           // Opzionale: Nascondi pulsanti backup se vuoi
         } else {
            btnNuovoProduttore.style.display = "block";
            btnNuovaIncentivazione.style.display = "block";
@@ -463,7 +475,6 @@
 
         await init();
       } else {
-        // Utente non loggato
         currentUser = null;
         isAdmin = false;
         loginOverlay.classList.remove("hidden");
@@ -482,14 +493,11 @@
       }
     });
 
-    btnLogout.addEventListener("click", () => {
-      signOut(auth);
-    });
+    btnLogout.addEventListener("click", () => signOut(auth));
 
     // ------------------------------------------------
     // LOGICA APP
     // ------------------------------------------------
-
     function setMsg(type, text){
       msg.className = "msg" + (type ? " " + type : "");
       msg.textContent = text || "";
@@ -501,6 +509,7 @@
       return Number.isFinite(n) ? n : NaN;
     }
     function money2(n){ return (Math.round(n * 100) / 100).toFixed(2); }
+    function pad2(n){ return String(n).padStart(2, "0"); }
     function normalizeName(s){ return (s || "").trim().toUpperCase(); }
     function colorForProducer(name){
       const palette = ["#7CF6FF","#B18CFF","#35F2A6","#FFC04D","#FF5A7A","#7CFFB2","#6CA8FF"];
@@ -518,25 +527,18 @@
     }
     premioImponibile.addEventListener("input", ()=>calcola(premioImponibile, percentuale, provvigioni));
     percentuale.addEventListener("input", ()=>calcola(premioImponibile, percentuale, provvigioni));
-
-    const editPremioImponibile = document.getElementById("editPremioImponibile");
-    const editPercentuale = document.getElementById("editPercentuale");
-    const editProvvigioni = document.getElementById("editProvvigioni");
+    
     editPremioImponibile.addEventListener("input", ()=>calcola(editPremioImponibile, editPercentuale, editProvvigioni));
     editPercentuale.addEventListener("input", ()=>calcola(editPremioImponibile, editPercentuale, editProvvigioni));
 
     btnReset.addEventListener("click", () => { setMsg("",""); provvigioni.value=""; });
 
     // Caricamento Dati Ausiliari
-    async function loadAux(colName, defs, selectIds){
+    async function loadAux(colName, selectIds){
       try{
         const q = query(collection(db, colName), orderBy("name", "asc"));
         const snap = await getDocs(q);
-        const list = snap.docs.map(d => ({id:d.id, ...d.data()}));
-        const set = new Map();
-        defs.forEach(n => set.set(normalizeName(n), {name:normalizeName(n)}));
-        list.forEach(i => set.set(normalizeName(i.name), i));
-        const final = [...set.values()].sort((a,b)=>a.name.localeCompare(b.name));
+        const final = snap.docs.map(d => ({id:d.id, ...d.data()}));
         
         const html = `<option value="" selected disabled>Seleziona...</option>` +
           final.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
@@ -546,7 +548,6 @@
           if(el) el.innerHTML = html;
         });
         
-        // Filtro produttori speciale
         if(colName === COL_PROD){
             produttori = final;
             fProduttore.innerHTML = `<option value="">Tutti</option>` + final.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
@@ -555,11 +556,9 @@
         } else {
             incentivazioni = final;
         }
-
       }catch(e){ console.error(e); }
     }
 
-    // Inserimento nuovi produttori/incentivi (Solo Admin visualmente, ma protetto anche da regole DB)
     btnNuovoProduttore.addEventListener("click", async () => {
       const name = prompt("Nome nuovo produttore:");
       if(!name) return;
@@ -573,18 +572,16 @@
       loadIncentivazioni();
     });
 
-    async function loadProduttori(){ loadAux(COL_PROD, ["EVAN SGARBI","DUILIO FRARACCI"], ["produttoreSelect","editProduttoreSelect"]); }
-    async function loadIncentivazioni(){ loadAux(COL_INC, ["STANDARD"], ["incentivazioneSelect","editIncentivazioneSelect"]); }
+    async function loadProduttori(){ loadAux(COL_PROD, ["produttoreSelect","editProduttoreSelect"]); }
+    async function loadIncentivazioni(){ loadAux(COL_INC, ["incentivazioneSelect","editIncentivazioneSelect"]); }
 
-    // ==========================================
-    // CORE LOGIC: SALVATAGGIO CON USER ID
-    // ==========================================
+    // SALVATAGGIO NUOVO RECORD
     async function addRecord(){
       if (!document.getElementById("formProvvigioni").reportValidity()) return;
       
       const d = new Date();
       const record = {
-        userId: currentUser.uid, // <--- IMPORTANTE: Associa il record all'utente
+        userId: currentUser.uid,
         userEmail: currentUser.email,
         nomeCliente: nomeClienteInput.value.trim(),
         dataDecorrenza: dataDecorrenzaInput.value,
@@ -598,7 +595,7 @@
         percentuale: toNumber(percentuale.value),
         provvigioni: toNumber(provvigioni.value),
         anno: d.getFullYear(), mese: d.getMonth()+1,
-        dataiso: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`,
+        dataiso: `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`,
         pagate: false, pagateData: null,
         createdAt: serverTimestamp()
       };
@@ -613,20 +610,10 @@
     }
     btnInserisci.addEventListener("click", addRecord);
 
-    // ==========================================
-    // CORE LOGIC: CARICAMENTO CON FILTRI RUOLO
-    // ==========================================
+    // CARICAMENTO E FILTRI
     async function loadByFilters(){
       let constraints = [];
-      
-      // LOGICA RUOLI:
-      // Se NON è admin, vede SOLO i suoi record
-      if (!isAdmin) {
-        constraints.push(where("userId", "==", currentUser.uid));
-      }
-      // Se è admin, non mettiamo filtri sull'userId, quindi vede tutto (compresi i vecchi record senza userId)
-
-      // Filtri UI standard
+      if (!isAdmin) constraints.push(where("userId", "==", currentUser.uid));
       if(fProduttore.value) constraints.push(where("produttore", "==", fProduttore.value));
       if(fCompagnia.value) constraints.push(where("compagnia", "==", fCompagnia.value));
       if(fPagate.value !== "") constraints.push(where("pagate", "==", fPagate.value === "true"));
@@ -640,8 +627,7 @@
         renderResults(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       }catch(e){ 
         console.error(e); 
-        // Fallback per vecchi indici o errori di permesso
-        if(e.message.includes("requires an index")) alert("Manca un indice Firestore. Apri la console browser per il link.");
+        if(e.message.includes("requires an index")) alert("Manca un indice Firestore. Controlla la console.");
         setMsg("err", "Errore caricamento dati."); 
       }
     }
@@ -651,10 +637,13 @@
       lastResults = rows;
       tbody.innerHTML = rows.map(r => {
         const c = producerColorMap[r.produttore] || "#7CF6FF";
-        const disabled = r.pagate ? "disabled" : "";
-        // Disabilitiamo azioni se l'utente non è il proprietario E non è admin (caso raro di record orfani)
-        // Ma qui abbiamo già filtrato a monte.
+        const isPaid = r.pagate ? "checked" : "";
+        const dateVal = (r.pagateData && typeof r.pagateData === "string") ? r.pagateData : "";
+        const disabledDate = r.pagate ? "" : "disabled";
         
+        // Checkbox pagamenti abilitato solo per admin
+        const disableCheck = isAdmin ? "" : "disabled";
+
         return `<tr>
             <td class="mono" style="color:#999;font-size:11px">${r.dataiso||""}</td>
             <td><b>${r.nomeCliente||""}</b><br><small style="color:#666">${r.userEmail || "Legacy"}</small></td>
@@ -665,7 +654,8 @@
             <td class="mono" style="font-weight:bold;color:#fff">${money2(Number(r.provvigioni||0))}</td>
             <td>
                <div class="paid-wrap">
-                <input type="checkbox" ${r.pagate?"checked":""} disabled title="Solo Admin o Gestione Pagamenti">
+                <input type="checkbox" data-action="togglePaid" data-id="${r.id}" ${isPaid} ${disableCheck}>
+                <input type="date" data-action="paidDate" data-id="${r.id}" value="${dateVal}" ${disabledDate} ${disableCheck} style="width:110px">
                </div>
             </td>
             <td>
@@ -681,52 +671,176 @@
       const tot = rows.reduce((s,r)=>s+(Number(r.provvigioni)||0),0);
       totaleBox.textContent = `Totale visualizzato: ${money2(tot)}`;
       
-      // Popola anni dinamicamente
       const anni = [...new Set(rows.map(r => r.anno))].filter(Boolean).sort((a,b)=>b-a);
       if(fAnno.children.length<=1) fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a=>`<option value="${a}">${a}</option>`).join("");
     }
 
-    // Export Excel
+    // GESTIONE AZIONI TABELLA
+    tbody.addEventListener("change", async (ev) => {
+      const el = ev.target;
+      const action = el.dataset.action;
+      const id = el.dataset.id;
+      if (!action || !id) return;
+      
+      if(!isAdmin) return; // Sicurezza lato client extra
+
+      if (action === "togglePaid"){
+        const checked = el.checked;
+        const dateInput = tbody.querySelector(`input[data-action="paidDate"][data-id="${id}"]`);
+        if(dateInput){
+            dateInput.disabled = !checked;
+            if(checked && !dateInput.value){
+                const d = new Date();
+                dateInput.value = `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+            }
+            if(!checked) dateInput.value = "";
+        }
+        await updateDoc(doc(db, COL_EXTRA, id), {
+            pagate: checked, 
+            pagateData: checked ? dateInput.value : null 
+        });
+      }
+      if (action === "paidDate"){
+        const val = el.value;
+        await updateDoc(doc(db, COL_EXTRA, id), { pagateData: val, pagate: !!val });
+      }
+    });
+
     window.delItem = async (id) => {
-      if(!confirm("Eliminare?")) return;
+      if(!confirm("Eliminare definitivamente?")) return;
       await deleteDoc(doc(db, COL_EXTRA, id));
       loadByFilters();
     };
+
+    // GESTIONE EDIT MODAL COMPLETA
     window.openEdit = (id) => {
       const row = lastResults.find(r=>r.id===id);
       if(!row) return;
-      document.getElementById("editId").value = row.id;
-      document.getElementById("editNomeCliente").value = row.nomeCliente||"";
-      // ... mappatura campi edit ...
-      // Per brevità ometto la mappatura completa di tutti i campi dell'edit, assicurati di riempire i value come nel file originale
-      // Esempio:
-      document.getElementById("editPremioImponibile").value = row.premioImponibile;
-      document.getElementById("editPercentuale").value = row.percentuale;
-      document.getElementById("editProvvigioni").value = row.provvigioni;
+      
+      editId.value = row.id;
+      editNomeCliente.value = row.nomeCliente || "";
+      editDataDecorrenza.value = row.dataDecorrenza || "";
+      editProduttoreSelect.value = row.produttore || "";
+      editCompagniaSelect.value = row.compagnia || "";
+      editTipoPolizzaSelect.value = row.tipoPolizza || "";
+      editIncentivazioneSelect.value = row.incentivazione || "";
+      editNumeroPolizza.value = row.numeroPolizza || "";
+      editPremio.value = row.premio || "";
+      editPremioImponibile.value = row.premioImponibile || "";
+      editPercentuale.value = row.percentuale || "";
+      editProvvigioni.value = row.provvigioni || "";
 
       editModal.classList.remove("hidden");
     };
     btnChiudiModal.addEventListener("click", ()=>editModal.classList.add("hidden"));
     
-    // BACKUP (Solo Admin o visibile a tutti? Lascio visibile ma i dati dipendono dal filtro)
+    btnSalvaModifiche.addEventListener("click", async () => {
+      const id = editId.value;
+      if(!id) return;
+      
+      try{
+        await updateDoc(doc(db, COL_EXTRA, id), {
+          nomeCliente: editNomeCliente.value.trim(),
+          dataDecorrenza: editDataDecorrenza.value,
+          produttore: editProduttoreSelect.value,
+          compagnia: editCompagniaSelect.value,
+          tipoPolizza: editTipoPolizzaSelect.value,
+          incentivazione: editIncentivazioneSelect.value,
+          numeroPolizza: editNumeroPolizza.value.trim(),
+          premio: toNumber(editPremio.value),
+          premioImponibile: toNumber(editPremioImponibile.value),
+          percentuale: toNumber(editPercentuale.value),
+          provvigioni: toNumber(editProvvigioni.value),
+          updatedAt: serverTimestamp()
+        });
+        editModal.classList.add("hidden");
+        await loadByFilters();
+        setMsg("ok", "Modifica salvata.");
+      }catch(e){
+        alert("Errore salvataggio modifica: " + e.message);
+      }
+    });
+
+    // EXPORT EXCEL
+    btnExportExcel.addEventListener("click", () => {
+      if (!window.XLSX) return;
+      const data = lastResults.map(r => ({
+        "Data Ins.": r.dataiso, "Cliente": r.nomeCliente, "Decorrenza": r.dataDecorrenza,
+        "Produttore": r.produttore, "Compagnia": r.compagnia, "Tipo": r.tipoPolizza,
+        "Incentivazione": r.incentivazione, "Polizza": r.numeroPolizza,
+        "Premio": r.premio, "Imponibile": r.premioImponibile, "%": r.percentuale,
+        "Provvigioni": r.provvigioni, "Pagate": r.pagate?"SI":"NO", "Data Pag.": r.pagateData,
+        "Utente": r.userEmail
+      }));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Export");
+      XLSX.writeFile(wb, `Provvigioni_${new Date().getTime()}.xlsx`);
+    });
+
+    // BACKUP E RIPRISTINO (COMPLETO)
     const btnBackupDownload = document.getElementById("btnBackupDownload");
     const fileBackupInput = document.getElementById("fileBackupInput");
     const btnBackupRestore = document.getElementById("btnBackupRestore");
 
-    // Helper per scaricare TUTTO (Bypassando filtri locali, ma rispettando regole DB)
     async function getFullCollection(colName) {
-      // Se non è admin, Firebase bloccherà la lettura di tutto se impostiamo le regole.
-      // Qui usiamo la query semplice.
       const snap = await getDocs(collection(db, colName)); 
-      // Se l'utente è standard e le regole DB sono attive, questo fallirà se tenta di leggere doc altrui.
-      // Modifichiamo per sicurezza: scarica quello che l'utente può vedere.
       return snap.docs.map(d => ({ _id: d.id, ...d.data() }));
     }
 
     btnBackupDownload.addEventListener("click", async () => {
        if(!isAdmin && !confirm("Scaricherai solo i tuoi dati. Procedere?")) return;
-       // ... logica backup identica al file precedente ...
-       // Per brevità, assumiamo la funzione sia la stessa.
+       try {
+        setMsg("warn", "Generazione backup in corso...");
+        const [prodData, incData, extraData] = await Promise.all([
+          getFullCollection(COL_PROD),
+          getFullCollection(COL_INC),
+          getFullCollection(COL_EXTRA)
+        ]);
+
+        const backupBundle = {
+          version: 1, timestamp: new Date().toISOString(),
+          data: { produttori: prodData, incentivazioni: incData, extra: extraData }
+        };
+        const blob = new Blob([JSON.stringify(backupBundle, null, 2)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `Backup_${new Date().toISOString().slice(0,10)}.json`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setMsg("ok", "Backup completato.");
+      } catch (e) { setMsg("err", "Errore backup: " + e.message); }
+    });
+
+    btnBackupRestore.addEventListener("click", () => {
+       if(!isAdmin) return alert("Solo admin può ripristinare.");
+       fileBackupInput.value = ""; fileBackupInput.click();
+    });
+
+    fileBackupInput.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const json = JSON.parse(event.target.result);
+          if (!json.data || !json.data.extra) throw new Error("File non valido");
+          if (!confirm(`Ripristinare ${json.data.extra.length} record?`)) return;
+          
+          setMsg("warn", "Ripristino...");
+          const restore = async (col, items) => {
+            const promises = items.map(i => {
+               const { _id, ...d } = i;
+               return setDoc(doc(db, col, _id), d);
+            });
+            await Promise.all(promises);
+          };
+          await restore(COL_PROD, json.data.produttori);
+          await restore(COL_INC, json.data.incentivazioni);
+          await restore(COL_EXTRA, json.data.extra);
+          setMsg("ok", "Ripristino completato.");
+          await init();
+        } catch (err) { setMsg("err", "Errore file: " + err.message); }
+      };
+      reader.readAsText(file);
     });
     
     // INIT
