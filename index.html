@@ -23,7 +23,7 @@
                   linear-gradient(180deg, var(--bg), #050711);
       color: var(--text);
     }
-    .wrap{ max-width: 1250px; margin: 0 auto; }
+    .wrap{ max-width: 1300px; margin: 0 auto; }
     
     /* TITOLO GLOW ARANCIO FLUO */
     .title{ display:flex; flex-direction: column; margin-bottom: 30px; align-items: flex-start; gap: 10px; }
@@ -73,9 +73,9 @@
     .msg.err{ color: var(--danger); }
 
     .toolbar{ display:flex; gap: 10px; flex-wrap: wrap; align-items: end; margin-top: 20px; padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.02); }
-    .tool{ min-width: 140px; flex: 1; }
-    .tool.small{ min-width: 100px; max-width: 140px; flex: 0; }
-    .tool.medium{ min-width: 120px; max-width: 160px; flex: 0; }
+    .tool{ min-width: 120px; flex: 1; }
+    .tool.small{ min-width: 90px; max-width: 130px; flex: 0; }
+    .tool.medium{ min-width: 110px; max-width: 150px; flex: 0; }
 
     table{ width:100%; border-collapse: collapse; margin-top: 16px; overflow:hidden; border-radius: 14px; border: 1px solid var(--line); background: rgba(6, 9, 18, .6); }
     th, td{ padding: 12px 12px; border-bottom: 1px solid rgba(120,150,255,.14); font-size: 13px; vertical-align: middle; }
@@ -204,11 +204,11 @@
           <div>
             <div class="row2">
               <div>
-                <label for="premio">Premio Lordo (Opz)</label>
+                <label for="premio">Premio Lordo Annuo (Opz)</label>
                 <input id="premio" type="number" step="0.01" min="0" placeholder="0,00" />
               </div>
               <div>
-                <label for="premioImponibile" style="color:#fff; font-weight:bold;">Premio Imponibile</label>
+                <label for="premioImponibile" style="color:#fff; font-weight:bold;">Premio Imponibile Annuo</label>
                 <input id="premioImponibile" type="number" step="0.01" min="0" required placeholder="0,00" style="border-color:rgba(255,255,255,0.4);" />
               </div>
             </div>
@@ -286,12 +286,12 @@
         </div>
         
         <div class="tool small">
-          <label for="fAnno">Anno</label>
+          <label for="fAnno">Anno Dec.</label>
           <select id="fAnno"><option value="">Tutti</option></select>
         </div>
 
         <div class="tool small">
-          <label for="fMese">Mese</label>
+          <label for="fMese">Mese Dec.</label>
           <select id="fMese">
             <option value="">Tutti</option>
             <option value="1">Gennaio</option>
@@ -307,6 +307,13 @@
             <option value="11">Novembre</option>
             <option value="12">Dicembre</option>
           </select>
+        </div>
+
+        <div class="tool small">
+          <label for="fSettimana">Settimana</label>
+          <select id="fSettimana">
+             <option value="">Tutte</option>
+             </select>
         </div>
 
         <div class="tool small">
@@ -385,8 +392,8 @@
           </div>
           <div>
             <div class="row2">
-              <div><label>Premio Lordo (Opz)</label><input id="editPremio" type="number" step="0.01" /></div>
-              <div><label>Premio Imponibile</label><input id="editPremioImponibile" type="number" step="0.01" /></div>
+              <div><label>Premio Lordo Annuo (Opz)</label><input id="editPremio" type="number" step="0.01" /></div>
+              <div><label>Premio Imponibile Annuo</label><input id="editPremioImponibile" type="number" step="0.01" /></div>
             </div>
 
             <div style="margin-top:15px; border-top:1px dashed var(--line); padding-top:10px;">
@@ -499,7 +506,8 @@
     const fIncentivi = document.getElementById("fIncentivi");
     const fPagate = document.getElementById("fPagate");
     const fAnno = document.getElementById("fAnno");
-    const fMese = document.getElementById("fMese"); // NUOVO RIFERIMENTO
+    const fMese = document.getElementById("fMese"); 
+    const fSettimana = document.getElementById("fSettimana"); // NUOVO
     const btnApplicaFiltri = document.getElementById("btnApplicaFiltri");
 
     // Table & Edit
@@ -535,6 +543,21 @@
     let lastResults = [];
     let producerColorMap = {};
 
+    // Populate Weeks
+    (function popWeeks(){
+        let html = '<option value="">Tutte</option>';
+        for(let i=1; i<=53; i++) html += `<option value="${i}">Settimana ${i}</option>`;
+        fSettimana.innerHTML = html;
+    })();
+
+    // Helper: ISO Week Number
+    function getWeekNumber(d) {
+        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+        var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+        return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+    }
+
     // ------------------------------------------------
     // GESTIONE AUTENTICAZIONE
     // ------------------------------------------------
@@ -550,7 +573,6 @@
         loginOverlay.classList.add("hidden");
         mainApp.classList.remove("hidden");
 
-        // Permessi
         const displayStyle = isAdmin ? "block" : "none";
         btnNuovoProduttore.style.display = displayStyle;
         btnNuovaIncentivazione.style.display = displayStyle;
@@ -610,7 +632,7 @@
          boxEl.classList.add("hidden");
          reqFields.forEach(el => {
            el.removeAttribute("required");
-           el.value = ""; // Pulisci campi
+           el.value = ""; 
          });
        }
     }
@@ -707,6 +729,7 @@
         percentuale: hasInc ? toNumber(percentuale.value) : 0,
         provvigioni: hasInc ? toNumber(provvigioni.value) : 0,
 
+        // Campi Legacy per ordinamento base
         anno: d.getFullYear(), mese: d.getMonth()+1,
         dataiso: `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`,
         pagate: false, pagateData: null,
@@ -727,15 +750,15 @@
 
     // CARICAMENTO E FILTRI
     async function loadByFilters(){
+      // QUERY BASE (Scarica tutto per l'utente, filtro poi in locale per flessibilità su date)
       let constraints = [];
       if (!isAdmin) constraints.push(where("userId", "==", currentUser.uid));
+      // Filtri DB diretti solo per campi statici
       if(fProduttore.value) constraints.push(where("produttore", "==", fProduttore.value));
       if(fCompagnia.value) constraints.push(where("compagnia", "==", fCompagnia.value));
       if(fPagate.value !== "") constraints.push(where("pagate", "==", fPagate.value === "true"));
-      if(fAnno.value) constraints.push(where("anno", "==", Number(fAnno.value)));
-      if(fMese.value) constraints.push(where("mese", "==", Number(fMese.value))); // FILTRO MESE
       
-      constraints.push(orderBy("dataiso", "desc"));
+      constraints.push(orderBy("dataDecorrenza", "desc")); // Ordinamento per decorrenza
       
       try{
         const q = query(collection(db, COL_EXTRA), ...constraints);
@@ -743,7 +766,31 @@
         
         let results = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-        // Filtro LATO CLIENTE per "Incentivazione"
+        // ---- FILTRAGGIO LATO CLIENTE (Sulla Data Decorrenza) ----
+        
+        // Filtro ANNO (Decorrenza)
+        if(fAnno.value) {
+            results = results.filter(r => r.dataDecorrenza.startsWith(fAnno.value));
+        }
+
+        // Filtro MESE (Decorrenza)
+        if(fMese.value) {
+            results = results.filter(r => {
+                const m = parseInt(r.dataDecorrenza.split("-")[1]);
+                return m == fMese.value;
+            });
+        }
+
+        // Filtro SETTIMANA (Decorrenza)
+        if(fSettimana.value) {
+            results = results.filter(r => {
+                const dateObj = new Date(r.dataDecorrenza);
+                const w = getWeekNumber(dateObj);
+                return w == fSettimana.value;
+            });
+        }
+
+        // Filtro INCENTIVI
         const fIncVal = fIncentivi.value;
         if(fIncVal === "SI"){
              results = results.filter(r => r.incentivazione !== "NESSUNA" && r.provvigioni > 0);
@@ -754,7 +801,7 @@
         renderResults(results);
       }catch(e){ 
         console.error(e); 
-        setMsg("err", "Errore caricamento dati (Controlla Indici Console)."); 
+        setMsg("err", "Errore caricamento dati (Verifica Indici)."); 
       }
     }
     btnApplicaFiltri.addEventListener("click", loadByFilters);
@@ -768,7 +815,6 @@
         const extraClass = hasExtra ? "color:#fff;font-weight:bold" : "color:#555;";
         const extraVal = hasExtra ? money2(Number(r.provvigioni)) : "-";
         
-        // Logica Colonna Stato
         let statusHtml = "";
         if(hasExtra){
              const isPaid = r.pagate ? "checked" : "";
@@ -811,7 +857,8 @@
       
       totaleBox.innerHTML = `Totale Provvigioni Extra: <b>${money2(tot)}</b> | Volume Imponibile: <b>${money2(totImp)}</b>`;
       
-      const anni = [...new Set(rows.map(r => r.anno))].filter(Boolean).sort((a,b)=>b-a);
+      // Popola Anno filtro basandosi sulle date di decorrenza REALI
+      const anni = [...new Set(rows.map(r => r.dataDecorrenza.split("-")[0]))].sort((a,b)=>b-a);
       if(fAnno.children.length<=1) fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a=>`<option value="${a}">${a}</option>`).join("");
     }
 
@@ -927,8 +974,8 @@
         "Compagnia": r.compagnia, 
         "Tipo": r.tipoPolizza === "NUOVA" ? "Nuova Affari" : "Sostituzione",
         "Polizza": r.numeroPolizza,
-        "Premio Lordo": r.premio, 
-        "Premio Imp.": r.premioImponibile, 
+        "Premio Lordo Annuo": r.premio, 
+        "Premio Imp. Annuo": r.premioImponibile, 
         "Incentivazione": r.incentivazione,
         "% Extra": r.percentuale,
         "Provv. Extra": r.provvigioni, 
