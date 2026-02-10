@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Provvigioni Extra - Multiutenza</title>
+  <title>Nuova Produzione - Registro Polizze</title>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#070A12">
 
@@ -12,27 +12,28 @@
     :root{
       --bg:#070A12; --text:#EAF0FF; --muted:#9AA6C0; --line: rgba(120, 150, 255, .18);
       --danger:#FF5A7A; --ok:#35F2A6; --warn:#FFC04D; --glow-orange: #FF6B00; 
+      --glow-blue: #00D4FF;
     }
     *{ box-sizing:border-box; }
     body{
       margin:0; padding:26px;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(900px 500px at 20% 10%, rgba(255, 107, 0, .08), transparent 55%),
-                  radial-gradient(900px 600px at 80% 20%, rgba(177,140,255,.10), transparent 60%),
+      background: radial-gradient(900px 500px at 20% 10%, rgba(0, 212, 255, .05), transparent 55%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(177,140,255,.08), transparent 60%),
                   linear-gradient(180deg, var(--bg), #050711);
       color: var(--text);
     }
     .wrap{ max-width: 1200px; margin: 0 auto; }
     
     .title{ display:flex; flex-direction: column; margin-bottom: 24px; gap: 10px; }
-    .title h1{ margin:0; font-size: 38px; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 0 10px rgba(255, 107, 0, 0.6); }
-    .badge{ padding:6px 12px; border:1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 999px; color: var(--muted); font-size: 12px; }
+    .title h1{ margin:0; font-size: 38px; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
+    .badge{ padding:6px 12px; border:1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 999px; color: var(--muted); font-size: 12px; display:inline-block; width:fit-content;}
     
     .card{ border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)); border-radius: 14px; padding: 20px; backdrop-filter: blur(8px); }
     
     label{ display:block; margin: 10px 0 6px; color: var(--muted); font-size: 13px; }
     input, select, button{ width:100%; padding: 11px 12px; border-radius: 12px; border: 1px solid rgba(120,150,255,.22); background: rgba(10, 14, 28, .85); color: var(--text); outline: none; transition: all 0.2s ease; }
-    input:focus, select:focus{ border-color: var(--glow-orange); box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15); }
+    input:focus, select:focus{ border-color: var(--glow-blue); box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15); }
     input[readonly]{ background: rgba(255,255,255,.04); border-style: dashed; color: rgba(234,240,255,.92); }
     
     .grid{ display:grid; grid-template-columns: 1.1fr 1fr; gap: 20px; }
@@ -41,9 +42,18 @@
     .split{ display:flex; gap:10px; flex-wrap: wrap; align-items: end; }
     .split > *{ flex: 1; min-width: 180px; }
 
+    /* SEZIONE INCENTIVI SPECIALI */
+    .incentive-box {
+      border: 1px solid rgba(255, 192, 77, 0.3);
+      background: rgba(255, 192, 77, 0.03);
+      padding: 15px; border-radius: 12px; margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+    .incentive-box.hidden { display:none; }
+
     .actions{ display:flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; align-items:center; }
     .btn{ width:auto; padding: 12px 20px; cursor:pointer; border: 1px solid rgba(124,246,255,.35); background: linear-gradient(180deg, rgba(124,246,255,.12), rgba(177,140,255,.10)); font-weight: 600; color: #fff; }
-    .btn#btnInserisci { border-color: var(--glow-orange); background: linear-gradient(180deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05)); }
+    .btn#btnInserisci { border-color: var(--glow-blue); background: linear-gradient(180deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.05)); }
     .btn.secondary{ border-color: rgba(177,140,255,.35); background: rgba(255,255,255,.03); font-weight: normal; }
     .btn.danger{ border-color: rgba(255,90,122,.45); background: rgba(255,90,122,.08); }
     .btn.warn{ border-color: rgba(255,192,77,.45); background: rgba(255,192,77,.08); }
@@ -91,8 +101,8 @@
 
     /* MODALE */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-    .modal-content { background: #0D111D; border: 1px solid var(--glow-orange); border-radius: 16px; padding: 24px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 40px rgba(255, 107, 0, 0.2); }
-    .modal-header { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: var(--glow-orange); text-transform: uppercase; }
+    .modal-content { background: #0D111D; border: 1px solid var(--glow-blue); border-radius: 16px; padding: 24px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 40px rgba(0, 212, 255, 0.2); }
+    .modal-header { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: var(--glow-blue); text-transform: uppercase; }
   </style>
 </head>
 
@@ -100,7 +110,7 @@
 
   <div id="loginOverlay">
     <div class="login-box">
-      <h2 style="color:white; margin-bottom:20px;">ACCESSO PROVVIGIONI</h2>
+      <h2 style="color:white; margin-bottom:20px;">ACCESSO PRODUZIONE</h2>
       <input type="email" id="emailLogin" placeholder="Email" style="margin-bottom:10px;">
       <input type="password" id="passwordLogin" placeholder="Password" style="margin-bottom:20px;">
       <button id="btnLogin" class="btn" style="background: var(--glow-orange); color: white;">ACCEDI</button>
@@ -119,8 +129,8 @@
     </div>
 
     <div class="title">
-      <h1>Provvigioni Extra</h1>
-      <div class="badge">Produttori + Incentivazioni dinamiche · Multiutenza</div>
+      <h1>Nuova Produzione</h1>
+      <div class="badge">Registro Polizze Nuove / Sostituzioni · Gestione Incentivi</div>
     </div>
 
     <div class="card">
@@ -130,11 +140,11 @@
             <div class="split">
               <div>
                 <label for="nomeCliente">Nome Cliente</label>
-                <input id="nomeCliente" type="text" placeholder="Es. Mario Rossi" />
+                <input id="nomeCliente" type="text" placeholder="Es. Mario Rossi" required />
               </div>
               <div>
                 <label for="dataDecorrenza">Data Decorrenza</label>
-                <input id="dataDecorrenza" type="date" />
+                <input id="dataDecorrenza" type="date" required />
               </div>
             </div>
 
@@ -145,13 +155,10 @@
                   <option value="" selected disabled>Caricamento...</option>
                 </select>
               </div>
-              <div>
-                <label>&nbsp;</label>
-                <button class="btn secondary" type="button" id="btnNuovoProduttore">Nuovo produttore</button>
+              <div style="flex:0; min-width:auto;">
+                 <label>&nbsp;</label>
+                 <button class="btn secondary" type="button" id="btnNuovoProduttore" title="Aggiungi Produttore">+</button>
               </div>
-            </div>
-
-            <div class="split">
               <div>
                 <label for="compagniaSelect">Compagnia</label>
                 <select id="compagniaSelect" required>
@@ -165,60 +172,73 @@
                   <option value="METLIFE">METLIFE</option>
                 </select>
               </div>
-
-              <div>
-                <label for="tipoPolizzaSelect">Tipo polizza</label>
-                <select id="tipoPolizzaSelect" required>
-                  <option value="" selected disabled>Seleziona...</option>
-                  <option value="NUOVA">Polizza nuova</option>
-                  <option value="SOSTITUZIONE_AUMENTO">Sostituzione (premio in aumento)</option>
-                </select>
-              </div>
             </div>
 
             <div class="split">
               <div>
-                <label for="incentivazioneSelect">Incentivazione</label>
-                <select id="incentivazioneSelect" required>
-                  <option value="" selected disabled>Caricamento...</option>
+                <label for="tipoPolizzaSelect">Tipo polizza</label>
+                <select id="tipoPolizzaSelect" required>
+                  <option value="" selected disabled>Seleziona...</option>
+                  <option value="NUOVA">Polizza Nuova Affari</option>
+                  <option value="SOSTITUZIONE_AUMENTO">Sostituzione (Aumento Premio)</option>
                 </select>
               </div>
               <div>
-                <label>&nbsp;</label>
-                <button class="btn secondary" type="button" id="btnNuovaIncentivazione">Nuova incentivazione</button>
+                 <label for="numeroPolizza">Numero di polizza</label>
+                 <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
               </div>
             </div>
-
-            <label for="numeroPolizza">Numero di polizza</label>
-            <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
           </div>
 
           <div>
             <div class="row2">
               <div>
-                <label for="premio">Premio</label>
+                <label for="premio">Premio Lordo</label>
                 <input id="premio" type="number" step="0.01" min="0" required placeholder="0,00" />
               </div>
               <div>
-                <label for="premioImponibile">Premio imponibile</label>
-                <input id="premioImponibile" type="number" step="0.01" min="0" required placeholder="0,00" />
+                <label for="premioImponibile" style="color:#fff; font-weight:bold;">Premio Imponibile</label>
+                <input id="premioImponibile" type="number" step="0.01" min="0" required placeholder="0,00" style="border-color:rgba(255,255,255,0.4);" />
               </div>
             </div>
 
-            <div class="row2">
-              <div>
-                <label for="percentuale">% provvigioni (su imponibile)</label>
-                <input id="percentuale" type="number" step="0.01" min="0" required placeholder="Es. 12,50" />
-              </div>
-              <div>
-                <label for="provvigioni">Provvigioni calcolate</label>
-                <input id="provvigioni" type="number" step="0.01" readonly placeholder="0,00" />
-              </div>
+            <div style="margin-top:15px; border-top:1px dashed var(--line); padding-top:10px;">
+               <label for="toggleIncentivi" style="color:var(--warn);">Prevede Incentivazione Extra?</label>
+               <select id="toggleIncentivi" style="margin-bottom:10px;">
+                  <option value="NO">NO - Nessun incentivo extra</option>
+                  <option value="SI">SI - Calcola provvigioni extra</option>
+               </select>
+
+               <div id="boxIncentivi" class="incentive-box hidden">
+                  <div class="split">
+                    <div>
+                      <label for="incentivazioneSelect">Tipo Incentivazione</label>
+                      <select id="incentivazioneSelect">
+                        <option value="" selected disabled>Caricamento...</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>&nbsp;</label>
+                      <button class="btn secondary" type="button" id="btnNuovaIncentivazione">Nuova Tipologia</button>
+                    </div>
+                  </div>
+
+                  <div class="row2">
+                    <div>
+                      <label for="percentuale">% Extra (su imponibile)</label>
+                      <input id="percentuale" type="number" step="0.01" min="0" placeholder="Es. 12,50" />
+                    </div>
+                    <div>
+                      <label for="provvigioni">Importo Extra Calcolato</label>
+                      <input id="provvigioni" type="number" step="0.01" readonly placeholder="0,00" />
+                    </div>
+                  </div>
+               </div>
             </div>
 
             <div class="actions">
-              <button class="btn" type="button" id="btnInserisci">INSERISCI E SALVA</button>
-              <button class="btn secondary" type="reset" id="btnReset">Reset</button>
+              <button class="btn" type="button" id="btnInserisci">REGISTRA POLIZZA</button>
+              <button class="btn secondary" type="reset" id="btnReset">Pulisci</button>
             </div>
             <div id="msg" class="msg"></div>
           </div>
@@ -245,7 +265,7 @@
           </select>
         </div>
         <div class="tool small">
-          <label for="fPagate">Pagamenti</label>
+          <label for="fPagate">Stato Inc.</label>
           <select id="fPagate">
             <option value="">Tutte</option>
             <option value="true">Pagate</option>
@@ -278,14 +298,14 @@
       <table id="tabella" class="hidden">
         <thead>
           <tr>
-            <th>Data Ins.</th>
+            <th>Data</th>
             <th>Cliente</th>
-            <th>Decorrenza</th>
-            <th>Produttore</th>
-            <th>Compagnia</th>
             <th>Polizza</th>
-            <th class="mono">Provv.</th>
-            <th>Pagate</th>
+            <th>Comp./Prod.</th>
+            <th>Premio Imp.</th>
+            <th class="mono">Extra</th>
+            <th>Incentivo</th>
+            <th>Stato</th>
             <th>Azioni</th>
           </tr>
         </thead>
@@ -297,7 +317,7 @@
 
   <div id="editModal" class="modal-overlay hidden">
     <div class="modal-content">
-      <div class="modal-header">Modifica Provvigione</div>
+      <div class="modal-header">Modifica Polizza</div>
       <form id="formEdit">
         <input type="hidden" id="editId" />
         <div class="grid">
@@ -317,20 +337,32 @@
             </div>
             <div class="split">
                <div><label>Tipo Polizza</label><select id="editTipoPolizzaSelect">
-                    <option value="NUOVA">Polizza nuova</option><option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
+                    <option value="NUOVA">Nuova Affari</option><option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
                </select></div>
-               <div><label>Incentivazione</label><select id="editIncentivazioneSelect"></select></div>
+               <div><label>Numero Polizza</label><input id="editNumeroPolizza" type="text" /></div>
             </div>
-            <label>Numero Polizza</label><input id="editNumeroPolizza" type="text" />
           </div>
           <div>
             <div class="row2">
-              <div><label>Premio</label><input id="editPremio" type="number" step="0.01" /></div>
+              <div><label>Premio Lordo</label><input id="editPremio" type="number" step="0.01" /></div>
               <div><label>Premio Imponibile</label><input id="editPremioImponibile" type="number" step="0.01" /></div>
             </div>
-            <div class="row2">
-              <div><label>% Provvigione</label><input id="editPercentuale" type="number" step="0.01" /></div>
-              <div><label>Calcolo Provv.</label><input id="editProvvigioni" type="number" step="0.01" readonly /></div>
+
+            <div style="margin-top:15px; border-top:1px dashed var(--line); padding-top:10px;">
+                <label style="color:var(--warn);">Incentivazione Extra?</label>
+                <select id="editToggleIncentivi" style="margin-bottom:10px;">
+                  <option value="NO">NO</option>
+                  <option value="SI">SI</option>
+               </select>
+               <div id="editBoxIncentivi" class="incentive-box hidden">
+                 <div class="split">
+                   <div><label>Tipo Incentivo</label><select id="editIncentivazioneSelect"></select></div>
+                 </div>
+                 <div class="row2">
+                    <div><label>% Extra</label><input id="editPercentuale" type="number" step="0.01" /></div>
+                    <div><label>Importo Extra</label><input id="editProvvigioni" type="number" step="0.01" readonly /></div>
+                  </div>
+               </div>
             </div>
             
             <div class="actions" style="margin-top:24px;">
@@ -397,20 +429,25 @@
     const currentUserDisplay = document.getElementById("currentUserDisplay");
     const roleBadge = document.getElementById("roleBadge");
 
-    // Main Form
+    // Main Form Elements
     const nomeClienteInput = document.getElementById("nomeCliente");
     const dataDecorrenzaInput = document.getElementById("dataDecorrenza");
     const produttoreSelect = document.getElementById("produttoreSelect");
     const btnNuovoProduttore = document.getElementById("btnNuovoProduttore");
     const compagniaSelect = document.getElementById("compagniaSelect");
     const tipoPolizzaSelect = document.getElementById("tipoPolizzaSelect");
-    const incentivazioneSelect = document.getElementById("incentivazioneSelect");
-    const btnNuovaIncentivazione = document.getElementById("btnNuovaIncentivazione");
     const numeroPolizza = document.getElementById("numeroPolizza");
     const premio = document.getElementById("premio");
     const premioImponibile = document.getElementById("premioImponibile");
+    
+    // Incentive Elements
+    const toggleIncentivi = document.getElementById("toggleIncentivi");
+    const boxIncentivi = document.getElementById("boxIncentivi");
+    const incentivazioneSelect = document.getElementById("incentivazioneSelect");
+    const btnNuovaIncentivazione = document.getElementById("btnNuovaIncentivazione");
     const percentuale = document.getElementById("percentuale");
     const provvigioni = document.getElementById("provvigioni");
+
     const btnInserisci = document.getElementById("btnInserisci");
     const btnReset = document.getElementById("btnReset");
     const msg = document.getElementById("msg");
@@ -438,10 +475,14 @@
     const editProduttoreSelect = document.getElementById("editProduttoreSelect");
     const editCompagniaSelect = document.getElementById("editCompagniaSelect");
     const editTipoPolizzaSelect = document.getElementById("editTipoPolizzaSelect");
-    const editIncentivazioneSelect = document.getElementById("editIncentivazioneSelect");
     const editNumeroPolizza = document.getElementById("editNumeroPolizza");
     const editPremio = document.getElementById("editPremio");
     const editPremioImponibile = document.getElementById("editPremioImponibile");
+    
+    // Edit Incentive Fields
+    const editToggleIncentivi = document.getElementById("editToggleIncentivi");
+    const editBoxIncentivi = document.getElementById("editBoxIncentivi");
+    const editIncentivazioneSelect = document.getElementById("editIncentivazioneSelect");
     const editPercentuale = document.getElementById("editPercentuale");
     const editProvvigioni = document.getElementById("editProvvigioni");
     
@@ -466,13 +507,10 @@
         loginOverlay.classList.add("hidden");
         mainApp.classList.remove("hidden");
 
-        if(!isAdmin){
-           btnNuovoProduttore.style.display = "none";
-           btnNuovaIncentivazione.style.display = "none";
-        } else {
-           btnNuovoProduttore.style.display = "block";
-           btnNuovaIncentivazione.style.display = "block";
-        }
+        // Permessi
+        const displayStyle = isAdmin ? "block" : "none";
+        btnNuovoProduttore.style.display = displayStyle;
+        btnNuovaIncentivazione.style.display = displayStyle;
 
         await init();
       } else {
@@ -507,7 +545,7 @@
       if (typeof v !== "string") v = String(v ?? "");
       v = v.replace(",", ".").trim();
       const n = Number(v);
-      return Number.isFinite(n) ? n : NaN;
+      return Number.isFinite(n) ? n : 0;
     }
     function money2(n){ return (Math.round(n * 100) / 100).toFixed(2); }
     function pad2(n){ return String(n).padStart(2, "0"); }
@@ -519,11 +557,36 @@
       return palette[h % palette.length];
     }
 
-    // Calcoli UI
+    // TOGGLE INCENTIVI LOGIC
+    function handleIncentiveToggle(toggleEl, boxEl, reqFields){
+       const isSi = toggleEl.value === "SI";
+       if(isSi){
+         boxEl.classList.remove("hidden");
+         reqFields.forEach(el => el.setAttribute("required", "true"));
+       } else {
+         boxEl.classList.add("hidden");
+         reqFields.forEach(el => {
+           el.removeAttribute("required");
+           el.value = ""; // Pulisci campi
+         });
+       }
+    }
+
+    toggleIncentivi.addEventListener("change", () => {
+        handleIncentiveToggle(toggleIncentivi, boxIncentivi, [incentivazioneSelect, percentuale]);
+        if(toggleIncentivi.value === "NO") provvigioni.value = "";
+    });
+    
+    editToggleIncentivi.addEventListener("change", () => {
+        handleIncentiveToggle(editToggleIncentivi, editBoxIncentivi, [editIncentivazioneSelect, editPercentuale]);
+        if(editToggleIncentivi.value === "NO") editProvvigioni.value = "";
+    });
+
+    // Calcoli
     function calcola(impElem, percElem, outElem){
       const imp = toNumber(impElem.value);
       const perc = toNumber(percElem.value);
-      if (!Number.isFinite(imp) || !Number.isFinite(perc)) { outElem.value = ""; return; }
+      if (imp <= 0 || perc <= 0) { outElem.value = ""; return; }
       outElem.value = money2(imp * (perc / 100));
     }
     premioImponibile.addEventListener("input", ()=>calcola(premioImponibile, percentuale, provvigioni));
@@ -532,7 +595,11 @@
     editPremioImponibile.addEventListener("input", ()=>calcola(editPremioImponibile, editPercentuale, editProvvigioni));
     editPercentuale.addEventListener("input", ()=>calcola(editPremioImponibile, editPercentuale, editProvvigioni));
 
-    btnReset.addEventListener("click", () => { setMsg("",""); provvigioni.value=""; });
+    btnReset.addEventListener("click", () => { 
+        setMsg("",""); 
+        provvigioni.value=""; 
+        boxIncentivi.classList.add("hidden");
+    });
 
     // Caricamento Dati Ausiliari
     async function loadAux(colName, selectIds){
@@ -554,8 +621,6 @@
             fProduttore.innerHTML = `<option value="">Tutti</option>` + final.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
             producerColorMap={};
             final.forEach(p=>producerColorMap[p.name]=colorForProducer(p.name));
-        } else {
-            incentivazioni = final;
         }
       }catch(e){ console.error(e); }
     }
@@ -581,6 +646,8 @@
       if (!document.getElementById("formProvvigioni").reportValidity()) return;
       
       const d = new Date();
+      const hasInc = toggleIncentivi.value === "SI";
+
       const record = {
         userId: currentUser.uid,
         userEmail: currentUser.email,
@@ -589,12 +656,15 @@
         produttore: produttoreSelect.value,
         compagnia: compagniaSelect.value,
         tipoPolizza: tipoPolizzaSelect.value,
-        incentivazione: incentivazioneSelect.value,
         numeroPolizza: numeroPolizza.value.trim(),
         premio: toNumber(premio.value),
         premioImponibile: toNumber(premioImponibile.value),
-        percentuale: toNumber(percentuale.value),
-        provvigioni: toNumber(provvigioni.value),
+        
+        // Logica Condizionale
+        incentivazione: hasInc ? incentivazioneSelect.value : "NESSUNA",
+        percentuale: hasInc ? toNumber(percentuale.value) : 0,
+        provvigioni: hasInc ? toNumber(provvigioni.value) : 0,
+
         anno: d.getFullYear(), mese: d.getMonth()+1,
         dataiso: `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`,
         pagate: false, pagateData: null,
@@ -603,8 +673,10 @@
 
       try{
         await addDoc(collection(db, COL_EXTRA), record);
-        setMsg("ok", "Inserito e salvato.");
+        setMsg("ok", "Polizza registrata con successo.");
         document.getElementById("formProvvigioni").reset();
+        toggleIncentivi.value = "NO";
+        boxIncentivi.classList.add("hidden");
         provvigioni.value = "";
         await loadByFilters();
       }catch(e){ setMsg("err", `Errore: ${e.message}`); }
@@ -628,7 +700,6 @@
         renderResults(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       }catch(e){ 
         console.error(e); 
-        if(e.message.includes("requires an index")) alert("Manca un indice Firestore. Controlla la console.");
         setMsg("err", "Errore caricamento dati."); 
       }
     }
@@ -642,21 +713,25 @@
         const dateVal = (r.pagateData && typeof r.pagateData === "string") ? r.pagateData : "";
         const disabledDate = r.pagate ? "" : "disabled";
         
+        const hasExtra = (r.provvigioni > 0);
+        const extraClass = hasExtra ? "color:#fff;font-weight:bold" : "color:#555;";
+        const extraVal = hasExtra ? money2(Number(r.provvigioni)) : "-";
+        
         // Checkbox pagamenti abilitato solo per admin
         const disableCheck = isAdmin ? "" : "disabled";
 
         return `<tr>
-            <td class="mono" style="color:#999;font-size:11px">${r.dataiso||""}</td>
-            <td><b>${r.nomeCliente||""}</b><br><small style="color:#666">${r.userEmail || "Legacy"}</small></td>
-            <td>${r.dataDecorrenza||""}</td>
-            <td><span style="color:${c}">${r.produttore||""}</span></td>
-            <td>${r.compagnia||""}</td>
-            <td>${r.numeroPolizza||""}</td>
-            <td class="mono" style="font-weight:bold;color:#fff">${money2(Number(r.provvigioni||0))}</td>
+            <td style="color:#999;font-size:11px">${r.dataDecorrenza||""}</td>
+            <td><b>${r.nomeCliente||""}</b></td>
+            <td>${r.numeroPolizza||""}<br><small>${r.tipoPolizza === 'NUOVA' ? 'Nuova' : 'Sost.'}</small></td>
+            <td>${r.compagnia}<br><span style="color:${c}">${r.produttore}</span></td>
+            <td class="mono">${money2(r.premioImponibile||0)}</td>
+            <td class="mono" style="${extraClass}">${extraVal}</td>
+            <td><small>${r.incentivazione === "NESSUNA" ? "" : r.incentivazione}</small></td>
             <td>
                <div class="paid-wrap">
                 <input type="checkbox" data-action="togglePaid" data-id="${r.id}" ${isPaid} ${disableCheck}>
-                <input type="date" data-action="paidDate" data-id="${r.id}" value="${dateVal}" ${disabledDate} ${disableCheck} style="width:110px">
+                <input type="date" data-action="paidDate" data-id="${r.id}" value="${dateVal}" ${disabledDate} ${disableCheck} style="width:105px; padding:4px;">
                </div>
             </td>
             <td>
@@ -670,7 +745,11 @@
 
       tabella.classList.toggle("hidden", rows.length === 0);
       const tot = rows.reduce((s,r)=>s+(Number(r.provvigioni)||0),0);
-      totaleBox.textContent = `Totale visualizzato: ${money2(tot)}`;
+      
+      // Calcolo totali imponibili
+      const totImp = rows.reduce((s,r)=>s+(Number(r.premioImponibile)||0),0);
+      
+      totaleBox.innerHTML = `Totale Provvigioni Extra: <b>${money2(tot)}</b> | Volume Imponibile: <b>${money2(totImp)}</b>`;
       
       const anni = [...new Set(rows.map(r => r.anno))].filter(Boolean).sort((a,b)=>b-a);
       if(fAnno.children.length<=1) fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a=>`<option value="${a}">${a}</option>`).join("");
@@ -682,8 +761,7 @@
       const action = el.dataset.action;
       const id = el.dataset.id;
       if (!action || !id) return;
-      
-      if(!isAdmin) return; // Sicurezza lato client extra
+      if(!isAdmin) return; 
 
       if (action === "togglePaid"){
         const checked = el.checked;
@@ -713,7 +791,7 @@
       loadByFilters();
     };
 
-    // GESTIONE EDIT MODAL COMPLETA
+    // GESTIONE EDIT
     window.openEdit = (id) => {
       const row = lastResults.find(r=>r.id===id);
       if(!row) return;
@@ -724,12 +802,26 @@
       editProduttoreSelect.value = row.produttore || "";
       editCompagniaSelect.value = row.compagnia || "";
       editTipoPolizzaSelect.value = row.tipoPolizza || "";
-      editIncentivazioneSelect.value = row.incentivazione || "";
       editNumeroPolizza.value = row.numeroPolizza || "";
       editPremio.value = row.premio || "";
       editPremioImponibile.value = row.premioImponibile || "";
-      editPercentuale.value = row.percentuale || "";
-      editProvvigioni.value = row.provvigioni || "";
+      
+      // Gestione Logica Edit Incentivi
+      const hasInc = (row.provvigioni > 0 || (row.incentivazione && row.incentivazione !== "NESSUNA"));
+      editToggleIncentivi.value = hasInc ? "SI" : "NO";
+      
+      // Triggera visibilità
+      handleIncentiveToggle(editToggleIncentivi, editBoxIncentivi, [editIncentivazioneSelect, editPercentuale]);
+
+      if(hasInc){
+          editIncentivazioneSelect.value = row.incentivazione || "";
+          editPercentuale.value = row.percentuale || "";
+          editProvvigioni.value = row.provvigioni || "";
+      } else {
+          editIncentivazioneSelect.value = "";
+          editPercentuale.value = "";
+          editProvvigioni.value = "";
+      }
 
       editModal.classList.remove("hidden");
     };
@@ -739,6 +831,8 @@
       const id = editId.value;
       if(!id) return;
       
+      const hasInc = editToggleIncentivi.value === "SI";
+
       try{
         await updateDoc(doc(db, COL_EXTRA, id), {
           nomeCliente: editNomeCliente.value.trim(),
@@ -746,12 +840,14 @@
           produttore: editProduttoreSelect.value,
           compagnia: editCompagniaSelect.value,
           tipoPolizza: editTipoPolizzaSelect.value,
-          incentivazione: editIncentivazioneSelect.value,
           numeroPolizza: editNumeroPolizza.value.trim(),
           premio: toNumber(editPremio.value),
           premioImponibile: toNumber(editPremioImponibile.value),
-          percentuale: toNumber(editPercentuale.value),
-          provvigioni: toNumber(editProvvigioni.value),
+          
+          incentivazione: hasInc ? editIncentivazioneSelect.value : "NESSUNA",
+          percentuale: hasInc ? toNumber(editPercentuale.value) : 0,
+          provvigioni: hasInc ? toNumber(editProvvigioni.value) : 0,
+          
           updatedAt: serverTimestamp()
         });
         editModal.classList.add("hidden");
@@ -766,19 +862,28 @@
     btnExportExcel.addEventListener("click", () => {
       if (!window.XLSX) return;
       const data = lastResults.map(r => ({
-        "Data Ins.": r.dataiso, "Cliente": r.nomeCliente, "Decorrenza": r.dataDecorrenza,
-        "Produttore": r.produttore, "Compagnia": r.compagnia, "Tipo": r.tipoPolizza,
-        "Incentivazione": r.incentivazione, "Polizza": r.numeroPolizza,
-        "Premio": r.premio, "Imponibile": r.premioImponibile, "%": r.percentuale,
-        "Provvigioni": r.provvigioni, "Pagate": r.pagate?"SI":"NO", "Data Pag.": r.pagateData,
+        "Data Ins.": r.dataiso, 
+        "Cliente": r.nomeCliente, 
+        "Decorrenza": r.dataDecorrenza,
+        "Produttore": r.produttore, 
+        "Compagnia": r.compagnia, 
+        "Tipo": r.tipoPolizza === "NUOVA" ? "Nuova Affari" : "Sostituzione",
+        "Polizza": r.numeroPolizza,
+        "Premio Lordo": r.premio, 
+        "Premio Imp.": r.premioImponibile, 
+        "Incentivazione": r.incentivazione,
+        "% Extra": r.percentuale,
+        "Provv. Extra": r.provvigioni, 
+        "Pagate": r.pagate?"SI":"NO", 
+        "Data Pag.": r.pagateData,
         "Utente": r.userEmail
       }));
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Export");
-      XLSX.writeFile(wb, `Provvigioni_${new Date().getTime()}.xlsx`);
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "NuovaProduzione");
+      XLSX.writeFile(wb, `Produzione_${new Date().getTime()}.xlsx`);
     });
 
-    // BACKUP E RIPRISTINO (COMPLETO)
+    // BACKUP E RIPRISTINO
     const btnBackupDownload = document.getElementById("btnBackupDownload");
     const fileBackupInput = document.getElementById("fileBackupInput");
     const btnBackupRestore = document.getElementById("btnBackupRestore");
@@ -791,7 +896,7 @@
     btnBackupDownload.addEventListener("click", async () => {
        if(!isAdmin && !confirm("Scaricherai solo i tuoi dati. Procedere?")) return;
        try {
-        setMsg("warn", "Generazione backup in corso...");
+        setMsg("warn", "Generazione backup...");
         const [prodData, incData, extraData] = await Promise.all([
           getFullCollection(COL_PROD),
           getFullCollection(COL_INC),
@@ -805,7 +910,7 @@
         const blob = new Blob([JSON.stringify(backupBundle, null, 2)], { type: "application/json" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = `Backup_${new Date().toISOString().slice(0,10)}.json`;
+        a.download = `Backup_Produzione_${new Date().toISOString().slice(0,10)}.json`;
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
         setMsg("ok", "Backup completato.");
       } catch (e) { setMsg("err", "Errore backup: " + e.message); }
