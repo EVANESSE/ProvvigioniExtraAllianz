@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nuova Produzione - Registro Polizze</title>
+  <title>Nuova Produzione - Registro</title>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#070A12">
 
   <style>
-    /* STILI */
+    /* STILI BASE */
     :root{
       --bg:#070A12; --text:#EAF0FF; --muted:#9AA6C0; --line: rgba(120, 150, 255, .18);
-      --danger:#FF5A7A; --ok:#35F2A6; --warn:#FFC04D; --glow-orange: #FF6B00; 
-      --glow-blue: #00D4FF;
+      --danger:#FF5A7A; --ok:#35F2A6; --warn:#FFC04D; 
+      --glow-orange: #FF6B00; --glow-blue: #00D4FF;
     }
     *{ box-sizing:border-box; }
     body{
@@ -25,9 +25,23 @@
     }
     .wrap{ max-width: 1200px; margin: 0 auto; }
     
-    .title{ display:flex; flex-direction: column; margin-bottom: 24px; gap: 10px; }
-    .title h1{ margin:0; font-size: 38px; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
-    .badge{ padding:6px 12px; border:1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 999px; color: var(--muted); font-size: 12px; display:inline-block; width:fit-content;}
+    /* TITOLO GLOW ARANCIO FLUO */
+    .title{ display:flex; flex-direction: column; margin-bottom: 30px; align-items: flex-start; gap: 10px; }
+    .title h1{ 
+      margin:0; font-size: 32px; text-transform: uppercase; font-weight: 900; letter-spacing: 2px; 
+      color: #fff; 
+      
+      /* Cornice */
+      border: 3px solid var(--glow-orange);
+      padding: 12px 24px;
+      border-radius: 8px;
+      background: rgba(255, 107, 0, 0.05);
+
+      /* Effetto Glow e Rilievo */
+      box-shadow: 0 0 15px rgba(255, 107, 0, 0.4), inset 0 0 15px rgba(255, 107, 0, 0.1);
+      text-shadow: 2px 2px 0px #b34b00, 0 0 20px var(--glow-orange);
+    }
+    .badge{ margin-top:5px; padding:6px 12px; border:1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 999px; color: var(--muted); font-size: 12px; display:inline-block; width:fit-content;}
     
     .card{ border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)); border-radius: 14px; padding: 20px; backdrop-filter: blur(8px); }
     
@@ -63,8 +77,8 @@
     .msg.err{ color: var(--danger); }
 
     .toolbar{ display:flex; gap: 10px; flex-wrap: wrap; align-items: end; margin-top: 20px; padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.02); }
-    .tool{ min-width: 170px; flex: 1; }
-    .tool.small{ min-width: 130px; max-width: 190px; flex: 0; }
+    .tool{ min-width: 150px; flex: 1; }
+    .tool.small{ min-width: 100px; max-width: 150px; flex: 0; }
 
     table{ width:100%; border-collapse: collapse; margin-top: 16px; overflow:hidden; border-radius: 14px; border: 1px solid var(--line); background: rgba(6, 9, 18, .6); }
     th, td{ padding: 12px 12px; border-bottom: 1px solid rgba(120,150,255,.14); font-size: 13px; vertical-align: middle; }
@@ -193,8 +207,8 @@
           <div>
             <div class="row2">
               <div>
-                <label for="premio">Premio Lordo</label>
-                <input id="premio" type="number" step="0.01" min="0" required placeholder="0,00" />
+                <label for="premio">Premio Lordo (Opzionale)</label>
+                <input id="premio" type="number" step="0.01" min="0" placeholder="0,00" />
               </div>
               <div>
                 <label for="premioImponibile" style="color:#fff; font-weight:bold;">Premio Imponibile</label>
@@ -249,6 +263,15 @@
         <div class="tool">
           <label for="fProduttore">Filtro produttore</label>
           <select id="fProduttore"><option value="">Tutti</option></select>
+        </div>
+        
+        <div class="tool">
+            <label for="fIncentivi">Incentivazione</label>
+            <select id="fIncentivi">
+                <option value="">Tutti</option>
+                <option value="SI">SI (Con Extra)</option>
+                <option value="NO">NO (Solo Polizza)</option>
+            </select>
         </div>
 
         <div class="tool">
@@ -344,7 +367,7 @@
           </div>
           <div>
             <div class="row2">
-              <div><label>Premio Lordo</label><input id="editPremio" type="number" step="0.01" /></div>
+              <div><label>Premio Lordo (Opz)</label><input id="editPremio" type="number" step="0.01" /></div>
               <div><label>Premio Imponibile</label><input id="editPremioImponibile" type="number" step="0.01" /></div>
             </div>
 
@@ -388,7 +411,7 @@
       getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-    // CONFIGURAZIONE API KEY CORRETTA
+    // CONFIGURAZIONE API KEY
     const firebaseConfig = {
       apiKey: "AIzaSyBImpEln_jCpYyMMrNh63xJDJ89Vxf3DIc",
       authDomain: "provvigioni-extra-allianz.firebaseapp.com",
@@ -455,6 +478,7 @@
     // Filters
     const fProduttore = document.getElementById("fProduttore");
     const fCompagnia = document.getElementById("fCompagnia");
+    const fIncentivi = document.getElementById("fIncentivi"); // NUOVO FILTRO
     const fPagate = document.getElementById("fPagate");
     const fAnno = document.getElementById("fAnno");
     const btnApplicaFiltri = document.getElementById("btnApplicaFiltri");
@@ -657,7 +681,7 @@
         compagnia: compagniaSelect.value,
         tipoPolizza: tipoPolizzaSelect.value,
         numeroPolizza: numeroPolizza.value.trim(),
-        premio: toNumber(premio.value),
+        premio: toNumber(premio.value), // Può essere 0
         premioImponibile: toNumber(premioImponibile.value),
         
         // Logica Condizionale
@@ -697,7 +721,19 @@
       try{
         const q = query(collection(db, COL_EXTRA), ...constraints);
         const snap = await getDocs(q);
-        renderResults(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        
+        // Processiamo i risultati
+        let results = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // Filtro LATO CLIENTE per "Incentivazione" (Per evitare problemi di indici Firestore)
+        const fIncVal = fIncentivi.value;
+        if(fIncVal === "SI"){
+             results = results.filter(r => r.incentivazione !== "NESSUNA" && r.provvigioni > 0);
+        } else if (fIncVal === "NO"){
+             results = results.filter(r => r.incentivazione === "NESSUNA" || !r.provvigioni || r.provvigioni === 0);
+        }
+
+        renderResults(results);
       }catch(e){ 
         console.error(e); 
         setMsg("err", "Errore caricamento dati."); 
@@ -709,16 +745,26 @@
       lastResults = rows;
       tbody.innerHTML = rows.map(r => {
         const c = producerColorMap[r.produttore] || "#7CF6FF";
-        const isPaid = r.pagate ? "checked" : "";
-        const dateVal = (r.pagateData && typeof r.pagateData === "string") ? r.pagateData : "";
-        const disabledDate = r.pagate ? "" : "disabled";
+        const hasExtra = (r.provvigioni > 0 && r.incentivazione !== "NESSUNA");
         
-        const hasExtra = (r.provvigioni > 0);
         const extraClass = hasExtra ? "color:#fff;font-weight:bold" : "color:#555;";
         const extraVal = hasExtra ? money2(Number(r.provvigioni)) : "-";
         
-        // Checkbox pagamenti abilitato solo per admin
-        const disableCheck = isAdmin ? "" : "disabled";
+        // Logica Colonna Stato
+        let statusHtml = "";
+        if(hasExtra){
+             const isPaid = r.pagate ? "checked" : "";
+             const dateVal = (r.pagateData && typeof r.pagateData === "string") ? r.pagateData : "";
+             const disabledDate = r.pagate ? "" : "disabled";
+             const disableCheck = isAdmin ? "" : "disabled";
+             
+             statusHtml = `<div class="paid-wrap">
+                <input type="checkbox" data-action="togglePaid" data-id="${r.id}" ${isPaid} ${disableCheck}>
+                <input type="date" data-action="paidDate" data-id="${r.id}" value="${dateVal}" ${disabledDate} ${disableCheck} style="width:105px; padding:4px;">
+               </div>`;
+        } else {
+             statusHtml = `<span style="opacity:0.3; font-size:11px;">-</span>`;
+        }
 
         return `<tr>
             <td style="color:#999;font-size:11px">${r.dataDecorrenza||""}</td>
@@ -729,10 +775,7 @@
             <td class="mono" style="${extraClass}">${extraVal}</td>
             <td><small>${r.incentivazione === "NESSUNA" ? "" : r.incentivazione}</small></td>
             <td>
-               <div class="paid-wrap">
-                <input type="checkbox" data-action="togglePaid" data-id="${r.id}" ${isPaid} ${disableCheck}>
-                <input type="date" data-action="paidDate" data-id="${r.id}" value="${dateVal}" ${disabledDate} ${disableCheck} style="width:105px; padding:4px;">
-               </div>
+               ${statusHtml}
             </td>
             <td>
               <div class="cell-actions">
@@ -744,9 +787,9 @@
       }).join("");
 
       tabella.classList.toggle("hidden", rows.length === 0);
-      const tot = rows.reduce((s,r)=>s+(Number(r.provvigioni)||0),0);
       
-      // Calcolo totali imponibili
+      // Calcolo totali imponibili e provvigioni solo dei record visibili
+      const tot = rows.reduce((s,r)=>s+(Number(r.provvigioni)||0),0);
       const totImp = rows.reduce((s,r)=>s+(Number(r.premioImponibile)||0),0);
       
       totaleBox.innerHTML = `Totale Provvigioni Extra: <b>${money2(tot)}</b> | Volume Imponibile: <b>${money2(totImp)}</b>`;
@@ -807,7 +850,7 @@
       editPremioImponibile.value = row.premioImponibile || "";
       
       // Gestione Logica Edit Incentivi
-      const hasInc = (row.provvigioni > 0 || (row.incentivazione && row.incentivazione !== "NESSUNA"));
+      const hasInc = (row.provvigioni > 0 && row.incentivazione !== "NESSUNA");
       editToggleIncentivi.value = hasInc ? "SI" : "NO";
       
       // Triggera visibilità
