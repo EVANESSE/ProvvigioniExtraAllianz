@@ -968,6 +968,7 @@ if(fRamo && fRamo.value) {
       if(!row) return;
       
       editId.value = row.id;
+      editRamoSelect.value = row.ramo || "";
       editNomeCliente.value = row.nomeCliente || "";
       editDataDecorrenza.value = row.dataDecorrenza || "";
       editProduttoreSelect.value = row.produttore || "";
@@ -1034,6 +1035,7 @@ if(fRamo && fRamo.value) {
       const data = lastResults.map(r => ({
         "Data Ins.": r.dataiso, 
         "Cliente": r.nomeCliente, 
+        "Ramo": r.ramo || "-",
         "Decorrenza": r.dataDecorrenza,
         "Produttore": r.produttore, 
         "Compagnia": r.compagnia, 
