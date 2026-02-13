@@ -186,28 +186,19 @@
             </div>
 
             <div class="split">
-  <div>
-    <label for="tipoPolizzaSelect">Tipo polizza</label>
-    <select id="tipoPolizzaSelect" required>
-      <option value="" selected disabled>Seleziona...</option>
-      <option value="NUOVA">Polizza Nuova Affari</option>
-      <option value="SOSTITUZIONE_AUMENTO">Sostituzione (Aumento Premio)</option>
-    </select>
-  </div>
-  <div>
-    <label for="ramoSelect">Ramo</label>
-    <select id="ramoSelect" required>
-      <option value="" selected disabled>Seleziona...</option>
-      <option value="MOTOR">Motor</option>
-      <option value="RAMI VARI">Rami Vari</option>
-      <option value="VITA">Vita</option>
-    </select>
-  </div>
-  <div>
-     <label for="numeroPolizza">Numero di polizza</label>
-     <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
-  </div>
-</div>
+              <div>
+                <label for="tipoPolizzaSelect">Tipo polizza</label>
+                <select id="tipoPolizzaSelect" required>
+                  <option value="" selected disabled>Seleziona...</option>
+                  <option value="NUOVA">Polizza Nuova Affari</option>
+                  <option value="SOSTITUZIONE_AUMENTO">Sostituzione (Aumento Premio)</option>
+                </select>
+              </div>
+              <div>
+                 <label for="numeroPolizza">Numero di polizza</label>
+                 <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
+              </div>
+            </div>
           </div>
 
           <div>
@@ -293,20 +284,11 @@
             <option value="METLIFE">METLIFE</option>
           </select>
         </div>
-
-<div class="tool">
-  <label for="fRamo">Ramo</label>
-  <select id="fRamo">
-    <option value="">Tutti</option>
-    <option value="MOTOR">Motor</option>
-    <option value="RAMI VARI">Rami Vari</option>
-    <option value="VITA">Vita</option>
-  </select>
-</div>
-<div class="tool small">
-  <label for="fAnno">Anno Dec.</label>
-  <select id="fAnno"><option value="">Tutti</option></select>
-</div>
+        
+        <div class="tool small">
+          <label for="fAnno">Anno Dec.</label>
+          <select id="fAnno"><option value="">Tutti</option></select>
+        </div>
 
         <div class="tool small">
           <label for="fMese">Mese Dec.</label>
@@ -368,7 +350,6 @@
             <th>Cliente</th>
             <th>Polizza</th>
             <th>Comp./Prod.</th>
-            <th>Ramo</th>
             <th>Premio Imp.</th>
             <th class="mono">Extra</th>
             <th>Incentivo</th>
@@ -408,33 +389,6 @@
                </select></div>
                <div><label>Numero Polizza</label><input id="editNumeroPolizza" type="text" /></div>
             </div>
-
-<div class="split">
-   <div>
-     <label>Tipo Polizza</label>
-     <select id="editTipoPolizzaSelect">
-        <option value="NUOVA">Nuova Affari</option>
-        <option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
-     </select>
-   </div>
-   <div>
-     <label>Ramo</label>
-     <select id="editRamoSelect" required>
-       <option value="MOTOR">Motor</option>
-       <option value="RAMI VARI">Rami Vari</option>
-       <option value="VITA">Vita</option>
-     </select>
-   </div>
-   <div>
-     <label>Numero Polizza</label>
-     <input id="editNumeroPolizza" type="text" />
-   </div>
-</div>
-  <div>
-     <label for="numeroPolizza">Numero di polizza</label>
-     <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
-  </div>
-</div>
           </div>
           <div>
             <div class="row2">
@@ -524,9 +478,6 @@
     const roleBadge = document.getElementById("roleBadge");
 
     // Main Form Elements
-    const ramoSelect = document.getElementById("ramoSelect");
-    const editRamoSelect = document.getElementById("editRamoSelect");
-    const fRamo = document.getElementById("fRamo");
     const nomeClienteInput = document.getElementById("nomeCliente");
     const dataDecorrenzaInput = document.getElementById("dataDecorrenza");
     const produttoreSelect = document.getElementById("produttoreSelect");
@@ -763,17 +714,6 @@
       const hasInc = toggleIncentivi.value === "SI";
 
       const record = {
-async function addRecord(){
-  if (!document.getElementById("formProvvigioni").reportValidity()) return;
-  
-  const d = new Date();
-  const hasInc = toggleIncentivi.value === "SI";
-
-  const record = {
-    ramo: document.getElementById("ramoSelect").value, // INCOLLA QUESTA
-    userId: currentUser.uid,
-    userEmail: currentUser.email,
-        ramo: ramoSelect.value,
         userId: currentUser.uid,
         userEmail: currentUser.email,
         nomeCliente: nomeClienteInput.value.trim(),
@@ -850,11 +790,6 @@ async function addRecord(){
             });
         }
 
-// Filtro RAMO (Decorrenza)
-if(fRamo && fRamo.value) {
-    results = results.filter(r => r.ramo === fRamo.value);
-}
-
         // Filtro INCENTIVI
         const fIncVal = fIncentivi.value;
         if(fIncVal === "SI"){
@@ -896,22 +831,23 @@ if(fRamo && fRamo.value) {
         }
 
         return `<tr>
-    <td style="color:#999;font-size:11px">${r.dataDecorrenza||""}</td>
-    <td><b>${r.nomeCliente||""}</b></td>
-    <td>${r.numeroPolizza||""}<br><small>${r.tipoPolizza === 'NUOVA' ? 'Nuova' : 'Sost.'}</small></td>
-    <td>${r.compagnia}<br><span style="color:${c}">${r.produttore}</span></td>
-    <td>${r.ramo || "-"}</td>
-    <td class="mono">${money2(r.premioImponibile||0)}</td>
-    <td class="mono" style="${extraClass}">${extraVal}</td>
-    <td><small>${r.incentivazione === "NESSUNA" ? "" : r.incentivazione}</small></td>
-    <td>${statusHtml}</td>
-    <td>
-      <div class="cell-actions">
-        <button class="btn warn tiny" onclick="openEdit('${r.id}')">Mod.</button>
-        <button class="btn danger tiny" onclick="delItem('${r.id}')">X</button>
-      </div>
-    </td>
-  </tr>`;
+            <td style="color:#999;font-size:11px">${r.dataDecorrenza||""}</td>
+            <td><b>${r.nomeCliente||""}</b></td>
+            <td>${r.numeroPolizza||""}<br><small>${r.tipoPolizza === 'NUOVA' ? 'Nuova' : 'Sost.'}</small></td>
+            <td>${r.compagnia}<br><span style="color:${c}">${r.produttore}</span></td>
+            <td class="mono">${money2(r.premioImponibile||0)}</td>
+            <td class="mono" style="${extraClass}">${extraVal}</td>
+            <td><small>${r.incentivazione === "NESSUNA" ? "" : r.incentivazione}</small></td>
+            <td>
+               ${statusHtml}
+            </td>
+            <td>
+              <div class="cell-actions">
+                <button class="btn warn tiny" onclick="openEdit('${r.id}')">Mod.</button>
+                <button class="btn danger tiny" onclick="delItem('${r.id}')">X</button>
+              </div>
+            </td>
+          </tr>`;
       }).join("");
 
       tabella.classList.toggle("hidden", rows.length === 0);
@@ -968,7 +904,6 @@ if(fRamo && fRamo.value) {
       if(!row) return;
       
       editId.value = row.id;
-      editRamoSelect.value = row.ramo || "";
       editNomeCliente.value = row.nomeCliente || "";
       editDataDecorrenza.value = row.dataDecorrenza || "";
       editProduttoreSelect.value = row.produttore || "";
@@ -1011,7 +946,6 @@ if(fRamo && fRamo.value) {
           compagnia: editCompagniaSelect.value,
           tipoPolizza: editTipoPolizzaSelect.value,
           numeroPolizza: editNumeroPolizza.value.trim(),
-          ramo: editRamoSelect.value,
           premio: toNumber(editPremio.value),
           premioImponibile: toNumber(editPremioImponibile.value),
           
@@ -1035,7 +969,6 @@ if(fRamo && fRamo.value) {
       const data = lastResults.map(r => ({
         "Data Ins.": r.dataiso, 
         "Cliente": r.nomeCliente, 
-        "Ramo": r.ramo || "-",
         "Decorrenza": r.dataDecorrenza,
         "Produttore": r.produttore, 
         "Compagnia": r.compagnia, 
