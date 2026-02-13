@@ -187,7 +187,19 @@
 
             <div class="split">
               <div>
-                <label for="tipoPolizzaSelect">Tipo polizza</label>
+                
+            <div class="split">
+              <div>
+                <label for="ramoSelect">Ramo</label>
+                <select id="ramoSelect" required>
+                  <option value="" selected disabled>Seleziona...</option>
+                  <option value="MOTOR">MOTOR</option>
+                  <option value="RAMI_VARI">RAMI VARI</option>
+                  <option value="VITA">VITA</option>
+                </select>
+              </div>
+            </div>
+            <label for="tipoPolizzaSelect">Tipo polizza</label>
                 <select id="tipoPolizzaSelect" required>
                   <option value="" selected disabled>Seleziona...</option>
                   <option value="NUOVA">Polizza Nuova Affari</option>
@@ -286,7 +298,17 @@
         </div>
         
         <div class="tool small">
-          <label for="fAnno">Anno Dec.</label>
+          
+      <div class="tool small">
+        <label for="fRamo">Ramo</label>
+        <select id="fRamo">
+          <option value="Tutti">Tutti</option>
+          <option value="MOTOR">MOTOR</option>
+          <option value="RAMI_VARI">RAMI VARI</option>
+          <option value="VITA">VITA</option>
+        </select>
+      </div>
+      <label for="fAnno">Anno Dec.</label>
           <select id="fAnno"><option value="">Tutti</option></select>
         </div>
 
@@ -350,6 +372,7 @@
             <th>Cliente</th>
             <th>Polizza</th>
             <th>Comp./Prod.</th>
+            <th>Ramo</th>
             <th>Premio Imp.</th>
             <th class="mono">Extra</th>
             <th>Incentivo</th>
@@ -384,7 +407,18 @@
               </select></div>
             </div>
             <div class="split">
-               <div><label>Tipo Polizza</label><select id="editTipoPolizzaSelect">
+               <div>
+            <div class="split">
+              <div>
+                <label>Ramo</label>
+                <select id="editRamoSelect">
+                  <option value="MOTOR">MOTOR</option>
+                  <option value="RAMI_VARI">RAMI VARI</option>
+                  <option value="VITA">VITA</option>
+                </select>
+              </div>
+            </div>
+            <label>Tipo Polizza</label><select id="editTipoPolizzaSelect">
                     <option value="NUOVA">Nuova Affari</option><option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
                </select></div>
                <div><label>Numero Polizza</label><input id="editNumeroPolizza" type="text" /></div>
@@ -482,7 +516,8 @@
     const dataDecorrenzaInput = document.getElementById("dataDecorrenza");
     const produttoreSelect = document.getElementById("produttoreSelect");
     const btnNuovoProduttore = document.getElementById("btnNuovoProduttore");
-    const compagniaSelect = document.getElementById("compagniaSelect");
+    const compagniaSelect = document.getElementById("compagniaSelect")
+  const ramoSelect = document.getElementById("ramoSelect");
     const tipoPolizzaSelect = document.getElementById("tipoPolizzaSelect");
     const numeroPolizza = document.getElementById("numeroPolizza");
     const premio = document.getElementById("premio");
@@ -502,7 +537,8 @@
 
     // Filters
     const fProduttore = document.getElementById("fProduttore");
-    const fCompagnia = document.getElementById("fCompagnia");
+    const fCompagnia = document.getElementById("fCompagnia")
+  const fRamo = document.getElementById("fRamo");
     const fIncentivi = document.getElementById("fIncentivi");
     const fPagate = document.getElementById("fPagate");
     const fAnno = document.getElementById("fAnno");
@@ -524,7 +560,8 @@
     const editNomeCliente = document.getElementById("editNomeCliente");
     const editDataDecorrenza = document.getElementById("editDataDecorrenza");
     const editProduttoreSelect = document.getElementById("editProduttoreSelect");
-    const editCompagniaSelect = document.getElementById("editCompagniaSelect");
+    const editCompagniaSelect = document.getElementById("editCompagniaSelect")
+  const editRamoSelect = document.getElementById("editRamoSelect");
     const editTipoPolizzaSelect = document.getElementById("editTipoPolizzaSelect");
     const editNumeroPolizza = document.getElementById("editNumeroPolizza");
     const editPremio = document.getElementById("editPremio");
@@ -720,6 +757,7 @@
         dataDecorrenza: dataDecorrenzaInput.value,
         produttore: produttoreSelect.value,
         compagnia: compagniaSelect.value,
+      ramo: ramoSelect.value,
         tipoPolizza: tipoPolizzaSelect.value,
         numeroPolizza: numeroPolizza.value.trim(),
         premio: toNumber(premio.value),
@@ -756,6 +794,7 @@
       // Filtri DB diretti solo per campi statici
       if(fProduttore.value) constraints.push(where("produttore", "==", fProduttore.value));
       if(fCompagnia.value) constraints.push(where("compagnia", "==", fCompagnia.value));
+      if(fRamo.value && fRamo.value !== "Tutti") constraints.push(where("ramo", "==", fRamo.value));
       if(fPagate.value !== "") constraints.push(where("pagate", "==", fPagate.value === "true"));
       
       constraints.push(orderBy("dataDecorrenza", "desc")); // Ordinamento per decorrenza
@@ -835,6 +874,7 @@
             <td><b>${r.nomeCliente||""}</b></td>
             <td>${r.numeroPolizza||""}<br><small>${r.tipoPolizza === 'NUOVA' ? 'Nuova' : 'Sost.'}</small></td>
             <td>${r.compagnia}<br><span style="color:${c}">${r.produttore}</span></td>
+          <td><small>${r.ramo || "-"}</small></td>
             <td class="mono">${money2(r.premioImponibile||0)}</td>
             <td class="mono" style="${extraClass}">${extraVal}</td>
             <td><small>${r.incentivazione === "NESSUNA" ? "" : r.incentivazione}</small></td>
@@ -907,7 +947,8 @@
       editNomeCliente.value = row.nomeCliente || "";
       editDataDecorrenza.value = row.dataDecorrenza || "";
       editProduttoreSelect.value = row.produttore || "";
-      editCompagniaSelect.value = row.compagnia || "";
+      editCompagniaSelect.value = row.compagnia
+    editRamoSelect.value = row.ramo || "MOTOR" || "";
       editTipoPolizzaSelect.value = row.tipoPolizza || "";
       editNumeroPolizza.value = row.numeroPolizza || "";
       editPremio.value = row.premio || "";
@@ -944,6 +985,7 @@
           dataDecorrenza: editDataDecorrenza.value,
           produttore: editProduttoreSelect.value,
           compagnia: editCompagniaSelect.value,
+        ramo: editRamoSelect.value,
           tipoPolizza: editTipoPolizzaSelect.value,
           numeroPolizza: editNumeroPolizza.value.trim(),
           premio: toNumber(editPremio.value),
