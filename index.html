@@ -186,19 +186,28 @@
             </div>
 
             <div class="split">
-              <div>
-                <label for="tipoPolizzaSelect">Tipo polizza</label>
-                <select id="tipoPolizzaSelect" required>
-                  <option value="" selected disabled>Seleziona...</option>
-                  <option value="NUOVA">Polizza Nuova Affari</option>
-                  <option value="SOSTITUZIONE_AUMENTO">Sostituzione (Aumento Premio)</option>
-                </select>
-              </div>
-              <div>
-                 <label for="numeroPolizza">Numero di polizza</label>
-                 <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
-              </div>
-            </div>
+  <div>
+    <label for="tipoPolizzaSelect">Tipo polizza</label>
+    <select id="tipoPolizzaSelect" required>
+      <option value="" selected disabled>Seleziona...</option>
+      <option value="NUOVA">Polizza Nuova Affari</option>
+      <option value="SOSTITUZIONE_AUMENTO">Sostituzione (Aumento Premio)</option>
+    </select>
+  </div>
+  <div>
+    <label for="ramoSelect">Ramo</label>
+    <select id="ramoSelect" required>
+      <option value="" selected disabled>Seleziona...</option>
+      <option value="MOTOR">Motor</option>
+      <option value="RAMI VARI">Rami Vari</option>
+      <option value="VITA">Vita</option>
+    </select>
+  </div>
+  <div>
+     <label for="numeroPolizza">Numero di polizza</label>
+     <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
+  </div>
+</div>
           </div>
 
           <div>
@@ -399,25 +408,29 @@
                </select></div>
                <div><label>Numero Polizza</label><input id="editNumeroPolizza" type="text" /></div>
             </div>
+
 <div class="split">
-  <div>
-    <label for="tipoPolizzaSelect">Tipo polizza</label>
-    <select id="tipoPolizzaSelect" required>
-      <option value="" selected disabled>Seleziona...</option>
-      <option value="NUOVA">Polizza Nuova Affari</option>
-      <option value="SOSTITUZIONE_AUMENTO">Sostituzione (Aumento Premio)</option>
-    </select>
-  </div>
-  <div>
-    <label for="editRamoSelect">Ramo</label>
-    <select id="editRamoSelect" required>
-      <option value="" selected disabled>Seleziona...</option>
-      <option value="MOTOR">Motor</option>
-      <option value="RAMI VARI">Rami Vari</option>
-      <option value="VITA">Vita</option>
-    </select>
-  </div>
+   <div>
+     <label>Tipo Polizza</label>
+     <select id="editTipoPolizzaSelect">
+        <option value="NUOVA">Nuova Affari</option>
+        <option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
+     </select>
+   </div>
+   <div>
+     <label>Ramo</label>
+     <select id="editRamoSelect" required>
+       <option value="MOTOR">Motor</option>
+       <option value="RAMI VARI">Rami Vari</option>
+       <option value="VITA">Vita</option>
+     </select>
+   </div>
+   <div>
+     <label>Numero Polizza</label>
+     <input id="editNumeroPolizza" type="text" />
+   </div>
 </div>
+  <div>
      <label for="numeroPolizza">Numero di polizza</label>
      <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
   </div>
@@ -750,6 +763,16 @@
       const hasInc = toggleIncentivi.value === "SI";
 
       const record = {
+async function addRecord(){
+  if (!document.getElementById("formProvvigioni").reportValidity()) return;
+  
+  const d = new Date();
+  const hasInc = toggleIncentivi.value === "SI";
+
+  const record = {
+    ramo: document.getElementById("ramoSelect").value, // INCOLLA QUESTA
+    userId: currentUser.uid,
+    userEmail: currentUser.email,
         ramo: ramoSelect.value,
         userId: currentUser.uid,
         userEmail: currentUser.email,
