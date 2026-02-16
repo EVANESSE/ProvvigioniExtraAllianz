@@ -1,12 +1,12 @@
 {
-  "name": "Provvigioni Extra",
-  "short_name": "Provv. Extra",
+  "name": "Produzione Agenzia",
+  "short_name": "Prod. Ag.",
   "start_url": "/ProvvigioniExtraAllianz/",
   "scope": "/ProvvigioniExtraAllianz/",
   "display": "standalone",
   "background_color": "#070A12",
   "theme_color": "#070A12",
-  "description": "Gestione provvigioni extra con filtri avanzati su produttori, compagnie e incentivazioni.",
+  "description": "Gestione produzione extra con filtri avanzati su produttori, compagnie e incentivazioni.",
   "icons": [
     {
       "src": "icon-192.png",
@@ -20,4 +20,5 @@
     }
   ]
 }
+
 
