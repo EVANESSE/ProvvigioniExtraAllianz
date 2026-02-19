@@ -52,14 +52,18 @@
     .split{ display:flex; gap:10px; flex-wrap: wrap; align-items: end; }
     .split > *{ flex: 1; min-width: 180px; }
 
-    /* SEZIONE INCENTIVI SPECIALI */
-    .incentive-box {
-      border: 1px solid rgba(255, 192, 77, 0.3);
-      background: rgba(255, 192, 77, 0.03);
+    /* SEZIONE BOX EXTRA (INCENTIVI E PROVENIENZA) */
+    .extra-box {
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      background: rgba(0, 212, 255, 0.03);
       padding: 15px; border-radius: 12px; margin-top: 15px;
       transition: all 0.3s ease;
     }
-    .incentive-box.hidden { display:none; }
+    .incentive-box {
+      border: 1px solid rgba(255, 192, 77, 0.3);
+      background: rgba(255, 192, 77, 0.03);
+    }
+    .hidden { display:none !important; }
 
     .actions{ display:flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; align-items:center; }
     .btn{ width:auto; padding: 12px 20px; cursor:pointer; border: 1px solid rgba(124,246,255,.35); background: linear-gradient(180deg, rgba(124,246,255,.12), rgba(177,140,255,.10)); font-weight: 600; color: #fff; }
@@ -84,7 +88,8 @@
     .cell-actions{ display:flex; gap:8px; flex-wrap: wrap; }
     .tiny{ width:auto; padding: 7px 10px; border-radius: 10px; font-size: 12px; }
     .paid-wrap{ display:flex; align-items:center; gap:10px; flex-wrap: wrap; }
-    .hidden{ display:none !important; }
+    
+    .prov-icon { font-size: 16px; cursor: help; }
 
     /* LOGIN & USER BAR */
     #loginOverlay {
@@ -187,9 +192,6 @@
 
             <div class="split">
               <div>
-                
-            <div class="split">
-              <div>
                 <label for="ramoSelect">Ramo</label>
                 <select id="ramoSelect" required>
                   <option value="" selected disabled>Seleziona...</option>
@@ -198,8 +200,8 @@
                   <option value="VITA">VITA</option>
                 </select>
               </div>
-            </div>
-            <label for="tipoPolizzaSelect">Tipo polizza</label>
+              <div>
+                <label for="tipoPolizzaSelect">Tipo polizza</label>
                 <select id="tipoPolizzaSelect" required>
                   <option value="" selected disabled>Seleziona...</option>
                   <option value="NUOVA">Polizza Nuova Affari</option>
@@ -211,6 +213,32 @@
                  <input id="numeroPolizza" type="text" required placeholder="Es. 123456789" />
               </div>
             </div>
+
+            <div style="margin-top:15px; border-top:1px dashed var(--line); padding-top:10px;">
+               <div class="split" style="align-items: flex-start;">
+                 <div>
+                   <label for="toggleProvenienza" style="color:var(--glow-blue);">Provenienza da altra ns. Compagnia?</label>
+                   <select id="toggleProvenienza">
+                      <option value="NO">NO - Esterna / Nuova</option>
+                      <option value="SI">SI - Altra ns. compagnia</option>
+                   </select>
+                 </div>
+                 <div id="boxProvenienza" class="extra-box hidden" style="margin-top:0; flex:1.5;">
+                    <label for="compagniaProvenienzaSelect">Compagnia di Provenienza</label>
+                    <select id="compagniaProvenienzaSelect">
+                      <option value="" selected disabled>Seleziona...</option>
+                      <option value="ALLIANZ">ALLIANZ</option>
+                      <option value="HDI">HDI</option>
+                      <option value="VITTORIA">VITTORIA</option>
+                      <option value="ARAG">ARAG</option>
+                      <option value="HELVETIA">HELVETIA</option>
+                      <option value="GENIALPIU'">GENIALPIU'</option>
+                      <option value="METLIFE">METLIFE</option>
+                    </select>
+                 </div>
+               </div>
+            </div>
+
           </div>
 
           <div>
@@ -232,7 +260,7 @@
                   <option value="SI">SI - Calcola provvigioni extra</option>
                </select>
 
-               <div id="boxIncentivi" class="incentive-box hidden">
+               <div id="boxIncentivi" class="extra-box incentive-box hidden">
                   <div class="split">
                     <div>
                       <label for="incentivazioneSelect">Tipo Incentivazione</label>
@@ -283,6 +311,15 @@
             </select>
         </div>
 
+        <div class="tool small">
+          <label for="fProvenienza">Prov. Int.</label>
+          <select id="fProvenienza">
+            <option value="">Tutte</option>
+            <option value="SI">Da altra ns.</option>
+            <option value="NO">Esterna/Nuova</option>
+          </select>
+        </div>
+
         <div class="tool">
           <label for="fCompagnia">Compagnia</label>
           <select id="fCompagnia">
@@ -298,17 +335,17 @@
         </div>
         
         <div class="tool small">
-          
-      <div class="tool small">
-        <label for="fRamo">Ramo</label>
-        <select id="fRamo">
-          <option value="Tutti">Tutti</option>
-          <option value="MOTOR">MOTOR</option>
-          <option value="RAMI_VARI">RAMI VARI</option>
-          <option value="VITA">VITA</option>
-        </select>
-      </div>
-      <label for="fAnno">Anno Dec.</label>
+          <label for="fRamo">Ramo</label>
+          <select id="fRamo">
+            <option value="Tutti">Tutti</option>
+            <option value="MOTOR">MOTOR</option>
+            <option value="RAMI_VARI">RAMI VARI</option>
+            <option value="VITA">VITA</option>
+          </select>
+        </div>
+        
+        <div class="tool small">
+          <label for="fAnno">Anno Dec.</label>
           <select id="fAnno"><option value="">Tutti</option></select>
         </div>
 
@@ -335,7 +372,7 @@
           <label for="fSettimana">Settimana</label>
           <select id="fSettimana">
              <option value="">Tutte</option>
-             </select>
+          </select>
         </div>
 
         <div class="tool small">
@@ -368,6 +405,7 @@
       <table id="tabella" class="hidden">
         <thead>
           <tr>
+            <th style="width:30px; text-align:center;" title="Provenienza altra compagnia interna">Prov.</th>
             <th>Data</th>
             <th>Cliente</th>
             <th>Polizza</th>
@@ -407,8 +445,6 @@
               </select></div>
             </div>
             <div class="split">
-               <div>
-            <div class="split">
               <div>
                 <label>Ramo</label>
                 <select id="editRamoSelect">
@@ -417,12 +453,35 @@
                   <option value="VITA">VITA</option>
                 </select>
               </div>
-            </div>
-            <label>Tipo Polizza</label><select id="editTipoPolizzaSelect">
+              <div>
+                <label>Tipo Polizza</label><select id="editTipoPolizzaSelect">
                     <option value="NUOVA">Nuova Affari</option><option value="SOSTITUZIONE_AUMENTO">Sostituzione</option>
-               </select></div>
-               <div><label>Numero Polizza</label><input id="editNumeroPolizza" type="text" /></div>
+               </select>
+              </div>
+              <div><label>Numero Polizza</label><input id="editNumeroPolizza" type="text" /></div>
             </div>
+            
+            <div style="margin-top:15px; border-top:1px dashed var(--line); padding-top:10px;">
+               <div class="split" style="align-items: flex-start;">
+                 <div>
+                   <label style="color:var(--glow-blue);">Prov. altra ns. Compagnia?</label>
+                   <select id="editToggleProvenienza">
+                      <option value="NO">NO</option>
+                      <option value="SI">SI</option>
+                   </select>
+                 </div>
+                 <div id="editBoxProvenienza" class="extra-box hidden" style="margin-top:0; flex:1.5;">
+                    <label>Compagnia di Provenienza</label>
+                    <select id="editCompagniaProvenienzaSelect">
+                      <option value="ALLIANZ">ALLIANZ</option><option value="HDI">HDI</option>
+                      <option value="VITTORIA">VITTORIA</option><option value="ARAG">ARAG</option>
+                      <option value="HELVETIA">HELVETIA</option><option value="GENIALPIU'">GENIALPIU'</option>
+                      <option value="METLIFE">METLIFE</option>
+                    </select>
+                 </div>
+               </div>
+            </div>
+
           </div>
           <div>
             <div class="row2">
@@ -436,7 +495,7 @@
                   <option value="NO">NO</option>
                   <option value="SI">SI</option>
                </select>
-               <div id="editBoxIncentivi" class="incentive-box hidden">
+               <div id="editBoxIncentivi" class="extra-box incentive-box hidden">
                  <div class="split">
                    <div><label>Tipo Incentivo</label><select id="editIncentivazioneSelect"></select></div>
                  </div>
@@ -516,12 +575,17 @@
     const dataDecorrenzaInput = document.getElementById("dataDecorrenza");
     const produttoreSelect = document.getElementById("produttoreSelect");
     const btnNuovoProduttore = document.getElementById("btnNuovoProduttore");
-    const compagniaSelect = document.getElementById("compagniaSelect")
-  const ramoSelect = document.getElementById("ramoSelect");
+    const compagniaSelect = document.getElementById("compagniaSelect");
+    const ramoSelect = document.getElementById("ramoSelect");
     const tipoPolizzaSelect = document.getElementById("tipoPolizzaSelect");
     const numeroPolizza = document.getElementById("numeroPolizza");
     const premio = document.getElementById("premio");
     const premioImponibile = document.getElementById("premioImponibile");
+
+    // Provenienza Elements
+    const toggleProvenienza = document.getElementById("toggleProvenienza");
+    const boxProvenienza = document.getElementById("boxProvenienza");
+    const compagniaProvenienzaSelect = document.getElementById("compagniaProvenienzaSelect");
     
     // Incentive Elements
     const toggleIncentivi = document.getElementById("toggleIncentivi");
@@ -537,13 +601,14 @@
 
     // Filters
     const fProduttore = document.getElementById("fProduttore");
-    const fCompagnia = document.getElementById("fCompagnia")
-  const fRamo = document.getElementById("fRamo");
+    const fCompagnia = document.getElementById("fCompagnia");
+    const fRamo = document.getElementById("fRamo");
     const fIncentivi = document.getElementById("fIncentivi");
+    const fProvenienza = document.getElementById("fProvenienza");
     const fPagate = document.getElementById("fPagate");
     const fAnno = document.getElementById("fAnno");
     const fMese = document.getElementById("fMese"); 
-    const fSettimana = document.getElementById("fSettimana"); // NUOVO
+    const fSettimana = document.getElementById("fSettimana");
     const btnApplicaFiltri = document.getElementById("btnApplicaFiltri");
 
     // Table & Edit
@@ -560,13 +625,18 @@
     const editNomeCliente = document.getElementById("editNomeCliente");
     const editDataDecorrenza = document.getElementById("editDataDecorrenza");
     const editProduttoreSelect = document.getElementById("editProduttoreSelect");
-    const editCompagniaSelect = document.getElementById("editCompagniaSelect")
-  const editRamoSelect = document.getElementById("editRamoSelect");
+    const editCompagniaSelect = document.getElementById("editCompagniaSelect");
+    const editRamoSelect = document.getElementById("editRamoSelect");
     const editTipoPolizzaSelect = document.getElementById("editTipoPolizzaSelect");
     const editNumeroPolizza = document.getElementById("editNumeroPolizza");
     const editPremio = document.getElementById("editPremio");
     const editPremioImponibile = document.getElementById("editPremioImponibile");
     
+    // Edit Provenienza Fields
+    const editToggleProvenienza = document.getElementById("editToggleProvenienza");
+    const editBoxProvenienza = document.getElementById("editBoxProvenienza");
+    const editCompagniaProvenienzaSelect = document.getElementById("editCompagniaProvenienzaSelect");
+
     // Edit Incentive Fields
     const editToggleIncentivi = document.getElementById("editToggleIncentivi");
     const editBoxIncentivi = document.getElementById("editBoxIncentivi");
@@ -637,7 +707,7 @@
     btnLogout.addEventListener("click", () => signOut(auth));
 
     // ------------------------------------------------
-    // LOGICA APP
+    // LOGICA APP E TOGGLE
     // ------------------------------------------------
     function setMsg(type, text){
       msg.className = "msg" + (type ? " " + type : "");
@@ -659,8 +729,8 @@
       return palette[h % palette.length];
     }
 
-    // TOGGLE INCENTIVI LOGIC
-    function handleIncentiveToggle(toggleEl, boxEl, reqFields){
+    // TOGGLE GENERICO PER SEZIONI (Incentivi e Provenienza)
+    function handleToggleBlock(toggleEl, boxEl, reqFields){
        const isSi = toggleEl.value === "SI";
        if(isSi){
          boxEl.classList.remove("hidden");
@@ -674,13 +744,17 @@
        }
     }
 
+    // Eventi Toggle Provenienza
+    toggleProvenienza.addEventListener("change", () => handleToggleBlock(toggleProvenienza, boxProvenienza, [compagniaProvenienzaSelect]));
+    editToggleProvenienza.addEventListener("change", () => handleToggleBlock(editToggleProvenienza, editBoxProvenienza, [editCompagniaProvenienzaSelect]));
+
+    // Eventi Toggle Incentivi
     toggleIncentivi.addEventListener("change", () => {
-        handleIncentiveToggle(toggleIncentivi, boxIncentivi, [incentivazioneSelect, percentuale]);
+        handleToggleBlock(toggleIncentivi, boxIncentivi, [incentivazioneSelect, percentuale]);
         if(toggleIncentivi.value === "NO") provvigioni.value = "";
     });
-    
     editToggleIncentivi.addEventListener("change", () => {
-        handleIncentiveToggle(editToggleIncentivi, editBoxIncentivi, [editIncentivazioneSelect, editPercentuale]);
+        handleToggleBlock(editToggleIncentivi, editBoxIncentivi, [editIncentivazioneSelect, editPercentuale]);
         if(editToggleIncentivi.value === "NO") editProvvigioni.value = "";
     });
 
@@ -701,6 +775,8 @@
         setMsg("",""); 
         provvigioni.value=""; 
         boxIncentivi.classList.add("hidden");
+        boxProvenienza.classList.add("hidden");
+        toggleProvenienza.value = "NO";
     });
 
     // Caricamento Dati Ausiliari
@@ -749,6 +825,7 @@
       
       const d = new Date();
       const hasInc = toggleIncentivi.value === "SI";
+      const hasProv = toggleProvenienza.value === "SI";
 
       const record = {
         userId: currentUser.uid,
@@ -757,12 +834,15 @@
         dataDecorrenza: dataDecorrenzaInput.value,
         produttore: produttoreSelect.value,
         compagnia: compagniaSelect.value,
-      ramo: ramoSelect.value,
+        ramo: ramoSelect.value,
         tipoPolizza: tipoPolizzaSelect.value,
         numeroPolizza: numeroPolizza.value.trim(),
         premio: toNumber(premio.value),
         premioImponibile: toNumber(premioImponibile.value),
         
+        provenienzaInterna: hasProv,
+        compagniaProvenienza: hasProv ? compagniaProvenienzaSelect.value : "",
+
         incentivazione: hasInc ? incentivazioneSelect.value : "NESSUNA",
         percentuale: hasInc ? toNumber(percentuale.value) : 0,
         provvigioni: hasInc ? toNumber(provvigioni.value) : 0,
@@ -778,9 +858,14 @@
         await addDoc(collection(db, COL_EXTRA), record);
         setMsg("ok", "Polizza registrata con successo.");
         document.getElementById("formProvvigioni").reset();
+        
         toggleIncentivi.value = "NO";
         boxIncentivi.classList.add("hidden");
         provvigioni.value = "";
+        
+        toggleProvenienza.value = "NO";
+        boxProvenienza.classList.add("hidden");
+
         await loadByFilters();
       }catch(e){ setMsg("err", `Errore: ${e.message}`); }
     }
@@ -788,16 +873,15 @@
 
     // CARICAMENTO E FILTRI
     async function loadByFilters(){
-      // QUERY BASE (Scarica tutto per l'utente, filtro poi in locale per flessibilità su date)
       let constraints = [];
       if (!isAdmin) constraints.push(where("userId", "==", currentUser.uid));
-      // Filtri DB diretti solo per campi statici
+      // Filtri DB
       if(fProduttore.value) constraints.push(where("produttore", "==", fProduttore.value));
       if(fCompagnia.value) constraints.push(where("compagnia", "==", fCompagnia.value));
       if(fRamo.value && fRamo.value !== "Tutti") constraints.push(where("ramo", "==", fRamo.value));
       if(fPagate.value !== "") constraints.push(where("pagate", "==", fPagate.value === "true"));
       
-      constraints.push(orderBy("dataDecorrenza", "desc")); // Ordinamento per decorrenza
+      constraints.push(orderBy("dataDecorrenza", "desc")); 
       
       try{
         const q = query(collection(db, COL_EXTRA), ...constraints);
@@ -805,14 +889,14 @@
         
         let results = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-        // ---- FILTRAGGIO LATO CLIENTE (Sulla Data Decorrenza) ----
+        // ---- FILTRAGGIO LATO CLIENTE ----
         
-        // Filtro ANNO (Decorrenza)
+        // Filtro ANNO
         if(fAnno.value) {
             results = results.filter(r => r.dataDecorrenza.startsWith(fAnno.value));
         }
 
-        // Filtro MESE (Decorrenza)
+        // Filtro MESE
         if(fMese.value) {
             results = results.filter(r => {
                 const m = parseInt(r.dataDecorrenza.split("-")[1]);
@@ -820,7 +904,7 @@
             });
         }
 
-        // Filtro SETTIMANA (Decorrenza)
+        // Filtro SETTIMANA
         if(fSettimana.value) {
             results = results.filter(r => {
                 const dateObj = new Date(r.dataDecorrenza);
@@ -835,6 +919,14 @@
              results = results.filter(r => r.incentivazione !== "NESSUNA" && r.provvigioni > 0);
         } else if (fIncVal === "NO"){
              results = results.filter(r => r.incentivazione === "NESSUNA" || !r.provvigioni || r.provvigioni === 0);
+        }
+
+        // Filtro PROVENIENZA
+        const fProvVal = fProvenienza.value;
+        if(fProvVal === "SI"){
+             results = results.filter(r => !!r.provenienzaInterna);
+        } else if (fProvVal === "NO"){
+             results = results.filter(r => !r.provenienzaInterna);
         }
 
         renderResults(results);
@@ -854,6 +946,9 @@
         const extraClass = hasExtra ? "color:#fff;font-weight:bold" : "color:#555;";
         const extraVal = hasExtra ? money2(Number(r.provvigioni)) : "-";
         
+        // Simbolo Provenienza
+        const provIcon = r.provenienzaInterna ? `<span class="prov-icon" title="Provenienza interna da: ${r.compagniaProvenienza}">🔄</span>` : "";
+
         let statusHtml = "";
         if(hasExtra){
              const isPaid = r.pagate ? "checked" : "";
@@ -870,11 +965,12 @@
         }
 
         return `<tr>
+            <td style="text-align:center;">${provIcon}</td>
             <td style="color:#999;font-size:11px">${r.dataDecorrenza||""}</td>
             <td><b>${r.nomeCliente||""}</b></td>
             <td>${r.numeroPolizza||""}<br><small>${r.tipoPolizza === 'NUOVA' ? 'Nuova' : 'Sost.'}</small></td>
             <td>${r.compagnia}<br><span style="color:${c}">${r.produttore}</span></td>
-          <td><small>${r.ramo || "-"}</small></td>
+            <td><small>${r.ramo || "-"}</small></td>
             <td class="mono">${money2(r.premioImponibile||0)}</td>
             <td class="mono" style="${extraClass}">${extraVal}</td>
             <td><small>${r.incentivazione === "NESSUNA" ? "" : r.incentivazione}</small></td>
@@ -897,7 +993,7 @@
       
       totaleBox.innerHTML = `Totale Provvigioni Extra: <b>${money2(tot)}</b> | Volume Imponibile: <b>${money2(totImp)}</b>`;
       
-      // Popola Anno filtro basandosi sulle date di decorrenza REALI
+      // Popola Anno filtro
       const anni = [...new Set(rows.map(r => r.dataDecorrenza.split("-")[0]))].sort((a,b)=>b-a);
       if(fAnno.children.length<=1) fAnno.innerHTML = `<option value="">Tutti</option>` + anni.map(a=>`<option value="${a}">${a}</option>`).join("");
     }
@@ -947,18 +1043,27 @@
       editNomeCliente.value = row.nomeCliente || "";
       editDataDecorrenza.value = row.dataDecorrenza || "";
       editProduttoreSelect.value = row.produttore || "";
-      editCompagniaSelect.value = row.compagnia
-    editRamoSelect.value = row.ramo || "MOTOR" || "";
+      editCompagniaSelect.value = row.compagnia || "";
+      editRamoSelect.value = row.ramo || "MOTOR";
       editTipoPolizzaSelect.value = row.tipoPolizza || "";
       editNumeroPolizza.value = row.numeroPolizza || "";
       editPremio.value = row.premio || "";
       editPremioImponibile.value = row.premioImponibile || "";
       
+      // Carica Stato Provenienza
+      const isProv = !!row.provenienzaInterna;
+      editToggleProvenienza.value = isProv ? "SI" : "NO";
+      handleToggleBlock(editToggleProvenienza, editBoxProvenienza, [editCompagniaProvenienzaSelect]);
+      if(isProv) {
+          editCompagniaProvenienzaSelect.value = row.compagniaProvenienza || "";
+      } else {
+          editCompagniaProvenienzaSelect.value = "";
+      }
+
+      // Carica Stato Incentivo
       const hasInc = (row.provvigioni > 0 && row.incentivazione !== "NESSUNA");
       editToggleIncentivi.value = hasInc ? "SI" : "NO";
-      
-      handleIncentiveToggle(editToggleIncentivi, editBoxIncentivi, [editIncentivazioneSelect, editPercentuale]);
-
+      handleToggleBlock(editToggleIncentivi, editBoxIncentivi, [editIncentivazioneSelect, editPercentuale]);
       if(hasInc){
           editIncentivazioneSelect.value = row.incentivazione || "";
           editPercentuale.value = row.percentuale || "";
@@ -978,6 +1083,7 @@
       if(!id) return;
       
       const hasInc = editToggleIncentivi.value === "SI";
+      const hasProv = editToggleProvenienza.value === "SI";
 
       try{
         await updateDoc(doc(db, COL_EXTRA, id), {
@@ -985,12 +1091,15 @@
           dataDecorrenza: editDataDecorrenza.value,
           produttore: editProduttoreSelect.value,
           compagnia: editCompagniaSelect.value,
-        ramo: editRamoSelect.value,
+          ramo: editRamoSelect.value,
           tipoPolizza: editTipoPolizzaSelect.value,
           numeroPolizza: editNumeroPolizza.value.trim(),
           premio: toNumber(editPremio.value),
           premioImponibile: toNumber(editPremioImponibile.value),
           
+          provenienzaInterna: hasProv,
+          compagniaProvenienza: hasProv ? editCompagniaProvenienzaSelect.value : "",
+
           incentivazione: hasInc ? editIncentivazioneSelect.value : "NESSUNA",
           percentuale: hasInc ? toNumber(editPercentuale.value) : 0,
           provvigioni: hasInc ? toNumber(editProvvigioni.value) : 0,
@@ -1013,7 +1122,9 @@
         "Cliente": r.nomeCliente, 
         "Decorrenza": r.dataDecorrenza,
         "Produttore": r.produttore, 
-        "Compagnia": r.compagnia, 
+        "Compagnia": r.compagnia,
+        "Prov. Altra Compagnia": r.provenienzaInterna ? "SI" : "NO",
+        "Compagnia Provenienza": r.compagniaProvenienza || "", 
         "Tipo": r.tipoPolizza === "NUOVA" ? "Nuova Affari" : "Sostituzione",
         "Polizza": r.numeroPolizza,
         "Premio Lordo Annuo": r.premio, 
